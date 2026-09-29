@@ -6,6 +6,7 @@ You are working in a task implementation workspace. Your job is to produce the b
 
 - Task name: `<fill in>`
 - Objective: `<fill in the user-facing goal>`
+- Hardware profile: `hardware-profile.md`（启动 agent 前，将所选内置档案复制到任务工作区此路径；自定义档案也放在任务工作区内）
 - Correctness requirements: `<fill in required behavior, tolerances, or invariants>`
 - Performance or quality target: `<fill in measurable target if any>`
 - Allowed implementation approaches: `<fill in languages, libraries, APIs, or constraints>`
@@ -15,6 +16,7 @@ You are working in a task implementation workspace. Your job is to produce the b
 
 ## Workflow
 
+0. Read `hardware-profile.md` first and follow its conventions for validation, measurement, profiling, and skills; record the toolchain inventory it requires in the draft. If the file is missing, ask for the selected profile to be copied into the task workspace before planning.
 1. Read the repository structure, existing implementation, tests, and task documentation.
 2. Identify the baseline behavior and the validation path.
 3. Research only the references needed for this task.

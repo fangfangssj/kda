@@ -10,8 +10,8 @@ MLSys-style benchmark work is one possible application of this loop. The same fl
 
 ## Minimal Loop
 
-1. Define the task contract.
-2. Let the agent inspect the local workspace.
+1. Define the task contract, including the hardware profile.
+2. Have the agent read the hardware profile, then inspect the local workspace.
 3. Make the agent write `docs/draft.md`.
 4. Convert the draft into an executable plan.
 5. Implement the first candidate.
@@ -25,12 +25,15 @@ MLSys-style benchmark work is one possible application of this loop. The same fl
 Each task should state:
 
 - Objective.
+- **Hardware profile**（指向任务工作区可读取的档案，推荐 `hardware-profile.md`；独立工作区须先复制内置档案——见 `docs/hardware-profiles.md`）。
 - Inputs and outputs.
 - Correctness requirements.
 - Constraints on implementation language, dependencies, APIs, or deployment.
 - Validation command.
 - Evaluation command, if different from validation.
 - Promotion criteria.
+
+The hardware profile parameterizes everything hardware-specific: implementation language/DSL, correctness conventions (reference implementation, tolerances, edge shapes), measurement conventions (timing tool, statistics, baseline set), profiling and attribution tools, and the mapped knowledge skills. The loop above stays identical across hardware; only the profile changes.
 
 ## Evidence Records
 
