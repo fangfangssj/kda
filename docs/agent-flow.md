@@ -1,12 +1,10 @@
 # Agent Flow
 
-Kernel Design Agents is a repeatable loop for agent-driven implementation work. The loop is useful when a task needs both exploration and evidence-based promotion decisions.
+Kernel Design Agents is a repeatable workflow for agent-driven Ascend NPU operator and kernel development. It is useful when a task needs exploration, correctness checks, and evidence-based promotion decisions.
 
 ## Principle
 
-Keep the reusable workflow separate from the task workspace. This repository explains the flow. The task workspace owns code, tests, datasets, benchmark scripts, private rules, and generated artifacts.
-
-MLSys-style benchmark work is one possible application of this loop. The same flow can also be used for compiler passes, runtime kernels, infrastructure changes, or other performance-sensitive tasks.
+Keep the reusable workflow separate from the task workspace. This repository documents the Ascend development loop; the task workspace owns kernel source, tests, datasets, benchmark scripts, private rules, and generated artifacts. The workflow applies across Ascend operator kernels, runtime integration, and performance optimization tasks.
 
 ## Minimal Loop
 
@@ -25,7 +23,7 @@ MLSys-style benchmark work is one possible application of this loop. The same fl
 Each task should state:
 
 - Objective.
-- **Hardware profile**（指向任务工作区可读取的档案，推荐 `hardware-profile.md`；独立工作区须先复制内置档案——见 `docs/hardware-profiles.md`）。
+- **Ascend hardware profile**（推荐使用 `hardware-profile.md`；独立工作区先复制 `hardware/ascend-ascendc.md`，并在任务契约中写明目标 SoC/NpuArch）。
 - Inputs and outputs.
 - Correctness requirements.
 - Constraints on implementation language, dependencies, APIs, or deployment.
@@ -33,7 +31,7 @@ Each task should state:
 - Evaluation command, if different from validation.
 - Promotion criteria.
 
-The hardware profile parameterizes everything hardware-specific: implementation language/DSL, correctness conventions (reference implementation, tolerances, edge shapes), measurement conventions (timing tool, statistics, baseline set), profiling and attribution tools, and the mapped knowledge skills. The loop above stays identical across hardware; only the profile changes.
+The Ascend hardware profile records the target SoC/NpuArch, CANN toolchain, Ascend C conventions, correctness checks, measurement and profiling commands, and mapped skills. The workflow stays consistent across Ascend tasks while the task contract captures each target's details.
 
 ## Evidence Records
 

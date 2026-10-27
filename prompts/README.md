@@ -1,22 +1,22 @@
 # Prompt Templates
 
-This directory stores generic prompts for the Kernel Design Agents workflow.
+This directory stores prompts for Ascend development with the Kernel Design Agents workflow.
 
-The templates are intentionally task-agnostic. Fill in the task objective, **hardware profile**, constraints, validation command, and promotion criteria before starting an agent session in a separate implementation workspace.
+The templates are task-agnostic within the Ascend domain. Fill in the task objective, Ascend SoC, **hardware profile**, constraints, validation command, and promotion criteria before starting an agent session in a separate implementation workspace.
 
 ## Available Templates
 
 | Path | Purpose | 配套硬件档案 |
 |---|---|---|
-| `basic-flow.md` | Minimal prompt for research, planning, implementation, validation, and iteration. | 通用 |
+| `basic-flow.md` | Ascend 任务的通用研究、计划、实现与验证流程。 | `ascend-ascendc` |
 | `ascendc-flow.md` | Ascend C 核函数专用：环境检查 → tiling 设计 → 模板脚手架 → ST/精度验证 → msprof 归因。 | `ascend-ascendc` |
 
 ## How To Use
 
 1. Create or enter the task implementation workspace.
-2. Copy the selected built-in profile from `hardware/` into the task workspace as `hardware-profile.md`; put custom profiles in the task workspace too.
+2. Copy `hardware/ascend-ascendc.md` into the task workspace as `hardware-profile.md`; record the target SoC/NpuArch in the task contract.
 3. Copy the relevant template content into the agent session.
-4. Replace placeholders with task-specific details（**必须填写 Hardware profile 字段**，指向工作区内的 `hardware-profile.md` 或自定义档案）。
+4. Replace placeholders with task-specific details（**必须填写 Ascend hardware profile 字段**，并注明目标 SoC/NpuArch）。
 5. Ask the agent to read the hardware profile first, then read the workspace and write `docs/draft.md`.
 6. Convert that draft into an executable plan.
 7. Run the implementation loop with validation after each meaningful change.

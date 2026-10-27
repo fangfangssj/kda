@@ -6,14 +6,13 @@
 - 格式：Agent Skills 开放标准（SKILL.md frontmatter），与 Claude Code / OpenCode / Cursor 等兼容
 - 许可：CANN Open Software License v2.0（个人使用；再分发时请附带其 LICENSE）
 
-## 已接入清单（25 个）
+## 已接入清单（19 个）
 
 | 类别 | 技能 |
 |---|---|
 | 架构知识 | npu-arch |
 | AscendC 知识 | ascendc-tiling-design, ascendc-api-best-practices, ascendc-performance-best-practices, ascendc-perf-optimize |
 | 代码检视 | ascendc-code-review |
-| Triton (triton_ascend) | triton-op-designer, triton-op-coding, triton-op-verifier, triton-precision-debug, triton-latency-optimizer, triton-simulator-optimizer |
 | 工程模板 | ascendc-direct-invoke-template |
 | 测试 | ascendc-st-design, ascendc-ut-develop, ops-precision-standard |
 | 调试 | ascendc-precision-debug, ascendc-crash-debug, ascendc-runtime-debug, ascendc-sync-audit |

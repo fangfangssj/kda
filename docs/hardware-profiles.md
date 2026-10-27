@@ -1,14 +1,14 @@
-# 硬件档案（Hardware Profiles）
+# 昇腾硬件档案
 
-KDA 的最小循环（契约 → 草稿 → 计划 → 候选 → 验证 → 测量 → 证据 → 晋升）本身与硬件无关。真正绑定硬件的只有三件事：**用什么语言写 kernel、怎么验证正确性、怎么测量与归因性能**。硬件档案就是把这三件事参数化：**一份 profile = 一个硬件组合 + 一套语言 / 验证 / 测量 / 技能的约定**。
+本仓库专注 Ascend NPU 开发。硬件档案记录目标昇腾芯片与 NpuArch、CANN 工具链、Ascend C 实现约定、正确性验证、性能测量和技能映射，供不同昇腾型号与开发任务复用。
 
 ## 规则
 
-1. 每个任务契约必须声明 `Hardware profile` 字段，指向任务工作区内可读取的 profile；推荐统一使用工作区根目录的 `hardware-profile.md`。
-2. 若任务工作区独立于本仓库，启动 agent 前先将本仓库 `hardware/<profile>.md` 复制为任务工作区的 `hardware-profile.md`。自定义 profile 也应放在任务工作区内。
-3. agent 在写 `docs/draft.md` 之前必须先读完工作区中的 profile，并以其中的命令约定、精度默认值、纪律条款为默认值；任务契约可以覆盖 profile（任务契约 > profile）。
-4. 任务可以在自己的工作区维护私有 profile 覆盖内置档案，不必回传本仓库。
-5. profile 只写**机制**（工具、命令、纪律、技能映射），不写具体任务的私有阈值或数据集。
+1. 每个任务契约必须声明 `Ascend hardware profile`，推荐将档案复制到任务工作区根目录并命名为 `hardware-profile.md`。
+2. 启动 agent 前，将 `hardware/ascend-ascendc.md` 复制到任务工作区；同时在任务契约中注明 SoC、NpuArch、CANN 与 torch_npu 版本。
+3. agent 在写 `docs/draft.md` 之前必须先读完 profile，并按其中的命令约定、精度标准和验证流程执行；任务契约可以进一步收紧要求。
+4. 需要覆盖其他昇腾芯片代际或工具链差异时，可在任务工作区维护档案副本；可复用的代际约定再回填到本仓库。
+5. profile 只写可复用的昇腾开发机制，不写具体任务的私有阈值或数据集。
 
 例如，进入独立任务工作区后，将路径替换为本地 KDA 仓库位置：
 
@@ -22,13 +22,13 @@ cp /path/to/kda/hardware/ascend-ascendc.md /path/to/task-workspace/hardware-prof
 |---|---|---|---|---|---|
 | `ascend-ascendc.md` | Atlas A2/A3（910B/910C） | Ascend C | torch_npu 参考 + 精度标准 + ST/UT | msprof（ops-profiling） | npu-arch, ascendc-* |
 
-配套 starter prompt：AscendC 用 `prompts/ascendc-flow.md`；`prompts/basic-flow.md` 可用于未绑定硬件的通用任务。
+配套 starter prompt：Ascend C kernel 任务使用 `prompts/ascendc-flow.md`；其他 Ascend 开发任务可用 `prompts/basic-flow.md`。
 
-## 新增一个硬件（扩展指南）
+## 维护昇腾芯片档案
 
-1. 复制 `hardware/TEMPLATE.md` 为 `hardware/<vendor>-<device>.md`。
-2. 逐节填写：工具链与版本基线、正确性验证约定（参考实现 + 精度默认值 + 边界形状）、性能测量约定（计时工具 + 统计口径 + csv 行格式）、profiling 采集与报告解读、技能映射、自动调优纪律、常见坑。
-3. 若该硬件有现成的知识技能（例如 AMD ROCm 的 rocprof 解读技能、寒武纪 MLU 知识库），把技能目录放进 `skills/`（昇腾系放 `skills/ascend/`）并在上表登记。
-4. 若需要专用 starter prompt，在 `prompts/` 新增并在 `prompts/README.md` 登记。
+1. 需要单独记录新的 Ascend SoC、NpuArch 代际或 CANN 工具链差异时，复制 `hardware/TEMPLATE.md` 并使用 `ascend-<family>.md` 命名。
+2. 填写芯片与工具链基线、Ascend C API/tiling 约定、正确性验证、上板测量与 profiling 方法、技能映射和常见坑。
+3. 更新本文件的档案表，并确认对应技能存在于 `skills/ascend/`。
+4. 若该型号需要不同的任务流程，再新增 Ascend 专用 starter prompt 并在 `prompts/README.md` 登记。
 
-示例：为 AMD ROCm 新增档案 → 复制模板为 `amd-rocm.md` → 填写 ROCm 工具链、参考实现、精度约定、测量与归因工具及对应技能 → 在上表登记。机制不变，只换档案。
+示例：新增一个 Atlas 芯片代际档案 → 复制模板为 `ascend-atlas-<family>.md` → 填写 SoC/NpuArch、CANN 版本、验证命令、msprof 采集方法与代际特有注意事项 → 在上表登记。

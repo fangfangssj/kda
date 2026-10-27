@@ -1,6 +1,6 @@
 # Agent Instructions
 
-本仓库是 Kernel Design Agents (KDA) 的**多硬件扩展版**工作流参考（个人定制版，基于 mit-han-lab/kernel-design-agents）。它应当保持小而任务无关（task-agnostic）。
+本仓库是面向 Ascend NPU 算子与 kernel 开发的 Kernel Design Agents (KDA) 工作流。流程保持任务无关，但硬件与工具链范围限定在昇腾；当前内置实现流程以 Ascend C 为主。
 
 ## Repository Rules
 
@@ -8,7 +8,7 @@
 - 任务专属内容（提示词、数据集、校验器、生成的实现、benchmark 日志、候选产物）一律不进本仓库。
 - benchmark 竞赛（含 MLSys 类工作）视为 KDA 的下游应用，不属于本仓库职责范围。
 - 生成产物放入 `runs/`、`outputs/` 或 `profile/`（这些路径被 git 忽略；本仓库自身仅作参考，不承载任务产物）。
-- 优先沉淀可复用机制：**硬件档案 > 通用流程文档 > 任务私有 harness**。
+- 优先沉淀可复用的昇腾开发机制：**Ascend 硬件档案 > 通用流程文档 > 任务私有 harness**。
 
 ## Hardware Profiles（硬件档案）
 
@@ -17,7 +17,7 @@
 1. 每个任务契约必须声明 `Hardware profile` 字段，指向任务工作区中可读取的档案；推荐使用工作区根目录的 `hardware-profile.md`。
 2. 若实现工作区独立于本仓库，启动 agent 前先把选定的内置 `hardware/<profile>.md` 复制到该文件；自定义档案也放在工作区内。
 3. agent 在写 `docs/draft.md` **之前必须先读 profile**，以其命令约定、精度默认值、纪律条款为默认值；任务契约可覆盖 profile。
-4. 新硬件 = 复制 `hardware/TEMPLATE.md` 填写 + 在 `docs/hardware-profiles.md` 登记；不要为单个任务直接修改内置档案。
+4. 新增昇腾芯片型号或架构代际档案时，复制 `hardware/TEMPLATE.md` 填写并在 `docs/hardware-profiles.md` 登记；不要为单个任务直接修改内置档案。
 5. 内置档案：`ascend-ascendc`。
 
 ## Expected Agent Workflow
@@ -34,7 +34,7 @@ For a new task:
 7. Record candidate relationships, evaluation results, and profiling evidence when applicable.
 8. Keep this repository focused on the reusable flow.
 
-## Optional Skills（按硬件档案映射）
+## Optional Skills（昇腾开发）
 
 Use external skills only when they are relevant to the active task:
 

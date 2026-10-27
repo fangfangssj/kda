@@ -1,19 +1,19 @@
-# Hardware Profile: `<vendor> · <device family>`
+# Hardware Profile: `Ascend · <device family>`
 
-> 复制本模板为 `hardware/<vendor>-<device>.md` 并逐节填写。
-> 原则：只写**机制**（工具、命令、纪律、技能映射），不写某个任务的私有阈值。
+> 本模板用于新增昇腾芯片型号、NpuArch 代际或 CANN 工具链档案。复制为 `hardware/ascend-<family>.md` 并逐节填写。
+> 原则：只写可复用的昇腾开发机制，不写某个任务的私有阈值。
 > 写完后在 `docs/hardware-profiles.md` 的档案表中登记一行。
 
-## 1. 目标硬件与工具链
+## 1. 昇腾芯片与工具链
 
-- 器件与代际：
-- 驱动 / 运行时 / 编译器版本基线：
+- Atlas 型号、SoC Version 与 NpuArch 代际：
+- CANN / torch_npu / 编译器版本基线：
 - agent 开工前必须记录的环境清单命令：
 
 ## 2. 实现语言与 API
 
 - 首选语言 / DSL：
-- 允许的宿主框架（如 PyTorch / torch_npu / JAX）：
+- 允许的宿主框架（如 torch_npu）：
 - 明确禁止或需任务契约特批的做法：
 
 ## 3. 正确性验证约定

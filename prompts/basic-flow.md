@@ -1,12 +1,12 @@
 # Kernel Design Agents Basic Flow Prompt
 
-You are working in a task implementation workspace. Your job is to produce the best correct implementation for the task described below.
+You are working in an Ascend task implementation workspace. Your job is to produce the best correct implementation for the task described below. Follow the selected Ascend hardware profile for the target SoC, toolchain, validation, and profiling conventions.
 
 ## Task Contract
 
 - Task name: `<fill in>`
 - Objective: `<fill in the user-facing goal>`
-- Hardware profile: `hardware-profile.md`（启动 agent 前，将所选内置档案复制到任务工作区此路径；自定义档案也放在任务工作区内）
+- Ascend hardware profile: `hardware-profile.md`（启动 agent 前，将 `hardware/ascend-ascendc.md` 复制到任务工作区此路径，并填写目标 SoC/NpuArch）
 - Correctness requirements: `<fill in required behavior, tolerances, or invariants>`
 - Performance or quality target: `<fill in measurable target if any>`
 - Allowed implementation approaches: `<fill in languages, libraries, APIs, or constraints>`
