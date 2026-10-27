@@ -1,0 +1,77 @@
+---
+type: API
+title: asc_load_image_to_cbuf_sync（废弃）
+description: 头文件路径为："c_api/composite/cube_datamove_composite.h"。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/deprecated_interface/asc_load_image_to_cbuf_sync_deprecated.md
+  role: primary
+created_at: '2026-09-12T03:09:26Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- a2
+- a3
+source_headers:
+- include/c_api/composite/cube_datamove_composite.h
+---
+
+# asc_load_image_to_cbuf_sync（废弃）
+
+## 功能说明
+
+头文件路径为：`"c_api/composite/cube_datamove_composite.h"`。
+
+**`asc_load_image_to_cbuf_sync`接口已废弃，请使用[对应的非同步接口](../cube_datamove/cube_load_aux_config/asc_load_image_to_cbuf.md)和同步接口[asc_sync](../sync/intra_core_sync/asc_sync.md)替代。**
+
+将图像数据从Global Memory搬运到L1 Buffer。
+
+## 函数原型
+
+- 同步搬运
+
+    ```cpp
+    __aicore__ inline void asc_load_image_to_cbuf_sync(__cbuf__ int8_t* dst, uint16_t hor_size, uint16_t ver_size, uint16_t hor_start_pos, uint16_t ver_start_pos, uint16_t src_hor_size, uint8_t top_pad_size, uint8_t bot_pad_size, uint16_t left_pad_size, uint16_t right_pad_size)
+    __aicore__ inline void asc_load_image_to_cbuf_sync(__cbuf__ half* dst, uint16_t hor_size, uint16_t ver_size, uint16_t hor_start_pos, uint16_t ver_start_pos, uint16_t src_hor_size, uint8_t top_pad_size, uint8_t bot_pad_size, uint16_t left_pad_size, uint16_t right_pad_size)
+    ```
+
+## 参数说明
+
+**表1** 参数说明
+
+| 参数名  | 输入/输出 | 描述 |
+| :----- | :------- | :------- |
+| dst | 输出 | 目的操作数（矢量）的起始地址。 |
+| hor_size | 输入 | 从源图中加载图片的水平宽度，单位为像素。取值范围：[1, 4094]。 |
+| ver_size | 输入 | 从源图中加载图片的垂直高度，单位为像素。取值范围：[1, 4094]。 |
+| hor_start_pos | 输入 | 加载图片在源图片上的水平起始地址，单位为像素。取值范围：[0, 4095]。 |
+| ver_start_pos | 输入 | 加载图片在源图片上的垂直起始地址，单位为像素。取值范围：[0, 4095]。 |
+| src_hor_size | 输入 | 源图片水平宽度，单位为像素。取值范围：[1, 4094]。 |
+| top_pad_size | 输入 | 目的图片顶部填充的像素数。取值范围：[0, 32]。 |
+| bot_pad_size | 输入 | 目的图片底部填充的像素数。取值范围：[0, 32]。 |
+| left_pad_size | 输入 | 目的图片左边填充的像素数。取值范围：[0, 32]。 |
+| right_pad_size | 输入 | 目的图片右边填充的像素数。取值范围：[0, 32]。 |
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_MTE2
+
+## 约束说明
+
+- 各存储单元的空间大小和对齐要求请参考[存储单元说明](../general_description_and_constraints.md#存储单元说明)。
+- 操作数地址重叠约束请参考[通用地址重叠约束](../general_description_and_constraints.md#通用地址重叠约束)。
+
+## 调用示例
+
+```cpp
+constexpr uint64_t total_length = 128;    // total_length指参与搬运的数据总长度
+__cbuf__ half dst[total_length];
+// 加载图片时的高度与宽度均为1，起始地址为(0,0)，源图片水平宽度为1，不做padding
+asc_load_image_to_cbuf_sync(dst, 1, 1, 0, 0, 1, 0, 0, 0, 0);
+```

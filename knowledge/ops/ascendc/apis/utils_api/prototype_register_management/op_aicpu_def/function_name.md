@@ -1,0 +1,58 @@
+---
+type: API
+title: FunctionName
+description: 配置自定义算子调用的kernel函数接口名称，functionName固定为“RunCpuKernel”。
+tags:
+- task.lookup
+- topic.implementation.api_layer.utils_api
+- topic.implementation.operator_registration
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/Utils-API/prototype_register_management/OpAICPUDef/FunctionName.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms: []
+---
+
+# FunctionName<a name="ZH-CN_TOPIC_0000002521371809"></a>
+
+## 功能说明<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001525424352_section36583473819"></a>
+
+配置自定义算子调用的核函数（Kernel）接口名称，functionName固定为“RunCpuKernel”。
+
+## 函数原型<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001525424352_section13230182415108"></a>
+
+```
+OpAICPUDef &FunctionName(const char *value)
+```
+
+## 参数说明<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001525424352_section75395119104"></a>
+
+<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_table111938719446"></a>
+<table><thead align="left"><tr id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_row6223476444"><th class="cellrowborder" valign="top" width="17.22%" id="mcps1.1.4.1.1"><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p10223674448"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p10223674448"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p10223674448"></a>参数</p>
+</th>
+<th class="cellrowborder" valign="top" width="15.340000000000002%" id="mcps1.1.4.1.2"><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p645511218169"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p645511218169"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p645511218169"></a>输入/输出</p>
+</th>
+<th class="cellrowborder" valign="top" width="67.44%" id="mcps1.1.4.1.3"><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p1922337124411"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p1922337124411"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p1922337124411"></a>说明</p>
+</th>
+</tr>
+</thead>
+<tbody><tr id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_row152234713443"><td class="cellrowborder" valign="top" width="17.22%" headers="mcps1.1.4.1.1 "><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p318615392613"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p318615392613"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p318615392613"></a>value</p>
+</td>
+<td class="cellrowborder" valign="top" width="15.340000000000002%" headers="mcps1.1.4.1.2 "><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p320343694214"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p320343694214"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001575944081_p320343694214"></a>输入</p>
+</td>
+<td class="cellrowborder" valign="top" width="67.44%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_p12935163055011"><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_p12935163055011"></a><a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_p12935163055011"></a><span>算子调用的核函数（Kernel）接口名称，</span><span>functionName固定为“RunCpuKernel”。</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## 返回值说明<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001525424352_section25791320141317"></a>
+
+OpAICPUDef算子定义，OpAICPUDef请参考[OpAICPUDef](index.md)。
+
+## 约束说明<a name="zh-cn_topic_0000001575610072_zh-cn_topic_0000001526442954_zh-cn_topic_0000001525424352_section19165124931511"></a>
+
+无
+

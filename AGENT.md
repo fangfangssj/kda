@@ -9,6 +9,7 @@
 - benchmark 竞赛（含 MLSys 类工作）视为 KDA 的下游应用，不属于本仓库职责范围。
 - 生成产物放入 `runs/`、`outputs/` 或 `profile/`（这些路径被 git 忽略；本仓库自身仅作参考，不承载任务产物）。
 - 优先沉淀可复用的昇腾开发机制：**Ascend 硬件档案 > 通用流程文档 > 任务私有 harness**。
+- `knowledge/ops/ascendc/` 是仓库内置的离线技术知识源；查询必须通过 `skills/ascend/knowledge-query` 或 `skills/ascend/ascendc-api-knowledge-query` 指导 Agent 使用原生文件搜索和读取工具，不新增查询脚本、服务或运行时依赖。
 
 ## Hardware Profiles（硬件档案）
 
@@ -38,7 +39,7 @@ For a new task:
 
 Use external skills only when they are relevant to the active task:
 
-- **昇腾（AscendC）**：`skills/ascend/` 下的 cannbot 技能族（npu-arch、ascendc-*、ops-profiling、msnpureport-toolkit、asys-toolkit、cann-env-setup 等），映射关系见 `hardware/ascend-ascendc.md` 的技能映射表。
+- **昇腾（AscendC）**：先按问题使用 `knowledge-query`（通用硬件/实现/排障知识）或 `ascendc-api-knowledge-query`（API 定义与重载）；再按需使用 `skills/ascend/` 下的 cannbot 技能（npu-arch、ascendc-*、ops-profiling、msnpureport-toolkit、asys-toolkit、cann-env-setup 等）。技能映射见 `hardware/ascend-ascendc.md`。
 - `humanize` 插件用于计划生成与实现循环（可选）。
 - 领域知识技能用于背景调研；profiling / 报告分析技能用于性能证据。
 

@@ -1,0 +1,106 @@
+---
+type: API
+title: MulDstAdd
+description: 将目的操作数与源操作数逐元素相乘再加另一个源操作数，结果写回目的操作数。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.compute.composite
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/reg_vector_compute/composite_compute/MulDstAdd.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/basic_api/reg_compute/kernel_reg_compute_vec_fused_intf.h
+---
+
+# MulDstAdd<a name="ZH-CN_TOPIC_0000002093730614"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为：`"basic_api/reg_compute/kernel_reg_compute_vec_fused_intf.h"`。
+
+该接口用于完成dstReg与srcReg0逐元素相乘再加srcReg1的融合乘加运算，根据mask将计算结果写回dstReg。计算公式如下：
+
+$$
+dstReg_i = dstReg_i \times srcReg0_i + srcReg1_i
+$$
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
+template <typename T = DefaultType, MaskMergeMode mode = MaskMergeMode::ZEROING, typename U>
+__simd_callee__ inline void MulDstAdd(U& dstReg, U& srcReg0, U& srcReg1, MaskReg& mask)
+```
+
+## 参数说明<a name="section622mcpsimp"></a>
+
+**表1**  模板参数说明
+
+| 参数名 | 描述 |
+| :----- | :--- |
+| T | 操作数数据类型。 |
+| mode | [MaskMergeMode](../aux_data_types/mask_merge_mode.md)枚举类型。选择MERGING模式或ZEROING模式。<br>• ZEROING模式下，mask未筛选的元素在dstReg中置零。<br>• MERGING模式当前不支持。 |
+| U | 目的操作数和源操作数的`RegTensor`类型，例如`RegTensor<half>`，由编译器自动推导，用户不需要填写。 |
+
+**表2**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| :----- | :-------- | :--- |
+| dstReg | 输出 | 目的操作数。<br>类型为[RegTensor](../register_data_types/reg_tensor.md)。 |
+| srcReg0 | 输入 | 源操作数。<br>类型为[RegTensor](../register_data_types/reg_tensor.md)。<br>数据类型需要与目的操作数保持一致。 |
+| srcReg1 | 输入 | 源操作数。<br>类型为[RegTensor](../register_data_types/reg_tensor.md)。<br>数据类型需要与目的操作数保持一致。 |
+| mask | 输入 | 源操作数元素操作的有效指示，详细说明请参考[MaskReg](../register_data_types/mask_reg.md)。 |
+
+## 返回值说明<a name="section640mcpsimp"></a>
+
+无
+
+## 数据类型
+
+**表3**  数据类型组合
+
+| srcReg0    | srcReg1    | dstReg     |
+| :--------- | :--------- | :--------- |
+| half       | half       | float      |
+| bfloat16_t | bfloat16_t | bfloat16_t |
+| float      | float      | float      |
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+- 本接口支持寄存器重叠。
+- 本接口操作数为寄存器，不涉及地址对齐。
+- 本接口不修改全局寄存器的值。
+
+## 关键特性说明
+
+在硬件层面单条指令完成乘加融合计算，精度高于分开执行[Mul](../basic_arithmetic/mul.md)和[Add](../basic_arithmetic/add.md)。
+
+## 调用示例<a name="section642mcpsimp"></a>
+
+```cpp
+template<typename T>
+__simd_vf__ inline void MulDstAddVF(__ubuf__ T* dstAddr, __ubuf__ T* src0Addr, __ubuf__ T* src1Addr, __ubuf__ T* src2Addr, uint32_t count, uint32_t oneRepeatSize, uint16_t repeatTimes)
+{
+    AscendC::Reg::RegTensor<T> srcReg0;
+    AscendC::Reg::RegTensor<T> srcReg1;
+    AscendC::Reg::RegTensor<T> dstReg;
+    AscendC::Reg::MaskReg mask;
+    for (uint16_t i = 0; i < repeatTimes; i++) {
+        mask = AscendC::Reg::UpdateMask<T>(count);
+        AscendC::Reg::LoadAlign(srcReg0, src0Addr + i * oneRepeatSize);
+        AscendC::Reg::LoadAlign(srcReg1, src1Addr + i * oneRepeatSize);
+        AscendC::Reg::LoadAlign(dstReg, src2Addr + i * oneRepeatSize);
+        AscendC::Reg::MulDstAdd(dstReg, srcReg0, srcReg1, mask);
+        AscendC::Reg::StoreAlign(dstAddr + i * oneRepeatSize, dstReg, mask);
+    }
+}
+```
+
+- [Atan2 950 ACLNN 算子知识](../../../../../operators/aclnn/math/math/atan2_950.md)
+- [GroupNormBackward 950 ACLNN 算子知识](../../../../../operators/aclnn/nn/norm/group_norm_backward_950.md)
+- [NormRopeConcat 950 ACLNN 算子知识](../../../../../operators/aclnn/transformer/posembedding/norm_rope_concat_950.md)

@@ -1,0 +1,20 @@
+# 量化操作
+
+- [AntiQuantize](anti_quantize.md)：按元素做伪量化计算，将int8_t等低精度数据类型伪量化为half等高精度数据类型，支持PER_TENSOR、PER_CHANNEL、PER_TOKEN、PER_GROUP四种量化策略，最多支持二维输入。
+- [AscendAntiQuant](ascend_anti_quant.md)：按元素做伪量化计算，将int8_t数据类型伪量化为half数据类型，支持PER_CHANNEL场景，可选开启输入转置。
+- [AscendDequant](ascend_dequant.md)：按元素做反量化计算，将int32_t数据类型反量化为half/float等数据类型，反量化系数可为标量或向量，最多支持二维输入。
+- [AscendQuant](ascend_quant.md)：按元素做量化计算，将half/float数据类型量化为int8_t数据类型，支持PER_TENSOR、PER_CHANNEL、PER_TOKEN等量化策略。
+- [Dequantize](dequantize.md)：按元素做反量化计算，将int32_t数据类型反量化为half/float等数据类型，支持PER_TENSOR、PER_CHANNEL、PER_TOKEN、PER_GROUP四种反量化策略，最多支持二维输入。
+- [GetAntiQuantizeMaxMinTmpSize](get_anti_quantize_max_min_tmp_size.md)：在host侧获取AntiQuantize接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetAntiQuantizeTmpBufferFactorSize](get_anti_quantize_tmp_buffer_factor_size.md)：获取AntiQuantize接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [GetAscendAntiQuantMaxMinTmpSize](get_ascend_anti_quant_max_min_tmp_size.md)：在host侧获取AscendAntiQuant接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetAscendAntiQuantTmpBufferFactorSize](get_ascend_anti_quant_tmp_buffer_factor_size.md)：获取AscendAntiQuant接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [GetAscendDequantMaxMinTmpSize](get_ascend_dequant_max_min_tmp_size.md)：在host侧获取AscendDequant接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetAscendDequantTmpBufferFactorSize](get_ascend_dequant_tmp_buffer_factor_size.md)：获取AscendDequant接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [GetAscendQuantMaxMinTmpSize](get_ascend_quant_max_min_tmp_size.md)：在host侧获取AscendQuant接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetAscendQuantTmpBufferFactorSize](get_ascend_quant_tmp_buffer_factor_size.md)：获取AscendQuant接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [GetDequantizeMaxMinTmpSize](get_dequantize_max_min_tmp_size.md)：在host侧获取Dequantize接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetDequantizeTmpBufferFactorSize](get_dequantize_tmp_buffer_factor_size.md)：获取Dequantize接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [GetQuantizeMaxMinTmpSize](get_quantize_max_min_tmp_size.md)：在host侧获取Quantize接口计算所需的最大和最小临时空间大小，用于选择合适的空间大小作为Tiling参数传递到kernel侧。
+- [GetQuantizeTmpBufferFactorSize](get_quantize_tmp_buffer_factor_size.md)：获取Quantize接口的maxLiveNodeCount和extraBuf，在固定空间大小下推算算子单次最大计算元素数量。
+- [Quantize](quantize.md)：按元素做量化计算，将高精度数据转换为低精度数据，支持PER_TENSOR、PER_CHANNEL、PER_TOKEN、PER_GROUP四种量化策略及舍入模式配置，最多支持二维输入。

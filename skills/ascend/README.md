@@ -1,12 +1,12 @@
 # skills/ascend — 昇腾技能层
 
-本目录的技能**只取自 [cann/cannbot-skills](https://gitcode.com/cann/cannbot-skills) 的 Skill 层**（知识、模板、调试、测试、工具类技能），未引入其 Plugin 编排层（plugins-official 的多角色工作流）与 pypto / graph / model / runtime 家族——编排层与 KDA 的最小循环哲学冲突，后者由 KDA 的任务契约 + 证据机制承担。
+本目录包含 19 个来自 [cann/cannbot-skills](https://gitcode.com/cann/cannbot-skills) Skill 层的昇腾技能，以及 2 个 KDA 本地知识查询 Skill。未引入上游 Plugin 编排层（plugins-official 的多角色工作流）与 pypto / graph / model / runtime 家族。
 
 - 来源快照：原有技能来自 `cannbot-skills @ c1ad585`（2026-09-12）；[`ascendc-code-review`](https://gitcode.com/cann/cannbot-skills/tree/591e5fd668decdf3b26545914ce98928c5fcb93d/ops/ascendc-code-review) 后补自上游 `591e5fd`（2026-09-29）。
 - 格式：Agent Skills 开放标准（SKILL.md frontmatter），与 Claude Code / OpenCode / Cursor 等兼容
 - 许可：CANN Open Software License v2.0（个人使用；再分发时请附带其 LICENSE）
 
-## 已接入清单（19 个）
+## 上游 cannbot 技能（19 个）
 
 | 类别 | 技能 |
 |---|---|
@@ -30,3 +30,12 @@ done
 ```
 
 技能只按需触发（SKILL.md 的 description 决定触发时机），全量 symlink 不会污染无关任务的会话。
+
+## KDA 本地知识查询技能
+
+| 技能 | 用途 |
+|---|---|
+| `knowledge-query` | 查询硬件、数据搬运、tiling、buffer、流水线、同步、算子案例与 Runbook。 |
+| `ascendc-api-knowledge-query` | 查询 Ascend C API 定义、参数、重载、对齐与 SoC/CANN 适用条件。 |
+
+两者读取仓内 `knowledge/ops/ascendc/` Markdown，只使用 Agent 原生文件搜索和阅读工具；不需要 Python 查询脚本、向量索引或服务。

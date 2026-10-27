@@ -1,0 +1,22 @@
+# 归一化操作
+
+- [BatchNorm](batch_norm.md)：对每一层输入做规范化处理，在batch维度上计算均值和方差进行归一化，再通过缩放和平移参数调整分布，加速训练并提升泛化能力。
+- [BatchNorm Tiling](batch_norm_tiling.md)：获取BatchNorm kernel计算时所需的Tiling参数，包括通过GetBatchNormMaxMinTmpSize获取最大最小临时空间大小和GetBatchNormNDTilingInfo获取tiling参数。
+- [DeepNorm](deep_norm.md)：在深层神经网络中替代LayerNorm，通过扩大残差连接提高Transformer稳定性，实现对shape为[B,S,H]输入数据的DeepNorm归一化。
+- [DeepNorm Tiling](deep_norm_tiling.md)：获取DeepNorm kernel计算时所需的Tiling参数，包括通过GetDeepNormMaxMinTmpSize获取最大最小临时空间大小和GetDeepNormTilingInfo获取tiling参数。
+- [GroupNorm](group_norm.md)：对shape为[N,C,H,W]的输入，将每个[C,H,W]在C维度上分为groupNum组并对每一组进行标准化，再通过可训练的缩放参数γ和平移参数β进行调整。
+- [GroupNorm Tiling](group_norm_tiling.md)：获取GroupNorm kernel计算时所需的Tiling参数，包括通过GetGroupNormMaxMinTmpSize获取最大最小临时空间大小和GetGroupNormNDTilingInfo获取tiling参数。
+- [LayerNorm](layer_norm.md)：对shape为[B,S,H]或[A,R]的输入数据进行LayerNorm归一化，输出归一化结果及均值、方差等，通过缩放系数γ、平移系数β和防除零系数ε加速训练收敛。
+- [LayerNormGrad](layer_norm_grad.md)：LayerNormGrad是一个函数，用于计算LayerNorm的反向传播梯度。该接口单独使用会输出x、resForGamma；也可以和LayerNormGradBeta配合使用，输出的resForGamma传递给LayerNormGradBeta， LayerNormGradBeta接口会输出gamma和beta，配合使用时就可以同时得到x、Gamma、beta。 算法公式为:
+- [LayerNormGradBeta](layer_norm_grad_beta.md)：LayerNormGradBeta接口用于获取反向beta/gamma的数值，和LayerNormGrad共同输出pdx, gamma和beta： 算法公式为: ! !
+- [LayerNormGradBeta Tiling](layer_norm_grad_beta_tiling.md)：获取LayerNormGradBeta kernel计算时所需的Tiling参数，包括通过GetLayerNormGradBetaMaxMinTmpSize获取最大最小临时空间大小和GetLayerNormGradBetaNDTilingInfo获取tiling参数。
+- [LayerNormGrad Tiling](layer_norm_grad_tiling.md)：获取LayerNormGrad kernel计算时所需的Tiling参数，包括通过GetLayerNormGradMaxMinTmpSize获取最大最小临时空间大小和GetLayerNormGradNDTilingInfo获取tiling参数。
+- [LayerNorm Tiling](layer_norm_tiling.md)：获取LayerNorm kernel计算时所需的Tiling参数，包括通过GetLayerNormMaxMinTmpSize获取最大最小临时空间大小和GetLayerNormNDTilingInfo获取tiling参数。
+- [Normalize](normalize.md)：在已知均值和方差的情况下，计算shape为[A,R]输入数据的标准差倒数rstd和归一化结果y，其中γ为缩放系数、β为平移系数、ε为防除零系数。
+- [Normalize Tiling](normalize_tiling.md)：获取Normalize kernel计算时所需的Tiling参数，通过GetNormalizeMaxMinTmpSize获取接口计算所需最大和最小临时空间大小。
+- [RmsNorm](rms_norm.md)：实现对shape为[B,S,H]输入数据的RmsNorm归一化，其中γ为缩放系数，ε为防除零的权重系数。
+- [RmsNorm Tiling](rms_norm_tiling.md)：获取RmsNorm kernel计算时所需的Tiling参数，包括通过GetRmsNormMaxMinTmpSize获取最大最小临时空间大小和GetRmsNormTilingInfo获取tiling参数。
+- [WelfordFinalize](welford_finalize.md)：Welford算法的后处理接口，用于在线计算均值和方差的最终结果。LayerNorm中Reduce轴较大时可切分Reduce轴，联合WelfordUpdate实现等效计算LayerNorm。
+- [WelfordFinalize Tiling](welford_finalize_tiling.md)：获取WelfordFinalize kernel计算时所需的Tiling参数，通过GetWelfordFinalizeMaxMinTmpSize获取接口计算所需最大和最小临时空间大小。
+- [WelfordUpdate](welford_update.md)：Welford算法的前处理接口，用于在线逐步计算均值和方差中间结果。LayerNorm中Reduce轴较大时可切分Reduce轴，联合WelfordFinalize实现等效计算LayerNorm。
+- [WelfordUpdate Tiling](welford_update_tiling.md)：获取WelfordUpdate kernel计算时所需的Tiling参数，通过GetWelfordUpdateMaxMinTmpSize获取接口计算所需最大和最小临时空间大小。

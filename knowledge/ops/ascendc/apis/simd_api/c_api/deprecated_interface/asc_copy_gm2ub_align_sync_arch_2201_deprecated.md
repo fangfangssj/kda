@@ -1,0 +1,97 @@
+---
+type: API
+title: asc_copy_gm2ub_align_sync_arch_2201（废弃）
+description: 头文件路径为："c_api/composite/vector_compute_composite.h"。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/deprecated_interface/asc_copy_gm2ub_align_sync_arch_2201_deprecated.md
+  role: primary
+created_at: '2026-09-12T03:09:26Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- a2
+- a3
+source_headers:
+- include/c_api/composite/vector_compute_composite.h
+---
+
+# asc_copy_gm2ub_align_sync_arch_2201（废弃）
+
+## 功能说明
+
+头文件路径为：`"c_api/composite/vector_compute_composite.h"`。
+
+**`asc_copy_gm2ub_align_sync`接口已废弃，请使用[对应的非同步接口](../vector_datamove/asc_copy_gm2ub_align/asc_copy_gm2ub_align_arch_2201.md)和同步接口[asc_sync](../sync/intra_core_sync/asc_sync.md)替代。**
+
+提供数据非对齐搬运的功能，将数据从Global Memory (GM)搬运到Unified Buffer（UB），并支持8位/16位/32位数据类型搬运。
+
+本接口支持以下两种数据搬运方式：
+
+- 前n个数据搬运
+
+    若搬运数据长度非32字节对齐，搬运数据会补齐至32字节对齐，支持以下两种填充方式：
+
+    - 手动填充：搬运前调用[asc_set_copy_pad_val](../vector_datamove/asc_set_copy_pad_val.md)配置填充值。
+    - 自动填充：不调用`asc_set_copy_pad_val`时，由硬件自动填充dummy假数据，dummy假数据的值为数据块的第一个元素的值。
+
+- 高维切分搬运
+
+    高维切分搬运采用Normal模式。若`burst_len`指定的单个数据块长度非32字节对齐，则`burst_count`指定的每个数据块都会分别补齐至32字节对齐。非32字节对齐场景支持以下两种填充方式：
+
+    - 手动填充：搬运前调用`asc_set_copy_pad_val`设置填充值。
+    - 自动填充：不调用`asc_set_copy_pad_val`时，由硬件自动填充dummy假数据，dummy假数据的值为数据块的第一个元素的值。
+
+## 函数原型
+
+- 同步计算
+
+    ```cpp
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ int8_t* dst, __gm__ int8_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ uint8_t* dst, __gm__ uint8_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ int16_t* dst, __gm__ int16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ uint16_t* dst, __gm__ uint16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ half* dst, __gm__ half* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ bfloat16_t* dst, __gm__ bfloat16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ int32_t* dst, __gm__ int32_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ uint32_t* dst, __gm__ uint32_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align_sync(__ubuf__ float* dst, __gm__ float* src, uint32_t size)
+    ```
+
+## 参数说明
+
+**表1** 参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| :--- | :--- | :--- |
+| dst | 输出 | 目的UB的起始地址。需要32字节对齐。 |
+| src | 输入 | 源GM的起始地址。需要1字节对齐。 |
+| size | 输入 | 搬运数据大小，单位为字节。取值范围：[0, 2097151]。 |
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_MTE2
+
+## 约束说明
+
+- 各存储单元的空间大小和对齐要求请参考[存储单元说明](../general_description_and_constraints.md#存储单元说明)。
+- 当`burst_count`、`burst_len`中任意一个值为0时，该接口被视为NOP（空操作）。
+- 当`size`值为0时，该接口被视为NOP（空操作）。
+- 如果本指令与其他指令存在UB地址重叠，必须插入同步指令[asc_sync_notify](../sync/intra_core_sync/asc_sync_notify.md)和[asc_sync_wait](../sync/intra_core_sync/asc_sync_wait.md)，保证多个指令串行化，防止出现异常数据。
+- 同步计算包含同步等待。
+- `left_padding_num`、`right_padding_num`对应的填充数据大小均不能超过32字节。
+
+## 调用示例
+
+```cpp
+// total_length指参与搬运的数据总长度。src是外部输入的GM内存。
+constexpr uint64_t total_length = 128;
+__ubuf__ uint8_t dst[total_length];
+asc_copy_gm2ub_align_sync(dst, src, total_length * sizeof(uint8_t));
+```

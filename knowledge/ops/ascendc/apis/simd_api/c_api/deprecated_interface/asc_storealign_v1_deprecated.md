@@ -1,0 +1,70 @@
+---
+type: API
+title: asc_storealign_pack_v2（废弃）
+description: 该接口已废弃。请使用asc_storealign_pack_quarter实现此功能。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/deprecated_interface/asc_storealign_v1_deprecated.md
+  role: primary
+created_at: '2026-09-03T08:52:46Z'
+updated_at: '2026-09-12T03:09:26Z'
+platforms:
+- '950'
+source_headers:
+- include/c_api/reg_compute/store/storealign.h
+---
+
+# asc_storealign_pack_v2（废弃）
+
+## 功能说明
+
+头文件路径为：`"c_api/reg_compute/store/storealign.h"`。
+
+**该接口已废弃。请使用[asc_storealign_pack_quarter](../reg_compute/store/asc_storealign_pack_quarter.md)实现此功能。**
+
+将矢量数据寄存器中由`mask`指示的有效32bit元素的低8bit数据压缩搬出到Unified Buffer（UB）。本接口不传入偏移量，用户需要自行更新目的操作数地址。
+
+## 函数原型
+
+```cpp
+__simd_callee__ inline void asc_storealign_pack_v2(__ubuf__ int32_t* dst_align32b, vector_int32_t src, vector_bool mask)
+__simd_callee__ inline void asc_storealign_pack_v2(__ubuf__ uint32_t* dst_align32b, vector_uint32_t src, vector_bool mask)
+__simd_callee__ inline void asc_storealign_pack_v2(__ubuf__ float* dst_align32b, vector_float src, vector_bool mask)
+```
+
+## 参数说明
+
+**表1** 参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst_align32b | 输出 | 目的操作数的起始地址，需32字节对齐。 |
+| src | 输入 | 源操作数（矢量数据寄存器）。支持的数据类型为`int32_t`、`uint32_t`、`float`。 |
+| mask | 输入 | 源操作数掩码（掩码寄存器），用于指示参与搬出的元素。对应位置为1时参与搬出，为0时不参与搬出。 |
+
+矢量数据寄存器和掩码寄存器的详细说明请参见[reg数据类型定义](../defs/type/data_type_definition.md)。
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_V
+
+## 约束说明
+
+- `dst_align32b`起始地址需32字节对齐。
+- `mask`需通过掩码设置接口预先赋值后再传入。
+
+## 调用示例
+
+```cpp
+__ubuf__ int32_t* dst_align32b = (__ubuf__ int32_t*)asc_get_phy_buf_addr(0);
+vector_int32_t src;
+vector_bool mask = asc_create_mask_b32(PAT_ALL);
+asc_storealign_pack_v2(dst_align32b, src, mask);
+```

@@ -1,0 +1,57 @@
+---
+type: API
+title: SetOutputType
+description: 设置结果矩阵Output在内存上的位置、数据格式和数据类型。
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.compute.neighborhood.convolution
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/convolution_compute/Conv3D_Tiling/SetOutputType.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-04T01:25:11Z'
+platforms: []
+source_headers:
+- include/adv_api/conv/conv3d/conv3d_tiling_base.h
+---
+
+# SetOutputType
+
+## 功能说明
+
+设置结果矩阵Output在内存上的位置、数据格式和数据类型。
+
+## 函数原型
+
+```
+void SetOutputType(const ConvCommonApi::TPosition pos, const ConvCommonApi::ConvFormat format, const ConvCommonApi::ConvDtype dtype)
+```
+
+## 参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| pos | 输入 | Output在内存上的[位置](../../../general_description_and_constraints.md#table07372185712)。当前仅支持TPosition::CO1。 |
+| format | 输入 | Output的数据格式。当前仅支持ConvFormat::NDC1HWC0。 |
+| dtype | 输入 | Output的数据类型。当前仅支持ConvDtype::FLOAT16、ConvDtype::BF16。 |
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+在调用GetTiling接口前，本接口可选调用。若未调用本接口，默认Bias为pos=TPosition::CO1，format=ConvFormat::NDC1HWC0，dtype=ConvDtype::FLOAT16。
+
+## 调用示例
+
+```
+// 实例化Conv3D API
+auto ascendcPlatform = platform_ascendc::PlatformAscendC(context->GetPlatformInfo());
+Conv3dTilingApi::Conv3dTiling conv3dApiTiling(ascendcPlatform);
+conv3dApiTiling.SetOutputType(
+    ConvCommonApi::TPosition::CO1, ConvCommonApi::ConvFormat::NDC1HWC0, ConvCommonApi::ConvDtype::BF16);
+```
+

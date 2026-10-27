@@ -1,0 +1,79 @@
+---
+type: API
+title: 复合计算概述
+description: 复合计算通常指的是在数学或编程中对复合函数或运算的处理。
+tags:
+- task.lookup
+- topic.compute.composite
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/memory_vector_compute/composite_compute/overview.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-04T01:25:11Z'
+platforms: []
+---
+
+# 概述<a name="ZH-CN_TOPIC_0000002573904727"></a>
+
+复合计算通常指的是在数学或编程中对复合函数或运算的处理。
+
+**表1**  复合指令功能说明
+
+| API | 数学表达 |
+| :--- | :--- |
+| [Axpy](axpy.md) | $dst_j=scalar \times src_i + dst_i$ |
+| [MulAddDst](mul_add_dst.md) | $dst_j=src0_i \times src1_i + dst_i$ |
+| [MulCast](mul_cast.md) | $dst_i=Cast(src0_i \times src1_i)$ |
+| [MulsCast(ISASI)](muls_cast_isasi.md) | $dst_i=Cast(src_i \times scalar)$ |
+| [AddRelu](add_relu.md) | $dst_i=Relu(src0_i + src1_i)$ |
+| [AddReluCast](add_relu_cast.md) | $dst_i=Cast(Relu(src0_i + src1_i))$ |
+| [SubRelu](sub_relu.md) | $dst_i=Relu(src0_i - src1_i)$ |
+| [SubReluCast](sub_relu_cast.md) | $dst_i=Cast(Relu(src0_i - src1_i))$ |
+| [AbsSub(ISASI)](abs_sub_isasi.md) | $dst_i=\lvert src0_i - src1_i\rvert$ |
+| [ExpSub(ISASI)](exp_sub_isasi.md) | $dst_i=e^{src0_i - src1_i}$ |
+| [FusedMulAdd](fused_mul_add.md) | $dst_j=src0_i \times dst_i + src1_i$ |
+| [MulAddRelu](mul_add_relu.md) | $dst_i=Relu(src0_i \times dst_i + src1_i)$ |
+| [CastDequant](cast_dequant.md) | • 输入数据类型为int16_t，关闭向量量化模式<br/>$dst_i=Cast(src_i \times scale + offset)$<br>• 输入数据类型为int16_t，开启向量量化模式<br>$dst_i=Cast(src_i \times scale_j + offset_j),j \in [0,15]$<br>• 输入类型为int32_t，对int32_t类型的输入做量化并进行精度转换（采用RINT舍入）<br>$dst_i=Cast(src_i \times scale)$ |
+| [AddDeqRelu](add_deq_relu.md) | $dst_i=Relu(Deq(src0_i + src1_i))$<br>$Deq(x)=Cast(x \times scale)$ |
+
+## 推荐使用场景<a name="zh-cn_topic_0000002558185995_section23771839304"></a>
+
+- Unified Buffer（UB）资源紧张场景。
+
+  使用复合指令能在不修改源操作数原有数据的同时，减少UB空间的使用。
+
+- 高性能场景。
+
+  在不考虑bank冲突等其它因素的情况下，由于使用复合指令能够减少计算指令的数量，能够带来性能提升。
+
+- 高精度场景。
+
+  对于源操作数和目的操作数类型一致的情况，使用复合指令不提升精度；
+
+  对于目的操作数数据类型精度高于源操作数的情况，使用复合指令有精度提升（如源操作数数据类型为half，目的操作数数据类型为float），如Axpy、MulAddDst。
+
+## 关键特性说明
+
+### 精度转换
+
+MulCast、AddReluCast、SubReluCast、MulsCast指令包含类型转换操作，转换规则参考下表：
+
+**表2**  精度转换规则
+
+| 源操作数的数据类型 | 目的操作数的数据类型 | 类型转换模式介绍 |
+| :----------------- | :------------------- | :--------------- |
+| float | half | 将源操作数按照CAST_NONE模式取到half所能表示的数，以half格式（溢出默认按照饱和处理）存入目的操作数中。 |
+| half | int8_t | 将源操作数按照CAST_NONE模式取整，以int8_t格式（溢出默认按照饱和处理）存入目的操作数中。 |
+| half | uint8_t | 将源操作数按照CAST_NONE模式取整，以uint8_t格式（溢出默认按照饱和处理）存入目的操作数中。 |
+| int16_t | int8_t | 将源操作数按照CAST_NONE模式取到int8_t所能表示的数，以int8_t格式（溢出默认按照饱和处理）存入目的操作数中。 |
+| int64_t | float | 将源操作数按照CAST_NONE模式取到float所能表示的数，以float格式（溢出默认按照饱和处理）存入目的操作数中。 |
+| int64_t | int32_t | 将源操作数以int32_t格式（溢出默认按照饱和处理）存入目的操作数中 |
+
+### 量化计算
+
+CastDequant、AddDeqRelu接口涉及量化参数的设置，需要结合[SetDeqScale](../type_conversion_aux_config/set_deq_scale.md)接口使用。
+
+### 三操作数读取
+
+对于MulAddDst、FusedMulAdd、MulAddRelu接口，若三个操作数均不重叠，将存在三读一写情况（其中目的操作数上既有读操作又有写操作），由于硬件最多支持两读一写，指令的理论并行度将在原有基础上减半，针对该情况，可通过重叠操作数减少读操作来恢复原并行度。

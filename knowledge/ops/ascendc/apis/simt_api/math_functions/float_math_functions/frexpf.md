@@ -1,0 +1,102 @@
+---
+type: API
+title: Frexpf
+description: 将x分解为归一化尾数和2的整数次幂，指数存入exp参数中。
+tags:
+- task.lookup
+- topic.implementation.api_layer.simt_api
+- topic.compute.elementwise.math_function
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMT-API/math_functions/float_math_functions/frexpf.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/simt_api/math_functions.h
+---
+
+# frexpf
+
+## 功能说明
+
+头文件路径为：`"simt_api/math_functions.h"`。
+
+将`x`转换为归一化\[1/2, 1\)的有符号数乘以2的积分幂。返回归一化的有符号数，指数存储在`exp`中。
+
+![](https://raw.gitcode.com/cann/asc-devkit/raw/639b2b5c1031188107d23d785d52b935f1b4f13b/docs/zh/api/figures/formulaimage_0000002516816359.png)
+
+## 函数原型
+
+```cpp
+inline float frexpf(float x, int *exp)
+```
+
+## 参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| x | 输入 | 源操作数。 |
+| exp | 输出 | UB、Global Memory或栈空间的地址，用于存储以2为底的指数。 |
+
+## 返回值说明
+
+将x转换为归一化\[1/2, 1\)的有符号数乘以2的积分幂时，返回该有符号数。
+
+- 当x为inf时，返回值为inf，exp为0。
+- 当x为-inf时，返回值为-inf，exp为0。
+- 当x为nan时，返回值为nan，exp为0。
+- 当x为0时，返回值为0，exp为0。
+
+## 约束说明
+
+无
+
+## 调用示例
+
+- SIMT编程场景：
+
+    ```cpp
+    #include "simt_api/math_functions.h"
+
+    __global__ __launch_bounds__(256) void compute_frexpf(float *result, int *exp_out, const float *x, uint32_t count)
+    {
+        const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+        if (idx >= count) {
+            return;
+        }
+        result[idx] = frexpf(x[idx], exp_out + idx);
+    }
+    ```
+
+- SIMD与SIMT混合编程场景：
+
+    ```cpp
+    #include "simt_api/math_functions.h"
+
+    __simt_vf__ __launch_bounds__(256) inline void compute_frexpf_vf(__gm__ float *result, __gm__ int *exp_out, __gm__ const float *x, uint32_t count)
+    {
+        const uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+        if (idx >= count) {
+            return;
+        }
+        result[idx] = frexpf(x[idx], exp_out + idx);
+    }
+
+    __global__ __vector__ void run_frexpf(__gm__ float *result, __gm__ int *exp_out, __gm__ const float *x, uint32_t count)
+    {
+        asc_vf_call<compute_frexpf_vf>(dim3(256), result, exp_out, x, count);
+    }
+    ```
+
+输入输出示例如下：
+
+```
+x: 0.25, 0.75, 1.25, 1.75
+result: 0.5, 0.75, 0.625, 0.875
+exp_out: -1 0 1 1
+```

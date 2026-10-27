@@ -1,0 +1,27 @@
+# 基础算术
+
+- [Abs](abs.md)：对srcReg中有效元素逐个取绝对值并写入dstReg，复数类型取模。
+- [Add](add.md)：对srcReg0和srcReg1按元素求和，结果写入dstReg，可选保留进位。
+- [AddC](add_c.md)：对srcReg0、srcReg1及输入进位按元素求和，结果写入dstReg和carry。
+- [Adds](adds.md)：对srcReg按元素与标量求和，结果写入dstReg。
+- [Div](div.md)：对srcReg0和srcReg1按元素相除，结果写入dstReg。
+- [Exp](exp.md)：对srcReg按元素进行指数运算，结果写入dstReg。
+- [LeakyRelu](leaky_relu.md)：按元素执行Leaky ReLU操作，大于0的元素直接写入目的操作数，否则乘以标量scalarValue后写入。
+- [Ln](ln.md)：根据mask逐元素对源操作数求自然对数，将结果写入目的操作数。
+- [Log](log.md)：根据mask逐元素对源操作数求自然对数（以e为底），将结果写入目的操作数。功能与Ln接口等价，命名遵循C/C++标准库log()约定。
+- [Log10](log10.md)：根据mask逐元素对源操作数求以10为底的对数，将结果写入目的操作数。
+- [Log2](log2.md)：根据mask对源操作数逐元素求以2为底的对数，将结果写入目的操作数。
+- [Max](max.md)：根据mask对源操作数srcReg0、srcReg1按元素求最大值，将结果写入目的操作数dstReg。
+- [Maxs](maxs.md)：根据mask对源操作数srcReg按元素与标量比较取较大值，将结果写入目的操作数dstReg。
+- [Min](min.md)：根据mask对源操作数srcReg0、srcReg1按元素求最小值，将结果写入目的操作数dstReg。
+- [Mins](mins.md)：根据mask对源操作数srcReg按元素与标量比较取较小值，将结果写入目的操作数dstReg。
+- [Mul](mul.md)：根据mask对源操作数srcReg0、srcReg1按元素相乘，将结果写入目的操作数dstReg。
+- [Mull](mull.md)：根据mask对源操作数srcReg0、srcReg1按元素相乘，将乘法结果的低位部分写入dstReg0，溢出（高位）部分写入dstReg1。
+- [Muls](muls.md)：根据mask对源操作数srcReg每个元素与标量scalarValue求积，将结果写入目的操作数dstReg。
+- [Neg](neg.md)：根据mask对源操作数srcReg逐元素取相反数，将结果写入目的操作数dstReg。
+- [Reg矢量计算概述](overview.md)：寄存器矢量基本算术运算接口概述，涵盖Abs、Exp、Add、Mul等单目、双目及标量双目运算。
+- [Prelu](prelu.md)：实现PReLU激活函数，源操作数srcReg0大于0的元素直接写入目的操作数，否则与srcReg1对应元素相乘后写入。
+- [Relu](relu.md)：根据mask对源操作数srcReg进行Relu（线性整流）操作，将结果写入目的操作数dstReg。
+- [Sqrt](sqrt.md)：根据mask对源操作数srcReg逐元素做平方根运算，将结果写入目的操作数dstReg。
+- [Sub](sub.md)：根据mask对源操作数srcReg0、srcReg1按元素求差，将结果写入目的操作数dstReg。可选保留进位到carry寄存器。
+- [SubC](sub_c.md)：根据mask对源操作数srcReg0、srcReg1及输入进位carrySrc按元素求差，将结果写入dstReg，同时将进位结果写入carry寄存器。

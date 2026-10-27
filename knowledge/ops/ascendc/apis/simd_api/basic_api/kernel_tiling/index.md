@@ -1,0 +1,14 @@
+# Kernel Tiling
+
+- [COPY_TILING_WITH_ARRAY](copy_tiling_with_array.md)：拷贝指定大小的数组内容到目标数组中，并返回指向拷贝后数组的指针。适用于拷贝一个结构体的数组成员变量的场景。该宏将指定数组拷贝至栈上，适用于频繁访问Tiling数据的场景，能够加快数据访问速度。
+- [COPY_TILING_WITH_STRUCT](copy_tiling_with_struct.md)：拷贝Tiling结构体，并返回指向拷贝后的Tiling结构体的指针。该宏适用于嵌套结构体场景，可拷贝结构体的子结构体成员变量。该宏将指定结构体拷贝至栈上，适用于频繁访问Tiling数据的场景，能够加快数据访问速度。
+- [GET_TILING_DATA](get_tiling_data.md)：用于获取算子kernel入口函数传入的Tiling信息，并填入注册的TilingData结构体中，此函数会以宏展开的方式进行编译。对应的算子host实现中需要定义TilingData结构体，实现并注册计算TilingData的Tiling函数。如果用户通过TilingData结构注册注册了多个TilingData结构体，使用该接口返回默认注册的结构体。
+- [GET_TILING_DATA_MEMBER](get_tiling_data_member.md)：用于获取tiling结构体的成员变量。
+- [GET_TILING_DATA_PTR_WITH_STRUCT](get_tiling_data_ptr_with_struct.md)：在使用该宏时，开发者可以通过指定结构体名称来获取相应的Tiling信息，并将其填入对应的Tiling结构体中。完成填充后，该宏将返回一个指向该Tiling结构体的指针，并使用__tiling_data_ptr__修饰符对该指针进行修饰。这种修饰方式能够确保在动静态Shape场景下代码的统一性和兼容性。
+- [GET_TILING_DATA_WITH_STRUCT](get_tiling_data_with_struct.md)：使用该接口指定结构体名称，可获取指定的tiling信息，并填入对应的Tiling结构体中，此函数会以宏展开的方式进行编译。与GET_TILING_DATA的区别是：GET_TILING_DATA只能获取默认注册的结构体，该接口可以根据指定的结构体名称获取对应的结构体，常用于针对不同的TilingKey注册了不同结构体的情况下。
+- [RegisterNoneTiling](register_none_tiling.md)：Kernel侧使用标准C++语法定义TilingData时，告知框架使用未注册结构体，配套GET_TILING_DATA系列接口获取TilingData。
+- [REGISTER_TILING_DEFAULT](register_tiling_default.md)：用于在kernel侧注册用户使用标准C++语法自定义的默认TilingData结构体。 注册TilingData结构体用于告知框架侧用户使用标准C++语法来定义TilingData，同时告知框架TilingData结构体类型，用于框架做tiling数据解析。
+- [REGISTER_TILING_FOR_TILINGKEY](register_tiling_for_tilingkey.md)：用于在kernel侧注册与TilingKey相匹配的TilingData自定义结构体；该接口需提供一个逻辑表达式，逻辑表达式以字符串“TILING_KEY_VAR”代指实际TilingKey，表达TilingKey所满足的范围。
+- [设置Kernel类型](set_kernel_type.md)：用于用户自定义设置kernel类型，控制算子执行时只启动该类型的核，避免启动不需要工作的核，缩短核启动开销。
+- [TILING_KEY_IS](tiling_key_is.md)：在核函数中判断本次执行时的tiling_key是否等于host侧运行时设置的某个key，从而标识tiling_key==key的一条kernel分支。
+- [TILING_KEY_LIST](tiling_key_list.md)：TILING_KEY_LIST函数用于在核函数中判断当前执行的TilingKey是否与Host侧配置的指定TilingKey匹配，从而标识满足TilingKey == key1或TilingKey == key2条件的分支逻辑。

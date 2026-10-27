@@ -1,0 +1,47 @@
+# 精度验证
+
+- [aclnn 接口调用指南](aclnn_interface_guide.md)：aclnn 接口调用指南：精度验证必须经 torch_aclnn_helper.h 的 EXEC_NPU_CMD 宏构建 PyTorch C++ Extension，Python 侧用 torch.ops.npu.<op> 调用；不存在 torch.ops.aclnn 命名空间。
+- [生态算子开源精度标准](ops_precision_standards.md)：生态算子开源精度标准：用平均相对误差 MERE 与最大相对误差 MARE（分母加 1e-7 防除零）判定达标；含迁移场景特殊考虑——950 新增数据类型、量化算子先 round 后 clamp 的测试设计、随机数建议 CPU 生成再传 NPU、跨架构精度对比及 MicroAPI 重写与 SIMT 优化后的验证要求。
+- [{{OP_NAME}} 算子精度验证报告（ascend950）](precision_report_template.md)：ascend950 算子精度验证报告的填空模板：抬头记录算子公式、torch.ops.npu 调用式、PyTorch CPU 参考基线与支持 dtype，正文含总览通过率、精度阈值标准、常规 shape 与边界值结果、按 dtype 汇总、950 与 910b 对比及关键发现各节。
+- [AscendC 算子精度标准（CPU 真值口径）](precision_standard_v2_1.md)：跨代际移植与反向生成的精度标准（CPU 真值口径）：真值优先 CPU FP64 完整复现公式与边界语义，禁用外部加速器结果当真值；要求覆盖小值域/零值/极值/非对齐/空维/动态 shape，逐输出记录误差指标，不得删失败样本或放宽阈值，正反向级联须验全部梯度。
+- [精度测试前置数值验证指南](precision_test_pre_validation_guide.md)：写精度测试脚本之前必做的前置数值验证流程：先用小规模输入（B=1~2、V=16~32）跑 NPU 算子并打印全部输出，手写最简 CPU 参考实现逐元素对比确认语义一致，不一致则先修参考实现。含检查清单、反模式与精度指标的有效点过滤。
+- [自定义算子 PyTorch 绑定构建指南（torch_aclnn_helper.h + EXEC_NPU_CMD 标准方式）](pytorch_binding_build_guide.md)：自定义算子 PyTorch 绑定构建的唯一标准方式：用 torch_aclnn_helper.h 的 EXEC_NPU_CMD 宏，禁手调 aclnn C API 或 Pybind 直封。适用于已装 OPP 包、有 libcust_opapi.so 但未注册进 torch.ops.npu 的算子。
+- [算子源码逆向分析方法论](source_code_reverse_analysis.md)：无文档算子的源码逆向分析方法论：五步流程为从 _def.cpp 提接口签名与 SoC 配置、逆向计算逻辑、推断输入域约束、提取边界条件、与 PyTorch 对标；并给出代码逆向加数学公式、同类算子类比、shape 关系推断三种测试用例生成策略及有文档时的差异检查清单。
+
+- [混合精度转换链的数值语义与缓冲预算](conversion_chain_and_storage.md)：按输入、计算、累计和输出 dtype 设计 Cast 链，独立核对舍入、地址重叠、UB 开销及块量化的 scale 范围。
+- [Ascend C 精度对比的证据与故障隔离](comparison_evidence_and_fault_isolation.md)：保持输入和数值契约一致，结合误差坐标、计算阶段和结构边界区分数值误差与布局/同步错误。
+- [升精度计算中的状态、舍入边界与 UB 成本](promoted_compute_state_and_memory_cost.md)：补充混合精度链的存活缓冲计算、累加状态初始化、非线性更新顺序以及 FP16/BF16 的取舍。
+- [量化舍入、饱和边界与 Bias 数值域](rounding_quantization_and_bias_domains.md)：明确整数/低比特量化的完整数值链，以及整数 Bias 与实数 Bias 的不同加入位置。
+- [Rsqrt Newton 修正的状态与数值域](rsqrt_refinement_state_and_domain.md)：保存倒数平方根迭代公式及误差关系，明确原始输入、近似值、epsilon 与特殊值必须独立处理。
+- [量化模式分发与反量化广播坐标](quantized_dispatch_and_dequant_broadcast.md)：区分类型别名、实际低位计算、行列 scale 与高阶接口的空间和平台合同。
+- [Fixpipe 随路量化通路与参数寿命](fixpipe_quantization_path_and_parameter_lifetime.md)：在已有硬件量化说明上保留参数搬运、格式匹配及部分融合的条件。
+- [dtype 直传与 Wrapper 转换流量](dtype_passthrough_and_wrapper_traffic.md)：将低精度数据直接传给 Kernel，保存内部 FP32 计算与原有舍入语义。
+- [初等函数稳定变换与语义保留](elementary_stability_without_semantic_clamping.md)：纠正 Exp 范围、无条件 epsilon/截断及 Sinh 平移错误，补充负状态抵消与输出 dtype 的分离诊断。
+- [误差指标与实际表示的测试输入](error_metrics_and_represented_test_inputs.md)：修正容差公式、空/非有限值统计和数据生成中改变 shape 或退化为零的陷阱。
+- [MX Scale 的范围条件与反例证据](mx_scale_range_and_counterexample_evidence.md)：从目标量化范围推导 scale 下界，区分保守指数偏移与完整 E8M0 编码规则。
+- [GLU 近零重算与局部近似的数值合同](glu_near_zero_recompute_contract.md)：保留 FP16 输入逐 K 重算及 Swish 近零公式的严格适用域和同步变化。
+- [迁移比较的逐字节等价与可观测范围](migration_bitwise_equivalence_and_observability.md)：区分数值正确性、确定性和逐位迁移等价，覆盖动态输出、原地状态和真实执行。
+- [SHMEM 误差公式、逐位比较与参考兜底边界](shmem_comparison_formulas_and_reference_limits.md)：区分逐元素、平均偏置及参考误差比，保留来源阈值的场景属性并纠正模板判定差异。
+- [激活参考实现的权重状态、边界与稳定公式](activation_reference_state_and_stable_formulas.md)：抽取 HardTanh、Linear+Softplus 与 Tanh 参考中的数学和测试条件，纠正示例覆盖与指数范围。
+- [三方精度比较与诊断假设的边界](three_way_comparison_and_diagnostic_hypotheses.md)：区分通过判据、参考误差比、量化容许和统计症状，补全生成器与真实 dtype 的一致性。
+- [DynamicQuant 转换路径与舍入反例](dynamic_quant_cast_paths_and_rounding_counterexamples.md)：保留 A2/CANN8.5 来源边界，修正双重舍入、最大值与结构对齐误读。
+- [Dequant-GLU 的列映射与 Scale 合同](dequant_glu_column_mapping_and_scale_contracts.md)：保留 mode 列置换、累加类型与量化收尾，限制软件路径唯一性。
+- [软件 Sigmoid 的范围规约与精度证据边界](software_sigmoid_range_reduction_and_evidence_limits.md)：保存多项式/Newton 候选，纠正所有硬件超越函数仅 FP16 精度的泛化。
+- [DSL API 路由的数值与重载边界](dsl_api_routing_and_numerical_scope.md)：保留归约、单目、双目及Gather映射，修正标量替换和Rsqrt泛化。
+- [Barrier 顺序与公式等价性](barrier_ordering_and_formula_equivalence.md)：区分数据依赖和数值舍入，识别Rstd及Modulate示例语义差异。
+- [量化 Bias 单位、范围与舍入声明](quantized_bias_units_range_and_rounding_claims.md)：保留动态INT4、FakeQuant和Gemma模式，纠正不可比基线。
+- [Rsqrt 初值溢出与特殊值收尾](rsqrt_seed_overflow_and_special_value_finalization.md)：保存Newton状态要求，纠正倒数后开方与修正掩码的陷阱。
+- [Scale Offset 位打包与 FP19 声明边界](scale_offset_bit_packing_and_fp19_claim_limits.md)：保存掩码、Int9和Uint64字段，纠正浮点位宽及缺失实现。
+- [统计修正与 Softmax 梯度合同](statistics_correction_and_softmax_gradient_contract.md)：保留BatchNorm及AMSGrad状态，纠正梯度基线和API内部推断。
+- [FP32 升精、算子状态与不完整归约](fp32_promotion_operator_state_and_incomplete_reductions.md)：保存逐算子混合精度细节，纠正算法与类型混淆。
+- [低比特格式注册、打包与 MX Scale](low_bit_format_registration_packing_and_mx_scale.md)：保存FP4/FP8/INT4实现约束，纠正存储收益和枚举互通。
+- [量化特殊值掩码与最终输出](quantization_special_value_masks_and_final_outputs.md)：纠正ZEROING、NaN修正位置和Scale倒数的泛化。
+- [舍入链、模式 ABI 与窄化前提](rounding_chain_modes_and_narrowing_preconditions.md)：保存多级INT8转换及模式分发，限定NONE和Trait语义。
+- [量化统计与双线性快速路径合同](quantization_statistics_and_bilinear_fast_path_contracts.md)：保存分层Cast和四角分支，补齐有效域、发布与尾部。
+- [Clipped SwiGLU 布局与非对称 Clip 语义](clipped_swiglu_layout_and_asymmetric_clip_semantics.md)：保存奇偶Gather，纠正仅上限裁剪仍防所有Exp溢出。
+- [APACE 编码 golden 与容差边界](apace_encoded_golden_and_tolerance_boundaries.md)：APACE 编码 golden 与容差边界的来源实例与适用边界。
+- [APACE MX scale 长度与物理顺序](apace_mx_scale_lengths_and_physical_order.md)：APACE MX scale 长度与物理顺序的来源实例与适用边界。
+- [混合容差、通过比例与最大误差的联合判定](mixed_tolerance_ratio_and_error_cap.md)：保存固定 Skill 浮点比较策略的逐元素混合容差、通过比例和误差硬上限，明确特殊值与 ULP@1 的边界。
+- [精度复检的 Bootstrap 中位数区间与样本合同](bootstrap_recheck_ratio_scope.md)：保存误差比样本和 Bootstrap 中位数判据，区分复检次数、重采样次数、均值区间及文档与实现的分位点差异。
+- [NaN/Inf 比较的参考策略与通过、跳过、待查状态](inf_nan_reference_policy_and_decision_states.md)：解释旧版 INF_NAN_MODE_ENABLE 映射和比较器真实分支，区分无特殊值、跳过 Inf、符号不一致及第三方同错。
+- [小值域 ErrorCount 的子集、触发与参考分母](small_value_subset_error_counts.md)：保存 AOG 双标杆小值域公式和阈值，区分默认 1% 触发、任意元素策略、正常域比较及 NaN/广播漏检。

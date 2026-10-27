@@ -1,0 +1,73 @@
+---
+type: API
+title: Init
+description: 用于内存和同步流水事件EventID的初始化。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.implementation.memory_management
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/resource_management/TPipe/Init.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+- '910'
+- kirin_x90
+- kirin_9030
+source_headers:
+- include/basic_api/kernel_tpipe.h
+---
+
+# Init<a name="ZH-CN_TOPIC_0000001717287036"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为：`"basic_api/kernel_tpipe.h"`。
+
+用于内存和同步流水事件EventID的初始化。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
+__aicore__ inline void Init()
+```
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+-   Tpipe对象复用时，要与[Destroy](destroy.md)接口成对使用，每次复用需要先Destroy释放资源，再调用init重新初始化。
+-   Tpipe构造函数内部已调用Init，无需在Tpipe对象初始化后再额外调用。
+
+## 返回值说明<a name="section640mcpsimp"></a>
+
+无
+
+## 调用示例<a name="section642mcpsimp"></a>
+
+
+```cpp
+// 实例化一个浮点型的自定义算子对象
+KernelTPipeInit<float> op;
+uint32_t srcSize = 128;
+
+// 构造一个Tpipe对象
+AscendC::TPipe tpipe;
+
+// 第一次执行流程
+op.Init(x, z, srcSize, &tpipe);
+op.Process();
+tpipe.Destroy();  // 重复使用需要先Destory，再进行Init
+
+// 第二次执行流程：复用算子对象和tpipe管道对象
+tpipe.Init();
+op.Init(x, z, srcSize, &tpipe);
+op.Process();
+tpipe.Destroy();  // 销毁tpipe管道资源
+```
+
+- [FusedLinearCrossEntropyLossGrad A2/A3 ACLNN 算子知识](../../../../../operators/aclnn/nn/matmul/fused_linear_cross_entropy_loss_grad.md)

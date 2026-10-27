@@ -1,0 +1,34 @@
+---
+type: Runbook
+title: "CANN perf gap is a knowledge gap, not a hardware limit"
+description: "CANN perf gap is a knowledge gap, not a hardware limit"
+tags: [task.optimization, topic.programming_model.execution_model.simt, topic.data_movement, topic.performance.analysis]
+status: draft
+sources:
+  - resource: https://gitcode.com/cann/cannbot-skills/blob/bb96c9c595c7a8e96745d365291769dc48319c22/plugins-community/ascendc-port-orchestrator/kb/okf/runbooks/field-notes/perf/ol-42-cann-perf-gap-is-a-knowledge-gap-not-a-hardware-li.md
+    role: primary
+created_at: "2026-08-30T16:00:00Z"
+updated_at: "2026-09-16T07:35:48Z"
+platforms: []
+aliases: ["OL-42"]
+---
+
+# CANN perf gap is a knowledge gap, not a hardware limit
+
+> 原 OKF v1 卡号：**OL-42**。
+> 现象分类：perf_regression；观测置信度：single_run（单次观测）。
+> 触发信号：
+> - when analyzing the cause of a performance gap
+
+## 适用场景
+
+- 适用技术与问题域：AscendC 性能/测量问题（现象分类：perf_regression）。
+- 适用平台：平台待核验（draft）；本卡为单次观测沉淀（single_run），按卡内声明范围消费。
+
+- **Category**: trust_calibration
+- **Loaded by**: Analyzer, Generator
+- **Trigger**: when analyzing the cause of a performance gap
+- **Lesson**: CANN uses exactly the same hardware capabilities and AscendC APIs. If our op runs <1.0x, the reason is missing optimization knowledge (DMA batching, cache-line coalescing, hybrid SIMT+SIMD strategies), not CANN having a "secret hardware interface". CANN source (~/workspace/cann/) contains these optimization techniques and can be studied in op-gen mode. Perf gap = closable knowledge gap.
+- **Evidence**: Gather fp16 dim=last 0.16x is not a platform limit — CANN achieves 1.0x on the same hardware, proving the AscendC API fully supports it
+
+<!-- 迁移自 porter OPERATIONAL_KNOWLEDGE.md OL-42（category=trust_calibration，convert_ol_to_okf.py --faithful-fallback，B2 整档忠实搬运）。confidence/severity/reproduce_count 未升格。 -->

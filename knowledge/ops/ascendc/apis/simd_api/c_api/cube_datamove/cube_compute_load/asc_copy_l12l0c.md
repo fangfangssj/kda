@@ -1,0 +1,92 @@
+---
+type: API
+title: asc_copy_l12l0c
+description: 头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/cube_datamove/cube_compute_load/asc_copy_l12l0c.md
+  role: primary
+created_at: '2026-10-20T07:46:54Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- a2
+- a3
+source_headers:
+- include/c_api/cube_datamove/cube_datamove.h
+---
+
+# asc_copy_l12l0c
+
+## 功能说明
+
+头文件路径为：`"c_api/cube_datamove/cube_datamove.h"`。
+
+将矩阵由L1 Buffer搬运到L0C Buffer中。该搬运支持的数据类型如下：
+- bfloat16_t->bfloat16_t
+- half->half
+- float->half
+- float->bfloat16_t
+- float->float
+- int32_t->int32_t
+- uint32_t->uint32_t
+
+源、目的矩阵的格式参见[关键分形格式详解](../../cube_compute/cube_compute_fractal_intro/key_fractal_format_details.md)；L0C中的数据作为累加初始值参与矩阵乘加时，参见[asc_mmad](../../cube_compute/mmad_compute/asc_mmad.md)的`c_matrix_source`和`c_matrix_init_val`参数。
+
+## 函数原型
+
+- 常规搬运
+
+    ```cpp
+    __aicore__ inline void asc_copy_l12l0c(__cc__ bfloat16_t* dst, __cbuf__ bfloat16_t* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ half* dst, __cbuf__ half* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ half* dst, __cbuf__ float* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ bfloat16_t* dst, __cbuf__ float* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ float* dst, __cbuf__ float* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ int32_t* dst, __cbuf__ int32_t* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    __aicore__ inline void asc_copy_l12l0c(__cc__ uint32_t* dst, __cbuf__ uint32_t* src, uint16_t n_burst, uint16_t len_burst, uint16_t src_gap, uint16_t dst_gap)
+    ```
+
+## 参数说明
+
+**表1** 参数说明
+
+| 参数名 | 输入/输出 | 描述                                                              |
+| :--- |:------|:----------------------------------------------------------------|
+| dst | 输出    | 目的操作数的起始地址。|
+| src | 输入    | 源操作数的起始地址。|
+| n_burst | 输入    | 待搬运的连续传输数据块个数。取值范围：[1, 4095]。 |
+| len_burst | 输入    | 待搬运的每个连续传输数据块的长度，单位为32个字节。取值范围：[1, 65535]。 |
+| src_gap | 输入    | 表示相邻迭代间，源操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔。 |
+| dst_gap | 输入    | 表示相邻迭代间，目的操作数前一个迭代第一个分形的结束地址到下一个迭代第一个分形起始地址的间隔。 |
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_MTE1
+
+## 约束说明
+
+- 各存储单元的空间大小和对齐要求请参考[存储单元说明](../../general_description_and_constraints.md#存储单元说明)。
+- 如果本指令与其他指令存在数据依赖，需要插入[同步指令](../../sync/system_sync_overview.md)，保证多个指令串行化，防止出现异常数据。
+
+## 调用示例
+
+```cpp
+//待搬运的连续传输数据块为1个
+constexpr uint16_t n_burst = 1;
+//待搬运的每个连续传输数据块的长度为32个字节
+constexpr uint16_t len_burst = 1;
+//相邻迭代间，源操作数前一个分形与后一个分形起始地址的间隔为64个字节
+constexpr uint16_t src_gap = 1;
+//相邻迭代间，目的操作数前一个分形与后一个分形起始地址的间隔为32个字节
+constexpr uint16_t dst_gap = 0;
+__cbuf__ half src[256];
+__cc__ half dst[256];
+asc_copy_l12l0c(dst, src, n_burst, len_burst, src_gap, dst_gap);
+```

@@ -1,0 +1,7 @@
+# 联合体
+
+- [asc_fill_value_config](asc_fill_value_config.md)：asc_fill_value_config为fill_value的初始化参数结构体，包含asc_fill_l0a/asc_fill_l0b/asc_fill_l1接口需要配置的各种初始化参数。
+- [asc_l13d_fmatrix_config](asc_l13d_fmatrix_config.md)：asc_l13d_fmatrix_config用于设置asc_copy_l12l0a/asc_copy_l12l0b的3D格式搬运接口的Feature map属性参数。
+- [asc_load3d_v2_config](asc_load3d_v2_config.md)：asc_load3d_v2_config用于设置Load3Dv2接口的repeat参数。
+- [asc_ndim_pad_count_config](asc_ndim_pad_count_config.md)：asc_ndim_pad_count_config用于asc_set_ndim_pad_count接口中，设置asc_ndim_copy_gm2ub接口的各个维度左右侧的padding元素个数。
+- [asc_store_atomic_config](asc_store_atomic_config.md)：asc_store_atomic_config参数包含原子操作启用位与原子操作类型，用于asc_get_store_atomic_config接口使用。

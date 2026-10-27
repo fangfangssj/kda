@@ -1,0 +1,27 @@
+# 类型特性
+
+- [add_const](add_const.md)：在程序编译时，为指定类型添加const限定符，可以用于在编译时进行类型转换。
+- [add_cv](add_cv.md)：在程序编译时，为指定类型添加const和volatile限定符，可以用于在编译时进行类型转换。
+- [add_lvalue_reference](add_lvalue_reference.md)：在程序编译时，为指定类型添加左值引用限定符，可以用于在编译时进行类型转换。
+- [add_pointer](add_pointer.md)：在程序编译时，为指定类型添加指针限定符，可以用于在编译时进行类型转换。
+- [add_rvalue_reference](add_rvalue_reference.md)：在程序编译时，为指定类型添加右值引用限定符，可以用于在编译时进行类型转换。
+- [add_volatile](add_volatile.md)：在程序编译时，为指定类型添加volatile限定符，可以用于在编译时进行类型转换。
+- [Conditional](conditional.md)：编译时类型特征工具，根据布尔条件从两个类型中选择一个，用于模板元编程中的类型选择。
+- [EnableIf](enable_if.md)：编译时模板元编程工具，根据布尔条件启用或禁用特定的函数模板、类模板或模板特化。
+- [IntegralConstant](integral_constant.md)：封装编译时常量整数值的模板结构体，是类型特性和编译时计算的基础组件，支持隐式转换和函数调用运算符。
+- [is_array](is_array.md)：在程序编译时，检测一个类型是否为数组类型，可以用于在编译时进行类型检查和条件处理。
+- [is_base_of](is_base_of.md)：is_base_of是定义于头文件的一个类型特征工具，它能够在程序编译时检查一个类型是否为另一个类型的基类。本接口可应用在模板元编程、类型检查和条件编译等场景，用于在编译阶段捕获潜在的类型错误，提高代码的鲁棒性。
+- [is_const](is_const.md)：在程序编译时，检测一个类型是否为const限定的类型，可以用于在编译时进行类型检查和条件处理。
+- [is_convertible](is_convertible.md)：is_convertible是定义于头文件的一个类型转换检查工具，它提供了一种在程序编译时进行类型转换检查的机制：判断两个类型之间是否可以进行隐式转换并返回结果布尔值。本接口可应用在模板元编程、函数重载决议以及静态断言等场景，用于在程序编译阶段捕获潜在的类型转换错误，避免发生运行时错误。
+- [is_floating_point](is_floating_point.md)：在程序编译时，检测一个类型是否为浮点类型，可以用于在编译时进行类型检查和条件处理。
+- [is_integral](is_integral.md)：在程序编译时，检测一个类型是否为整数类型，可以用于在编译时进行类型检查和条件处理。
+- [is_pointer](is_pointer.md)：在程序编译时，判断一个类型是否为指针类型，可以用于在编译时进行类型检查和条件处理。
+- [is_reference](is_reference.md)：在程序编译时，检测一个类型是否为引用类型，可以用于在编译时进行类型检查和条件处理。
+- [is_same](is_same.md)：is_same是定义在头文件里的一个类型特征工具，它能够在程序编译时判断两个类型是否完全相同。本接口可应用在模板元编程、类型检查、条件编译等场景，用于在编译阶段确定类型信息，避免运行时可能出现的类型不匹配问题。
+- [is_void](is_void.md)：在程序编译时，检测一个类型是否为void类型，可以用于在编译时进行类型检查和条件处理。
+- [remove_const](remove_const.md)：在程序编译时，对传入的模板参数类型移除const限定符，可以用于在编译时进行类型转换。
+- [remove_cv](remove_cv.md)：在程序编译时，对传入的模板参数类型移除const限定符或volatile限定符，或同时移除这两种限定符，可以用于在编译时进行类型转换。
+- [remove_pointer](remove_pointer.md)：在程序编译时，从给定类型中移除指针限定符，可以用于在编译时进行类型转换。
+- [remove_reference](remove_reference.md)：在程序编译时，从给定类型中移除引用限定符，包括左值引用T&和右值引用T&&，可以用于在编译时进行类型转换。
+- [remove_volatile](remove_volatile.md)：在程序编译时，对传入的模板参数类型移除volatile限定符，可以用于在编译时进行类型转换。
+- [Utils API类型特性](type_traits.md)：type_traits是Ascend C标准库中的一个头文件（），它提供了一系列用于在编译时进行类型检查、类型转换和类型操作的模板元编程工具。这些工具可以帮助开发者在程序编译时进行类型相关的决策，从而提高代码的安全性和性能。

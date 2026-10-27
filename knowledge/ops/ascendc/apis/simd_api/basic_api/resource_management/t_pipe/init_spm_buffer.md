@@ -1,0 +1,122 @@
+---
+type: API
+title: InitSpmBuffer
+description: 初始化SPM Buffer。SPM Buffer是GM上的空间，当UB空间不足时可存放溢出数据。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.implementation.memory_management
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/resource_management/TPipe/InitSpmBuffer.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+- '910'
+- kirin_x90
+- kirin_9030
+source_headers:
+- include/basic_api/kernel_tpipe.h
+---
+
+# InitSpmBuffer<a name="ZH-CN_TOPIC_0000001560400104"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为：`"basic_api/kernel_tpipe.h"`。
+
+初始化SPM Buffer。SPM Buffer是一块在GM上的空间，当Unified Buffer（UB）空间不足时可以将溢出数据存放在SPM Buffer上。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+-   暂存到workspace初始化，需要指定GM地址为SPM Buffer：
+
+    ```cpp
+    template <typename T>
+    __aicore__ inline void InitSpmBuffer(const GlobalTensor<T>& workspace, const int32_t bufferSize)
+    ```
+
+-   暂存到L1 Buffer初始化，不需要指定地址，会默认暂存到L1 Buffer，只需要传入需要的SPM Buffer大小：
+
+    ```cpp
+    __aicore__ inline void InitSpmBuffer(const int32_t bufferSize)
+    ```
+
+    
+    Ascend 950PR&950DT系列产品，不支持暂存到L1 Buffer初始化接口。
+    
+    
+    Atlas A3系列产品，不支持暂存到L1 Buffer初始化接口。
+    
+    
+    Atlas A2系列产品，不支持暂存到L1 Buffer初始化接口。
+    
+
+## 参数说明<a name="section622mcpsimp"></a>
+
+**表1**  模板参数说明
+
+| 参数名称 | 含义 |
+| -------- | ---- |
+| T | 待获取Tensor的数据类型，支持的类型请见[LocalTensor](../../data_structures/local_tensor/index.md)相关描述。|
+
+**表2**  接口参数说明
+
+<a name="table1794522316251"></a>
+<table><thead align="left"><tr id="row19456238252"><th class="cellrowborder" valign="top" width="12.36%" id="mcps1.1.4.1.1"><p id="p119458239258"><a name="p119458239258"></a><a name="p119458239258"></a>参数名</p>
+</th>
+<th class="cellrowborder" valign="top" width="12.379999999999999%" id="mcps1.1.4.1.2"><p id="p9945152332514"><a name="p9945152332514"></a><a name="p9945152332514"></a>输入/输出</p>
+</th>
+<th class="cellrowborder" valign="top" width="75.26%" id="mcps1.1.4.1.3"><p id="p1594552312513"><a name="p1594552312513"></a><a name="p1594552312513"></a>含义</p>
+</th>
+</tr>
+</thead>
+<tbody><tr id="row1694552372511"><td class="cellrowborder" valign="top" width="12.36%" headers="mcps1.1.4.1.1 "><p id="p1094516239250"><a name="p1094516239250"></a><a name="p1094516239250"></a>workspace</p>
+</td>
+<td class="cellrowborder" valign="top" width="12.379999999999999%" headers="mcps1.1.4.1.2 "><p id="p8945112312514"><a name="p8945112312514"></a><a name="p8945112312514"></a>输入</p>
+</td>
+<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.1.4.1.3 "><p id="p169454239253"><a name="p169454239253"></a><a name="p169454239253"></a>workspace地址。</p>
+</td>
+</tr>
+<tr id="row524916295111"><td class="cellrowborder" valign="top" width="12.36%" headers="mcps1.1.4.1.1 "><p id="p92491829141111"><a name="p92491829141111"></a><a name="p92491829141111"></a>bufferSize</p>
+</td>
+<td class="cellrowborder" valign="top" width="12.379999999999999%" headers="mcps1.1.4.1.2 "><p id="p6249142931114"><a name="p6249142931114"></a><a name="p6249142931114"></a>输入</p>
+</td>
+<td class="cellrowborder" valign="top" width="75.26%" headers="mcps1.1.4.1.3 "><p id="p17249929131117"><a name="p17249929131117"></a><a name="p17249929131117"></a>SPM Buffer的大小，单位是字节。</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+SPM Buffer供解决UB空间不足的特殊场景使用，性能较差，一般不推荐使用。
+
+## 返回值说明<a name="section640mcpsimp"></a>
+
+无
+
+## 调用示例<a name="section642mcpsimp"></a>
+
+-   暂存到workspace初始化
+
+    ```cpp
+    AscendC::TPipe pipe;
+    int len = 1024; // 设置spm buffer为1024个类型为T的数据
+    workspace_gm.SetGlobalBuffer((__gm__ T *)usrWorkspace, len);  // 此处的usrWorkspace为用户自定义的workspace
+    auto gm = workspace_gm[AscendC::GetBlockIdx() * len];
+    pipe.InitSpmBuffer(gm, len * sizeof(T));
+    ```
+
+-   暂存到L1 Buffer初始化
+
+    ```cpp
+    AscendC::TPipe pipe;
+    int len = 1024; // 设置spm buffer为1024个类型为T的数据
+    pipe.InitSpmBuffer(len * sizeof(T));
+    ```

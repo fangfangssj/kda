@@ -1,0 +1,59 @@
+---
+type: Guide
+title: 算子编译迁移指导
+description: 进行算子编译时，开发者需要感知不同架构、不同的AI处理器型号。
+tags:
+- task.lookup
+- topic.quality.compatibility.version_migration
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/guide/cross_gen_migration_guide/3510_arch_migration/2201_to_3510_guide/op_compilation_migration.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-04T01:25:11Z'
+platforms: []
+---
+
+# 算子编译迁移指导<a name="ZH-CN_TOPIC_0000002503428219"></a>
+
+进行算子编译时，开发者需要感知不同架构、不同的AI处理器型号。
+
+- 异构编译场景，开发者使用命令行或者编写Cmake文件进行编译的情况，需要手动修改NPU架构版本号或者AI处理器型号。以修改NPU架构版本号为例，更改编译命令行或编译工程CMakeLists.txt文件中的--npu-arch配置，示例如下：
+
+    ```
+    ...
+    
+    target_compile_options(demo PRIVATE
+        // 将dav-xxxx更换为对应NPU架构版本号
+        $<$<COMPILE_LANGUAGE:ASC>:--npu-arch=dav-xxxx>
+    )
+    ```
+
+    完成`--npu-arch`配置后，迁移过程中还可根据算子实现、目标架构和编译场景按需配置其他内置编译宏开关。相关开关的适用范围、使用约束和配置方式请参考[内置编译宏开关](../../../programming_guide/compilation_and_execution/operator_compilation/ai_core_operator_compilation.md#section57020345148)。
+
+- 对于使用msOpGen工具生成的标准自定义算子工程的情况，会自动在算子工程目录下生成编译配置项文件CMakePresets.json中，并自动填充ASCEND\_COMPUTE\_UNIT字段。开发者需要在进行算子原型定义时，通过AddConfig接口注册算子支持的AI处理器型号以及相关的配置信息。AddConfig接口原型如下：soc参数表示AI处理器型号，aicore\_config表示其他配置信息。
+
+    ```
+    void AddConfig(const char *soc);
+    void AddConfig(const char *soc, OpAICoreConfig &aicore_config);
+    ```
+
+    通过该接口注册AI处理器型号的样例如下，ascendxxx填写规则请参考算子工程目录下编译配置项文件CMakePresets.json中的ASCEND\_COMPUTE\_UNIT字段，该字段取值在使用msOpGen创建工程时自动生成。
+
+    ```
+    ...
+    
+    namespace ops {
+    class AddCustom : public OpDef {
+    public:
+        AddCustom(const char* name) : OpDef(name)
+        {
+            ...
+            // 将ascendXXX更换为对应芯片版本
+            this->AICore().AddConfig("ascendxxx");
+            
+        }
+    };
+    OP_ADD(AddCustom);
+    } // namespace ops
+    ```

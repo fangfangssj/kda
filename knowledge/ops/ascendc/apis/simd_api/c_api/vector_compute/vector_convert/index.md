@@ -1,0 +1,26 @@
+# 类型转换
+
+- [asc_bfloat162float](asc_bfloat162float.md)：将bfloat16_t类型数据转为float，无舍入模式。
+- [asc_bfloat162int32](asc_bfloat162int32.md)：将bfloat16_t类型数据转换为int32_t类型，并支持多种舍入模式：
+- [asc_float2bfloat16](asc_float2bfloat16.md)：将float类型数据转换为bfloat16_t类型，并支持多种舍入模式：
+- [asc_float2float](asc_float2float.md)：对float类型数据进行精度转换处理,支持多种舍入模式：
+- [asc_float2half](asc_float2half.md)：将float类型数据转换为half类型，支持多种舍入模式：
+- [asc_float2int16](asc_float2int16.md)：将float类型数据转换为int16_t类型，支持多种舍入模式：
+- [asc_float2int32](asc_float2int32.md)：将float类型转化为int32_t类型，并支持多种舍入模式：
+- [asc_float2int64](asc_float2int64.md)：将float类型转化为int64_t类型，并支持多种舍入模式：
+- [asc_half2float](asc_half2float.md)：将half类型转化为float类型，无舍入模式。
+- [asc_half2int16](asc_half2int16.md)：将half类型数据转换为int16_t，并支持多种舍入模式。 - RINT舍入模式：四舍六入五成双舍入 - ROUND舍入模式：四舍五入舍入 - FLOOR舍入模式：向负无穷舍入 - CEIL舍入模式：向正无穷舍入 - TRUNC舍入模式：向零舍入
+- [asc_half2int32](asc_half2int32.md)：将half类型转化为int32_t类型，并支持多种舍入模式：
+- [asc_half2int4](asc_half2int4.md)：将half类型数据转换为int4类型，支持多种舍入模式：
+- [asc_half2int8](asc_half2int8.md)：将half类型转化为int8_t类型，并支持多种舍入模式。
+- [asc_half2uint8](asc_half2uint8.md)：将half类型数据转换为uint8_t类型，支持多种舍入模式：
+- [asc_int162float](asc_int162float.md)：将int16_t类型数据转换为float类型。
+- [asc_int162half](asc_int162half.md)：将int16_t类型数据转换为half类型，支持多种舍入模式： - 不指定舍入模式：无舍入。 - RINT舍入模式：四舍六入五成双舍入。 - ROUND舍入模式：四舍五入舍入。 - FLOOR舍入模式：向负无穷舍入。 - CEIL舍入模式：向正无穷舍入。 - TRUNC舍入模式：向零舍入。
+- [asc_int322float](asc_int322float.md)：将int32_t类型数据转换为float类型，支持多种舍入模式：
+- [asc_int322int16](asc_int322int16.md)：将int32_t类型数据转换为int16_t类型。
+- [asc_int322int64](asc_int322int64.md)：将int32_t类型数据转换为int64_t类型。
+- [asc_int42half](asc_int42half.md)：将int4_t类型数据转换为half类型。
+- [asc_int642float](asc_int642float.md)：将int64_t类型数据转换为float类型。
+- [asc_int642int32](asc_int642int32.md)：将int64_t类型数据转换为int32_t类型。
+- [asc_int82half](asc_int82half.md)：将int8_t类型数据转换为half类型。
+- [asc_uint82half](asc_uint82half.md)：将uint8_t类型数据转换为half类型。

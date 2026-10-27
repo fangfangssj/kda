@@ -1,0 +1,122 @@
+---
+type: API
+title: asc_copy_gm2ub_align
+description: 提供数据非对齐搬运的功能，将数据从Global Memory (GM)搬运到Unified Buffer（UB），并支持8位/16位/32位数据类型搬运。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/vector_datamove/asc_copy_gm2ub_align/asc_copy_gm2ub_align_arch_2201.md
+  role: primary
+created_at: '2026-09-03T08:52:46Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- a2
+- a3
+source_headers:
+- include/c_api/vector_datamove/vector_datamove.h
+---
+
+# asc_copy_gm2ub_align
+
+## 功能说明
+
+头文件路径为：`"c_api/vector_datamove/vector_datamove.h"`。
+
+将数据从Global Memory（GM）搬运到Unified Buffer（UB），支持搬运长度不是32字节整数倍的数据，并在搬运过程中进行32字节对齐补齐。该接口支持8位/16位/32位数据类型搬运，搬运数据长度仍需满足对应数据类型的字节对齐要求；源、目的起始地址的对齐要求请参见[参数说明](#参数说明)。
+
+本接口支持以下两种数据搬运方式：
+
+- 前n个数据搬运
+
+    若搬运数据长度非32字节对齐，搬运数据会补齐至32字节对齐，支持以下两种填充方式：
+
+    - 手动填充：搬运前调用[asc_set_copy_pad_val](../asc_set_copy_pad_val.md)配置填充值。
+    - 自动填充：不调用`asc_set_copy_pad_val`时，由硬件自动填充dummy假数据，dummy假数据的值为数据块的第一个元素的值。
+
+- 高维切分搬运
+
+    高维切分搬运采用Normal模式。若`burst_len`指定的单个数据块长度非32字节对齐，则`burst_count`指定的每个数据块都会分别补齐至32字节对齐。非32字节对齐场景支持以下两种填充方式：
+
+    - 手动填充：搬运前调用`asc_set_copy_pad_val`设置填充值。
+    - 自动填充：不调用`asc_set_copy_pad_val`时，由硬件自动填充dummy假数据，dummy假数据的值为数据块的第一个元素的值。
+
+    循环搬运模式相关配置接口请参考[asc_set_gm2ub_loop_size](../asc_set_gm2ub_loop_size.md)、[asc_set_gm2ub_loop1_stride](../asc_set_gm2ub_loop1_stride.md)和[asc_set_gm2ub_loop2_stride](../asc_set_gm2ub_loop2_stride.md)。其中，`asc_set_gm2ub_loop_size`用于设置两层循环迭代次数，`asc_set_gm2ub_loop1_stride`和`asc_set_gm2ub_loop2_stride`分别用于设置内层循环`loop1`、外层循环`loop2`中相邻两次迭代的源操作数和目的操作数数据块起始地址偏移量。相关接口的产品支持情况以各接口文档为准。
+
+## 函数原型
+
+- 前n个数据搬运
+
+    ```cpp
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int8_t* dst, __gm__ int8_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint8_t* dst, __gm__ uint8_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int16_t* dst, __gm__ int16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint16_t* dst, __gm__ uint16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ half* dst, __gm__ half* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ bfloat16_t* dst, __gm__ bfloat16_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int32_t* dst, __gm__ int32_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint32_t* dst, __gm__ uint32_t* src, uint32_t size)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ float* dst, __gm__ float* src, uint32_t size)
+    ```
+
+- 高维切分搬运
+
+    ```cpp
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int8_t* dst, __gm__ int8_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint8_t* dst, __gm__ uint8_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int16_t* dst, __gm__ int16_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint16_t* dst, __gm__ uint16_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ half* dst, __gm__ half* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ bfloat16_t* dst, __gm__ bfloat16_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ int32_t* dst, __gm__ int32_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ uint32_t* dst, __gm__ uint32_t* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    __aicore__ inline void asc_copy_gm2ub_align(__ubuf__ float* dst, __gm__ float* src, uint16_t burst_count, uint32_t burst_len, uint8_t left_padding_num, uint8_t right_padding_num, uint32_t src_gap, uint32_t dst_gap)
+    ```
+
+## 参数说明
+
+**表1** 参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| :--- | :--- | :--- |
+| dst | 输出 | 目的UB的起始地址。需要32字节对齐。 |
+| src | 输入 | 源GM的起始地址。需要1字节对齐。 |
+| size | 输入 | 搬运数据大小，单位为字节。取值范围：[0, 2097151]。 |
+| burst_count | 输入 | 待搬运的连续传输数据块个数。取值范围：[0, 4095]。 |
+| burst_len | 输入 | 待搬运的每个连续传输数据块的长度，单位为字节。取值范围：[0, 2097151]。 |
+| left_padding_num | 输入 | 连续搬运数据块左侧需要补充的元素个数。该参数对应的填充数据大小不能超过32字节。 |
+| right_padding_num | 输入 | 连续搬运数据块右侧需要补充的元素个数。该参数对应的填充数据大小不能超过32字节。 |
+| src_gap | 输入 | 源操作数相邻连续数据块的距离（前面一个数据块的尾与后面一个数据块的头的间隔），单位为字节。 |
+| dst_gap | 输入 | 目的操作数相邻连续数据块的距离（前面一个数据块的尾与后面一个数据块的头的间隔），单位为DataBlock（32字节）。 |
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_MTE2
+
+## 约束说明
+
+- 各存储单元的空间大小和对齐要求请参考[存储单元说明](../../general_description_and_constraints.md#存储单元说明)。
+- 当`burst_count`、`burst_len`中任意一个值为0时，该接口被视为NOP（空操作）。
+- 当`size`值为0时，该接口被视为NOP（空操作）。
+- 如果本指令与其他指令存在数据依赖，需要插入[同步指令](../../sync/system_sync_overview.md)，保证多个指令串行化，防止出现异常数据。
+- `left_padding_num`、`right_padding_num`对应的填充数据大小均不能超过32字节。
+
+## 调用示例
+
+```cpp
+// total_length指参与搬运的数据总长度。src是外部输入的GM内存。
+constexpr uint64_t total_length = 128;
+__ubuf__ uint8_t dst[total_length];
+asc_copy_gm2ub_align(dst, src, total_length * sizeof(uint8_t));
+```
+
+## 配套 API 与常见组合
+
+- [asc_copy_ub2gm_align](../asc_copy_ub2gm_align/asc_copy_ub2gm_align_arch_2201.md)——算子数据流的搬入/回写闭环（MTE2 入、MTE3 出），P(b|a)=1.00，两侧对齐与 padding 语义成对互补
+- [asc_init](../../utils/sys_init/asc_init.md)——init 卡表列明复位 GM→UB 与 UB→GM 搬运循环次数及原子累加状态，直接决定 gm2ub copy 行为，约束明示不调用可能导致精度错误
+- [asc_load_l2_cache_mode](../../defs/enum/asc_load_l2_cache_mode.md)——该枚举就是 asc_copy_gm2ub_align 的 l2CacheMode 参数类型（枚举卡正文已列出该搬运接口为消费者，c_api_simd_add 实证传参），参数契约直接成立

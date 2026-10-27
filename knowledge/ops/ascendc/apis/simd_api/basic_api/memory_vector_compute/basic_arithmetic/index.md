@@ -1,0 +1,31 @@
+# 基础算术
+
+- [Abs](abs.md)：单目矢量计算接口，对输入tensor按元素取绝对值。
+- [Add](add.md)：双目矢量计算接口，对两个输入tensor按元素求和。
+- [Adds](adds.md)：双目矢量标量计算接口，将矢量tensor每个元素与标量求和。
+- [Adds（灵活标量位置）](adds_flexible_scalar.md)：矢量元素与标量做加法，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。
+- [BilinearInterpolation](bilinear_interpolation_isasi.md)：双目矢量计算接口，通过水平+垂直双层循环完成乘累加，适用于非规则数据访问+权重乘加场景。软仿接口。
+- [Div](div.md)：双目矢量计算接口，对两个输入tensor按元素求商。
+- [Divs（灵活标量位置）](divs_flexible_scalar.md)：矢量元素与标量做除法，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。
+- [Exp](exp.md)：单目矢量计算接口，对输入tensor按元素取自然指数。
+- [LeakyRelu](leaky_relu.md)：矢量元素执行Leaky ReLU操作：非负值原样输出，负值乘以标量系数后输出。
+- [Ln](ln.md)：单目矢量计算接口，对输入tensor按元素取自然对数。
+- [Max](max.md)：双目矢量计算接口，对两个输入tensor按元素取最大值。
+- [Maxs](maxs.md)：双目矢量标量计算接口，将矢量tensor每个元素与标量取最大值。
+- [Maxs（灵活标量位置）](maxs_flexible_scalar.md)：矢量元素与标量取最大值，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。
+- [Min](min.md)：双目矢量计算接口，对两个输入tensor按元素取最小值。
+- [Mins](mins.md)：双目矢量标量计算接口，将矢量tensor每个元素与标量取最小值。
+- [Mins（灵活标量位置）](mins_flexible_scalar.md)：矢量元素与标量取最小值，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。
+- [基础双目算术更多样例](more_examples.md)：基础算术接口更多样例，演示通过 tensor 高维切分 mask 连续与逐比特模式实现数据非连续计算。
+- [Mul](mul.md)：双目矢量计算接口，对两个输入tensor按元素求积。
+- [Mull](mull_isasi.md)：双目矢量计算接口，对前count个数据按元素相乘，结果写入dst0，溢出部分写入dst1。
+- [Muls](muls.md)：双目矢量标量计算接口，将矢量tensor每个元素与标量求积。
+- [Muls（灵活标量位置）](muls_flexible_scalar.md)：矢量元素与标量做乘法，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。
+- [Neg](neg_isasi.md)：单目矢量计算接口，对输入tensor按元素取相反数。
+- [Prelu](prelu_isasi.md)：双目矢量计算接口，src0非负时直接输出，否则输出src0与src1的乘积。
+- [Reciprocal](reciprocal.md)：单目矢量计算接口，对输入tensor按元素取倒数。
+- [Relu](relu.md)：单目矢量计算接口，对输入tensor按元素做ReLU计算，负值置零，非负值原样输出。
+- [Rsqrt](rsqrt.md)：单目矢量计算接口，对输入tensor按元素开方后取倒数。
+- [Sqrt](sqrt.md)：单目矢量计算接口，对输入tensor按元素做开方。
+- [Sub](sub.md)：双目矢量计算接口，对两个输入tensor按元素求差。
+- [Subs（灵活标量位置）](subs_flexible_scalar.md)：矢量元素与标量做减法，支持标量在前或在后两种场景，标量可配置为LocalTensor单点元素。

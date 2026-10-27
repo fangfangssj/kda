@@ -1,0 +1,31 @@
+# cube compute load
+
+- [asc_copy_gm2l0a](asc_copy_gm2l0a.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l0b](asc_copy_gm2l0b.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_arch_3510（2D矩阵搬运模式）](asc_copy_gm2l1_2d_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_align](asc_copy_gm2l1_align.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1](asc_copy_gm2l1_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_dn2nz](asc_copy_gm2l1_dn2nz.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_arch_3510（高维切分数据搬运）](asc_copy_gm2l1_highdim_split_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_nd2nz](asc_copy_gm2l1_nd2nz_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_gm2l1_nd2nz_arch_3510](asc_copy_gm2l1_nd2nz_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12bt](asc_copy_l12bt_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12bt](asc_copy_l12bt_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12fb](asc_copy_l12fb_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12fb](asc_copy_l12fb_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0a_arch_3510（2D矩阵搬运）](asc_copy_l12l0a_2d_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0a_arch_3510（3D矩阵搬运）](asc_copy_l12l0a_3d_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0a](asc_copy_l12l0a_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0a_mx](asc_copy_l12l0a_mx.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0a_trans](asc_copy_l12l0a_trans.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_arch_3510（2D矩阵搬运）](asc_copy_l12l0b_2d_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_arch_3510（3D矩阵搬运）](asc_copy_l12l0b_3d_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b](asc_copy_l12l0b_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_mx](asc_copy_l12l0b_mx.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_sparse](asc_copy_l12l0b_sparse.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_trans](asc_copy_l12l0b_trans_arch_2201.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0b_trans](asc_copy_l12l0b_trans_arch_3510.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [asc_copy_l12l0c](asc_copy_l12l0c.md)：头文件路径为："c_api/cube_datamove/cube_datamove.h"。
+- [矩阵计算输入搬运约束](cube_compute_input_move_constraint.md)：具体可见存储单元说明。
+- [矩阵搬入总体说明](cube_compute_load_overall_description.md)：矩阵计算的搬入是Ascend C编程框架中用于数据搬运的一类核心接口，主要实现Global Memory到L0A Buffer/L0B Buffer之间的数据高效传输。该类接口提供了多种数据搬运模式，能够满足矩阵计算中左右矩阵等数据的搬运需求，通常与Mmad接口配合使用。
+- [L1 Buffer、L0A Buffer/L0B Buffer内存结构介绍](l1_l0_a_b_memory_structure_intro.md)：为提升数据访问效率和吞吐量，Buffer采用了等容量的内存模块（Bank）结构设计。内存空间被划分为多个Bank，并以Bank为单位进一步分组形成多个Bank Group（BG）；每个Bank Group包含若干Bank，每个Bank都是一个可独立操作的存储单元子模块。

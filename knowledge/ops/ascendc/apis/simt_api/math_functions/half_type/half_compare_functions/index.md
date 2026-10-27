@@ -1,0 +1,20 @@
+# half类型比较函数
+
+- [__heq](_heq.md)：比较两个half类型数据是否相等，相等时返回true。
+- [__hequ](_hequ.md)：比较两个half类型数据是否相等，相等时返回true。若任一输入为nan，返回true。
+- [__hge](_hge.md)：比较两个half类型数据，仅当第一个数大于或等于第二个数时，返回true。
+- [__hgeu](_hgeu.md)：比较两个half类型数据，当第一个数大于或等于第二个数时，返回true。若任一输入为nan，返回true。
+- [__hgt](_hgt.md)：比较两个half类型数据，仅当第一个数大于第二个数时，返回true。
+- [__hgtu](_hgtu.md)：比较两个half类型数据，当第一个数大于第二个数时，返回true。若任一输入为nan，返回true。
+- [__hisinf](_hisinf.md)：判断浮点数是否为无穷。
+- [__hisnan](_hisnan.md)：判断浮点数是否为nan。
+- [__hle](_hle.md)：比较两个half类型数据，仅当第一个数小于或等于第二个数时，返回true。
+- [__hleu](_hleu.md)：比较两个half类型数据，当第一个数小于或等于第二个数时，返回true。若任一输入为nan，返回true。
+- [__hlt](_hlt.md)：比较两个half类型数据，仅当第一个数小于第二个数时，返回true。
+- [__hltu](_hltu.md)：比较两个half类型数据，当第一个数小于第二个数时，返回true。若任一输入为nan，返回true。
+- [__hmax](_hmax.md)：获取两个输入数据中的最大值。
+- [__hmax_nan](_hmax_nan.md)：获取两个输入数据中的最大值。任一输入为nan时结果为nan。
+- [__hmin](_hmin.md)：获取两个输入数据中的最小值。
+- [__hmin_nan](_hmin_nan.md)：获取两个输入数据中的最小值。任一输入为nan时结果为nan。
+- [__hne](_hne.md)：比较两个half类型数据是否不相等，不相等时返回true。
+- [__hneu](_hneu.md)：比较两个half类型数据是否不相等，不相等时返回true。若任一输入为nan，返回true。

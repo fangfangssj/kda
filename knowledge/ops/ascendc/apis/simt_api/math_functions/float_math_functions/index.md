@@ -1,0 +1,96 @@
+# float类型数学库函数
+
+- [__fdividef](_fdividef.md)：获取两个输入数据相除的结果。
+- [__saturatef](_saturatef.md)：将输入数据转换至0.0到1.0区间。小于等于0返回0，大于等于1返回1，区间内返回原值。
+- [abs](abs.md)：获取float类型输入数据的绝对值。
+- [Acosf](acosf.md)：获取输入数据的反余弦值。
+- [Acoshf](acoshf.md)：获取输入数据的双曲反余弦值。
+- [Asinf](asinf.md)：获取输入数据的反正弦值。
+- [Asinhf](asinhf.md)：获取输入数据的双曲反正弦值。
+- [Atan2f](atan2f.md)：获取输入数据y/x的反正切值。
+- [Atanf](atanf.md)：获取输入数据的反正切值。
+- [Atanhf](atanhf.md)：获取输入数据的反双曲正切值。
+- [Cbrtf](cbrtf.md)：获取输入数据x的立方根。
+- [Ceilf](ceilf.md)：获取大于或等于输入数据的最小整数值。
+- [Copysignf](copysignf.md)：获取由第一个输入x的数值部分和第二个输入y的符号部分拼接得到的浮点数。
+- [数学函数cosf](cosf.md)：获取输入数据的三角函数余弦值。 !
+- [Coshf](coshf.md)：获取输入数据的双曲余弦值。
+- [Cospif](cospif.md)：获取输入数据与π相乘的余弦值。
+- [cyl_bessel_i0f](cyl_bessel_i0f.md)：获取输入数据x的0阶常规修正圆柱贝塞尔函数的值。
+- [cyl_bessel_i1f](cyl_bessel_i1f.md)：获取输入数据x的1阶常规修正圆柱贝塞尔函数的值。
+- [Erfcf](erfcf.md)：获取输入数据的互补误差函数值。
+- [Erfcinvf](erfcinvf.md)：获取输入数据的逆互补误差函数值。
+- [Erfcxf](erfcxf.md)：获取输入数据的缩放互补误差函数值。
+- [数学函数erff](erff.md)：获取输入数据的误差函数值。 !
+- [Erfinvf](erfinvf.md)：获取输入数据的逆误差函数值。
+- [Exp10f](exp10f.md)：指定输入x，获取10的x次方。
+- [Exp2f](exp2f.md)：指定输入x，获取2的x次方。
+- [数学函数expf](expf.md)：根据输入x，获取e的x次方的计算结果。 !
+- [Expm1f](expm1f.md)：指定输入x，获取e的x次方减1。
+- [Fabsf](fabsf.md)：获取输入数据的绝对值。
+- [Fdimf](fdimf.md)：获取两个输入数据的差值，差值小于0时返回0。
+- [Fdividef](fdividef.md)：获取两个输入数据相除的结果。
+- [Floorf](floorf.md)：获取小于或等于输入数据的最大整数值。
+- [数学函数fmaf](fmaf.md)：对输入数据x、y、z，计算x与y相乘加上z的结果。 !
+- [Fmaxf](fmaxf.md)：获取两个输入数据中的最大值。
+- [Fminf](fminf.md)：获取两个输入数据中的最小值。
+- [Fmodf](fmodf.md)：获取输入数据x除以y的余数。求余数时，商取x除以y浮点数结果的整数部分。
+- [Frexpf](frexpf.md)：将x分解为归一化尾数和2的整数次幂，指数存入exp参数中。
+- [Hypotf](hypotf.md)：获取输入数据x、y平方和的平方根。
+- [Ilogbf](ilogbf.md)：计算以2为底输入数据的对数，对结果向下取整返回整数。
+- [Isfinite](isfinite.md)：判断浮点数是否为有限数（非inf、非nan）。
+- [Isinf](isinf.md)：判断浮点数是否为无穷。
+- [Isnan](isnan.md)：判断浮点数是否为nan。
+- [数学函数j0f](j0f.md)：获取输入数据x的0阶第一类贝塞尔函数j0的值。 !
+- [数学函数j1f](j1f.md)：获取输入数据x的1阶第一类贝塞尔函数j1的值。 !
+- [数学函数jnf](jnf.md)：获取输入数据x的n阶第一类贝塞尔函数jn的值。 !
+- [Ldexpf](ldexpf.md)：获取输入x乘以2的exp次幂的结果。
+- [Lgammaf](lgammaf.md)：获取输入数据x伽马值的绝对值并求自然对数。
+- [Llrintf](llrintf.md)：获取与输入数据最接近的整数，若存在两个同样接近的整数，则获取其中的偶数。
+- [Llroundf](llroundf.md)：获取对输入数据四舍五入后的整数。
+- [Log10f](log10f.md)：获取以10为底输入数据的对数。
+- [Log1pf](log1pf.md)：获取以e为底输入数据加1的对数。
+- [Log2f](log2f.md)：获取以2为底输入数据的对数。
+- [Logbf](logbf.md)：计算以2为底输入数据的对数，对结果向下取整返回浮点数。
+- [数学函数logf](logf.md)：获取以e为底，输入数据的对数。 !
+- [Lrintf](lrintf.md)：获取与输入数据最接近的整数，若存在两个同样接近的整数，则获取其中的偶数。
+- [Lroundf](lroundf.md)：获取对输入数据四舍五入后的整数。
+- [max](max.md)：获取两个输入数据中的最大值。
+- [min](min.md)：获取两个输入数据中的最小值。
+- [Modff](modff.md)：将输入参数分解为小数部分和整数部分。
+- [nanf](nanf.md)：根据输入的字符串生成一个float类型的安静NaN值（浮点尾数最高位为1），并将tagp解析值的低22位写入该NaN值的低22位。
+- [Nearbyintf](nearbyintf.md)：获取与输入浮点数最接近的整数，输入浮点数与左右整数的距离相等时，返回偶数。
+- [Nextafterf](nextafterf.md)：返回从x朝向y方向的下一个可表示浮点值，若x等于y则返回x。
+- [Norm3df](norm3df.md)：获取输入数据a、b、c平方和的平方根。
+- [Norm4df](norm4df.md)：获取输入数据a、b、c、d平方和的平方根。
+- [Normcdff](normcdff.md)：获取输入数据x的标准正态分布的累积分布函数值。
+- [Normcdfinvf](normcdfinvf.md)：获取输入数据x的标准正态累积分布的逆函数。
+- [Normf](normf.md)：获取输入数据a中前n个元素平方和的平方根。
+- [数学函数powf](powf.md)：获取输入数据x的y次幂。 !
+- [Rcbrtf](rcbrtf.md)：获取输入数据x的立方根的倒数。
+- [Remainderf](remainderf.md)：获取输入数据x除以y的余数。求余数时，商取最接近x除以y浮点数结果的整数，当x除以y的浮点数结果与左右最接近的整数距离相等时，商取偶数。
+- [Remquof](remquof.md)：获取输入数据x除以y的余数r。r=x-ny，其中n是x除以y的商，n取最接近x除以y浮点数结果的整数，当x除以y的浮点数结果与左右最接近的整数距离相等时，商取偶数，同时将商赋值给指针变量quo。
+- [Rhypotf](rhypotf.md)：获取输入数据x、y的平方和x^2 + y^2的平方根的倒数。
+- [Rintf](rintf.md)：获取与输入数据最接近的整数，若存在两个同样接近的整数，则获取其中的偶数。
+- [Rnorm3df](rnorm3df.md)：获取输入数据a、b、c的平方和a^2 + b^2 + c^2的平方根的倒数。
+- [Rnorm4df](rnorm4df.md)：获取输入数据a、b、c、d的平方和a^2 + b^2 + c^2 + d^2的平方根的倒数。
+- [Rnormf](rnormf.md)：获取输入数据a中前n个元素的平方和a\[0\]^2 + a\[1\]^2 + ...+ a\[n-1\]^2的平方根的倒数。
+- [Roundf](roundf.md)：获取对输入数据四舍五入后的整数。
+- [Rsqrtf](rsqrtf.md)：获取输入数据x的平方根的倒数。
+- [Scalblnf](scalblnf.md)：获取输入数据x与2的n次方的乘积。
+- [Scalbnf](scalbnf.md)：获取输入数据x与2的n次方的乘积。
+- [Signbit](signbit.md)：获取输入数据的符号位。
+- [Sincosf](sincosf.md)：获取输入数据的三角函数正弦值和余弦值。
+- [Sincospif](sincospif.md)：获取输入数据与π相乘的三角函数正弦值和余弦值。
+- [数学函数sinf](sinf.md)：获取输入数据的三角函数正弦值。 !
+- [Sinhf](sinhf.md)：获取输入数据的双曲正弦值。
+- [Sinpif](sinpif.md)：获取输入数据与π相乘的正弦值。
+- [Sqrtf](sqrtf.md)：获取输入数据x的平方根。
+- [数学函数tanf](tanf.md)：获取输入数据的三角函数正切值。 !
+- [Tanhf](tanhf.md)：获取输入数据的双曲正切值。
+- [Tanpif](tanpif.md)：获取输入数据与π相乘的正切值。
+- [Tgammaf](tgammaf.md)：获取输入数据x的伽马函数值。
+- [Truncf](truncf.md)：获取对输入数据的浮点数截断后的整数。
+- [数学函数y0f](y0f.md)：获取输入数据x的0阶第二类贝塞尔函数y0的值。 !
+- [数学函数y1f](y1f.md)：获取输入数据x的1阶第二类贝塞尔函数y1的值。 !
+- [数学函数ynf](ynf.md)：获取输入数据x的n阶第二类贝塞尔函数yn的值。 !

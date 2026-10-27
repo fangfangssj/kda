@@ -1,0 +1,129 @@
+# half类型精度转换函数
+
+- [__bfloat162half_rd](_bfloat162half_rd.md)：遵循CAST_FLOOR模式，将bfloat16类型数据转换为half类型数据，返回转换后的值。
+- [__bfloat162half_rd_sat](_bfloat162half_rd_sat.md)：将bfloat16类型数据转换为half类型数据，并遵循CAST_FLOOR模式，返回转换后的值。
+- [__bfloat162half_rn](_bfloat162half_rn.md)：遵循CAST_RINT模式，将bfloat16类型数据转换为half类型数据，返回转换后的值。
+- [__bfloat162half_rn_sat](_bfloat162half_rn_sat.md)：将bfloat16类型数据转换为half类型数据，并遵循CAST_RINT模式，返回转换后的值。
+- [__bfloat162half_rna](_bfloat162half_rna.md)：遵循CAST_ROUND模式，将bfloat16类型数据转换为half类型数据，返回转换后的值。
+- [__bfloat162half_rna_sat](_bfloat162half_rna_sat.md)：将bfloat16类型数据转换为half类型数据，并遵循CAST_ROUND模式，返回转换后的值。
+- [__bfloat162half_ru](_bfloat162half_ru.md)：遵循CAST_CEIL模式，将bfloat16类型数据转换为half类型数据，返回转换后的值。
+- [__bfloat162half_ru_sat](_bfloat162half_ru_sat.md)：饱和模式下，将bfloat16类型数据转换为half类型数据，并遵循CAST_CEIL模式，返回转换后的值。
+- [__bfloat162half_rz](_bfloat162half_rz.md)：遵循CAST_TRUNC模式，将bfloat16类型数据转换为half类型数据，返回转换后的值。
+- [__bfloat162half_rz_sat](_bfloat162half_rz_sat.md)：将bfloat16类型数据转换为half类型数据，并遵循CAST_TRUNC模式，返回转换后的值。
+- [__float22half2_rd](_float22half2_rd.md)：将float2类型数据的两个分量遵循CAST_FLOOR模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rd_sat](_float22half2_rd_sat.md)：将float2类型数据的两个分量遵循CAST_FLOOR模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rn](_float22half2_rn.md)：将float2类型数据遵循CAST_RINT模式转换为half2类型，返回转换后的half2类型数据。
+- [__float22half2_rn_sat](_float22half2_rn_sat.md)：饱和模式下，将float2类型数据的两个分量遵循CAST_RINT模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rna](_float22half2_rna.md)：将float2类型数据的两个分量遵循CAST_ROUND模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rna_sat](_float22half2_rna_sat.md)：将float2类型数据的两个分量遵循CAST_ROUND模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_ro](_float22half2_ro.md)：将float2类型数据的两个分量遵循CAST_ODD模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_ro_sat](_float22half2_ro_sat.md)：饱和模式下，将float2类型数据的两个分量遵循CAST_ODD模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_ru](_float22half2_ru.md)：将float2类型数据的两个分量遵循CAST_CEIL模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_ru_sat](_float22half2_ru_sat.md)：将float2类型数据的两个分量遵循CAST_CEIL模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rz](_float22half2_rz.md)：将float2类型数据的两个分量遵循CAST_TRUNC模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float22half2_rz_sat](_float22half2_rz_sat.md)：饱和模式下，将float2类型数据的两个分量遵循CAST_TRUNC模式转换为半精度浮点数，返回转换后的half2类型数据。
+- [__float2half](_float2half.md)：遵循CAST_RINT模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half2_rn](_float2half2_rn.md)：遵循CAST_RINT模式，将float类型数据转换为half类型后复制到half2的两个分量，返回转换后的half2类型数据。
+- [__float2half_rd](_float2half_rd.md)：遵循CAST_FLOOR模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_rd_sat](_float2half_rd_sat.md)：将浮点数转换为half类型数据，并遵循CAST_FLOOR模式，返回转换后的值。
+- [__float2half_rn](_float2half_rn.md)：遵循CAST_RINT模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_rn_sat](_float2half_rn_sat.md)：饱和模式下，将浮点数转换为半精度浮点数，并遵循CAST_RINT模式，返回转换后的值。
+- [__float2half_rna](_float2half_rna.md)：遵循CAST_ROUND模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_rna_sat](_float2half_rna_sat.md)：将浮点数转换为半精度浮点数，并遵循CAST_ROUND模式，返回转换后的值。
+- [__float2half_ro](_float2half_ro.md)：遵循CAST_ODD模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_ro_sat](_float2half_ro_sat.md)：将浮点数转换为半精度浮点数，并遵循CAST_ODD模式，返回转换后的值。
+- [__float2half_ru](_float2half_ru.md)：遵循CAST_CEIL模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_ru_sat](_float2half_ru_sat.md)：将浮点数转换为半精度浮点数，并遵循CAST_CEIL模式，返回转换后的值。
+- [__float2half_rz](_float2half_rz.md)：遵循CAST_TRUNC模式，将浮点数转换为半精度浮点数，返回转换后的值。
+- [__float2half_rz_sat](_float2half_rz_sat.md)：饱和模式下，将浮点数转换为半精度浮点数，并遵循CAST_TRUNC模式，返回转换后的值。
+- [__floats2half2_rn](_floats2half2_rn.md)：将输入数据x、y遵循CAST_RINT模式分别转换为half类型，并填充到half2的前后两部分，返回转换后的half2类型数据。
+- [__half22float2](_half22float2.md)：将half2的两个分量分别转换为float，填充到float2后返回。
+- [__half2char_rz](_half2char_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为signed char类型数据，返回转换后的值。
+- [__half2float](_half2float.md)：将half类型数据转换为浮点数，返回转换后的值。
+- [__half2half2](_half2half2.md)：将half类型数据复制到half2的两个分量，返回转换后的half2类型数据。
+- [__half2half_rd](_half2half_rd.md)：将half类型数据遵循CAST_FLOOR模式取整。
+- [__half2half_rn](_half2half_rn.md)：将half类型数据遵循CAST_RINT模式取整。
+- [__half2half_rna](_half2half_rna.md)：将half类型数据遵循CAST_ROUND模式取整。
+- [__half2half_ru](_half2half_ru.md)：将half类型数据遵循CAST_CEIL模式取整。
+- [__half2half_rz](_half2half_rz.md)：将half类型数据遵循CAST_TRUNC模式取整。
+- [__half2int_rd](_half2int_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为int类型数据，返回转换后的值。
+- [__half2int_rn](_half2int_rn.md)：遵循CAST_RINT模式，将half类型数据转换为int类型数据，返回转换后的值。
+- [__half2int_rna](_half2int_rna.md)：遵循CAST_ROUND模式，将half类型数据转换为int类型数据，返回转换后的值。
+- [__half2int_ru](_half2int_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为int类型数据，返回转换后的值。
+- [__half2int_rz](_half2int_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为int类型数据，返回转换后的值。
+- [__half2ll_rd](_half2ll_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为long long类型数据，返回转换后的值。
+- [__half2ll_rn](_half2ll_rn.md)：遵循CAST_RINT模式，将half类型数据转换为long long类型数据，返回转换后的值。
+- [__half2ll_rna](_half2ll_rna.md)：遵循CAST_ROUND模式，将half类型数据转换为long long类型数据，返回转换后的值。
+- [__half2ll_ru](_half2ll_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为long long类型数据，返回转换后的值。
+- [__half2ll_rz](_half2ll_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为long long类型数据，返回转换后的值。
+- [__half2short_rd](_half2short_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为short int类型数据，返回转换后的值。
+- [__half2short_rn](_half2short_rn.md)：遵循CAST_RINT模式，将half类型数据转换为short int类型数据，返回转换后的值。
+- [__half2short_ru](_half2short_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为short int类型数据，返回转换后的值。
+- [__half2short_rz](_half2short_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为short int类型数据，返回转换后的值。
+- [__half2uchar_rz](_half2uchar_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为unsigned char类型数据，返回转换后的值。
+- [__half2uint_rd](_half2uint_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为unsigned int类型数据，返回转换后的值。
+- [__half2uint_rn](_half2uint_rn.md)：遵循CAST_RINT模式，将half类型数据转换为无符号整数，返回转换后的值。
+- [__half2uint_rna](_half2uint_rna.md)：遵循CAST_ROUND模式，将half类型数据转换为unsigned int类型数据，返回转换后的值。
+- [__half2uint_ru](_half2uint_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为unsigned int类型数据，返回转换后的值。
+- [__half2uint_rz](_half2uint_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为无符号整数，返回转换后的值。
+- [__half2ull_rd](_half2ull_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为unsigned long long int类型数据，返回转换后的值。
+- [__half2ull_rn](_half2ull_rn.md)：遵循CAST_RINT模式，将half类型数据转换为unsigned long long类型数据，返回转换后的值。
+- [__half2ull_rna](_half2ull_rna.md)：遵循CAST_ROUND模式，将half类型数据转换为unsigned long long int类型数据，返回转换后的值。
+- [__half2ull_ru](_half2ull_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为unsigned long long int类型数据，返回转换后的值。
+- [__half2ull_rz](_half2ull_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为unsigned long long int类型数据，返回转换后的值。
+- [__half2ushort_rd](_half2ushort_rd.md)：遵循CAST_FLOOR模式，将half类型数据转换为unsigned short int类型数据，返回转换后的值。
+- [__half2ushort_rn](_half2ushort_rn.md)：遵循CAST_RINT模式，将half类型数据转换为unsigned short int类型数据，返回转换后的值。
+- [__half2ushort_ru](_half2ushort_ru.md)：遵循CAST_CEIL模式，将half类型数据转换为unsigned short int类型数据，返回转换后的值。
+- [__half2ushort_rz](_half2ushort_rz.md)：遵循CAST_TRUNC模式，将half类型数据转换为unsigned short int类型数据，返回转换后的值。
+- [__half_as_short](_half_as_short.md)：将half类型数据按位重新解释为short int类型数据。
+- [__half_as_ushort](_half_as_ushort.md)：将half类型数据按位重新解释为unsigned short int类型数据。
+- [__halves2half2](_halves2half2.md)：将输入的数据分别填充为half2前后两个分量，返回填充后的数据。
+- [__high2float](_high2float.md)：将输入数据的高16位转换为float类型并返回结果。
+- [__high2half](_high2half.md)：提取输入half2的高16位，并返回。
+- [__high2half2](_high2half2.md)：将输入数据的高16位填充到half2并返回结果。
+- [__highs2half2](_highs2half2.md)：分别提取两个half2输入的高16位，并填充到half2中，返回填充后的数据。
+- [__int2half_rd](_int2half_rd.md)：遵循CAST_FLOOR模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__int2half_rd_sat](_int2half_rd_sat.md)：按照CAST_FLOOR模式将int32类型数据转换为half类型数据。
+- [__int2half_rn](_int2half_rn.md)：遵循CAST_RINT模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__int2half_rn_sat](_int2half_rn_sat.md)：将int32类型数据按照CAST_RINT模式转换为half类型数据，返回转换后的值。
+- [__int2half_rna](_int2half_rna.md)：遵循CAST_ROUND模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__int2half_rna_sat](_int2half_rna_sat.md)：将int32类型数据转换为half类型数据，并遵循CAST_ROUND模式，返回转换后的值。
+- [__int2half_ru](_int2half_ru.md)：遵循CAST_CEIL模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__int2half_ru_sat](_int2half_ru_sat.md)：将int32类型数据转换为half类型数据，并遵循CAST_CEIL模式，返回转换后的值。
+- [__int2half_rz](_int2half_rz.md)：遵循CAST_TRUNC模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__int2half_rz_sat](_int2half_rz_sat.md)：遵循CAST_TRUNC模式，将int32类型数据转换为half类型数据，返回转换后的值。
+- [__ll2half_rd](_ll2half_rd.md)：遵循CAST_FLOOR模式，将int64类型数据转换为half类型数据，返回转换后的值。
+- [__ll2half_rn](_ll2half_rn.md)：遵循CAST_RINT模式，将int64类型数据转换为half类型数据，返回转换后的值。
+- [__ll2half_rna](_ll2half_rna.md)：遵循CAST_ROUND模式，将int64类型数据转换为half类型数据，返回转换后的值。
+- [__ll2half_ru](_ll2half_ru.md)：遵循CAST_CEIL模式，将int64类型数据转换为half类型数据，返回转换后的值。
+- [__ll2half_rz](_ll2half_rz.md)：遵循CAST_TRUNC模式，将int64类型数据转换为half类型数据，返回转换后的值。
+- [__low2float](_low2float.md)：将输入数据的低16位转换为浮点数并返回结果。
+- [__low2half](_low2half.md)：返回输入数据的低16位。
+- [__low2half2](_low2half2.md)：将输入数据的低16位填充到half2并返回。
+- [__lowhigh2highlow](_lowhigh2highlow.md)：将输入数据的高低16位进行交换并返回。
+- [__lows2half2](_lows2half2.md)：分别提取两个half2输入的低16位，并填充到half2中，返回填充后的数据。
+- [__short2half_rd](_short2half_rd.md)：遵循CAST_FLOOR模式，将short int类型数据转换为half类型数据，返回转换后的值。
+- [__short2half_rn](_short2half_rn.md)：遵循CAST_RINT模式，将short int类型数据转换为half类型数据，返回转换后的值。
+- [__short2half_ru](_short2half_ru.md)：遵循CAST_CEIL模式，将short int类型数据转换为half类型数据，返回转换后的值。
+- [__short2half_rz](_short2half_rz.md)：遵循CAST_TRUNC模式，将short int类型数据转换为half类型数据，返回转换后的值。
+- [__short_as_half](_short_as_half.md)：将short int类型数据按位重新解释为half类型数据。
+- [__uint2half_rd](_uint2half_rd.md)：遵循CAST_FLOOR模式，将uint32类型数据转换为half类型数据，返回转换后的值。
+- [__uint2half_rd_sat](_uint2half_rd_sat.md)：将uint32类型数据转换为half类型数据，并遵循CAST_FLOOR模式，返回转换后的值。
+- [__uint2half_rn](_uint2half_rn.md)：遵循CAST_RINT模式，将uint32类型数据转换为half类型数据，返回转换后的值。
+- [__uint2half_rn_sat](_uint2half_rn_sat.md)：将uint32类型数据转换为half类型数据，并遵循CAST_RINT模式，返回转换后的值。
+- [__uint2half_rna](_uint2half_rna.md)：遵循CAST_ROUND模式，将uint32类型数据转换为half类型数据，返回转换后的值。
+- [__uint2half_rna_sat](_uint2half_rna_sat.md)：将uint32类型数据转换为half类型数据，并遵循CAST_ROUND模式，返回转换后的值。
+- [__uint2half_ru](_uint2half_ru.md)：遵循CAST_CEIL模式，将uint32类型数据转换为half类型数据，返回转换后的值。
+- [__uint2half_ru_sat](_uint2half_ru_sat.md)：将uint32类型数据转换为half类型数据，并遵循CAST_CEIL模式，返回转换后的值。
+- [__uint2half_rz](_uint2half_rz.md)：遵循CAST_TRUNC模式，将uint32类型数据转换为half类型数据，返回转换后的值。
+- [__uint2half_rz_sat](_uint2half_rz_sat.md)：将uint32类型数据转换为half类型数据，并遵循CAST_TRUNC模式，返回转换后的值。
+- [__ull2half_rd](_ull2half_rd.md)：遵循CAST_FLOOR模式，将uint64类型数据转换为half类型数据，返回转换后的值。
+- [__ull2half_rn](_ull2half_rn.md)：遵循CAST_RINT模式，将uint64类型数据转换为half类型数据，返回转换后的值。
+- [__ull2half_rna](_ull2half_rna.md)：遵循CAST_ROUND模式，将uint64类型数据转换为half类型数据，返回转换后的值。
+- [__ull2half_ru](_ull2half_ru.md)：遵循CAST_CEIL模式，将uint64类型数据转换为half类型数据，返回转换后的值。
+- [__ull2half_rz](_ull2half_rz.md)：遵循CAST_TRUNC模式，将uint64类型数据转换为half类型数据，返回转换后的值。
+- [__ushort2half_rd](_ushort2half_rd.md)：遵循CAST_FLOOR模式，将unsigned short int类型数据转换为half类型数据，返回转换后的值。
+- [__ushort2half_rn](_ushort2half_rn.md)：遵循CAST_RINT模式，将unsigned short int类型数据转换为half类型数据，返回转换后的值。
+- [__ushort2half_ru](_ushort2half_ru.md)：遵循CAST_CEIL模式，将unsigned short int类型数据转换为half类型数据，返回转换后的值。
+- [__ushort2half_rz](_ushort2half_rz.md)：遵循CAST_TRUNC模式，将unsigned short int类型数据转换为half类型数据，返回转换后的值。
+- [__ushort_as_half](_ushort_as_half.md)：将unsigned short int的数据按位重新解释为half，即将unsigned short int的数据存储的位按照half的格式进行读取。

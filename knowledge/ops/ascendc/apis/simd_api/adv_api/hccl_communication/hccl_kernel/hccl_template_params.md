@@ -1,0 +1,81 @@
+---
+type: API
+title: HCCL模板参数
+description: 创建HCCL对象时需要传入模板参数。
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.data_movement.communication.collective_communication
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/HCCL_communication/HCCL_Kernel/HCCL_template_params.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-12T03:09:26Z'
+platforms:
+- '950'
+- a2
+- a3
+---
+
+# HCCL模板参数
+
+## 功能说明
+
+创建HCCL对象时需要传入模板参数。
+
+## 函数原型
+
+Hccl类定义如下，模板参数说明见[表1 Hccl类模板参数说明](#hccl-template-params)。
+
+```
+template <HcclServerType serverType = HcclServerType::HCCL_SERVER_TYPE_AICPU, const auto& config = DEFAULT_CFG>
+class Hccl;
+```
+
+## 参数说明
+
+**表1**  Hccl类模板参数说明
+
+<a name="hccl-template-params"></a>
+
+| 参数名称 | 描述 |
+| --- | --- |
+| serverType | 支持的服务端类型。HcclServerType枚举类型，取值如下。<br>HCCL_SERVER_TYPE_AICPU：AI CPU服务端。<br>HCCL_SERVER_TYPE_CCU：CCU服务端。<br>HCCL_SERVER_TYPE_END：预留参数，不支持使用。 |
+| config | 用于指定向服务端下发任务的核。HcclServerConfig类型，定义如下代码所示，含义如下。<br><br>type：向服务端下发任务的核的类型。CoreType类型，可取值为：<br>DEFAULT：表示不指定AIC核或者AIV核。<br>ON_AIV：表示指定为AIV核。<br>ON_AIC：表示指定为AIC核。<br><br>blockId：向服务端下发任务的核的ID。<br><br>默认值DEFAULT_CFG = {CoreType::DEFAULT, 0}。 |
+
+```
+enum HcclServerType {
+    HCCL_SERVER_TYPE_AICPU = 0,
+    HCCL_SERVER_TYPE_CCU,
+    HCCL_SERVER_TYPE_END // 预留参数，不支持使用
+};
+
+struct HcclServerConfig {
+    CoreType type;
+    int64_t blockId;
+};
+
+enum class CoreType : uint8_t { DEFAULT, ON_AIV, ON_AIC };
+```
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+无
+
+## 调用示例
+
+通过如下传入模板参数config的方式创建Hccl类对象，指定HCCL客户端仅在AIV的10号核上发送通信消息给服务端，替代通过调用[GetBlockIdx](../../../basic_api/tool_interface/system_resources_and_variables/get_block_idx.md)接口的方式指定运行的核。
+
+```
+static constexpr HcclServerConfig HCCL_CFG = {CoreType::ON_AIV, 10};
+// 选择AICPU作为服务端
+Hccl<HcclServerType::HCCL_SERVER_TYPE_AICPU, HCCL_CFG> hccl;
+
+// 选择CCU作为服务端
+Hccl<HcclServerType::HCCL_SERVER_TYPE_CCU, HCCL_CFG> hccl;
+```

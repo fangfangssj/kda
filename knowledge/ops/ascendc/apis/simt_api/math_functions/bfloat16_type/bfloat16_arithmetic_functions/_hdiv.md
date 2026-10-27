@@ -1,0 +1,108 @@
+---
+type: API
+title: __hdiv
+description: 计算两个bfloat16类型数据相除的结果，并遵循CAST_RINT模式对结果进行舍入。
+tags:
+- task.lookup
+- topic.implementation.api_layer.simt_api
+- topic.compute.elementwise.type_conversion
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMT-API/math_functions/bfloat16_type/bfloat16_arithmetic_functions/__hdiv.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/simt_api/asc_bf16.h
+---
+
+# \_\_hdiv
+
+## 功能说明
+
+头文件路径为：`"simt_api/asc_bf16.h"`。
+
+计算两个bfloat16类型数据相除的结果，并遵循CAST\_RINT模式对结果进行舍入。
+
+## 函数原型
+
+```cpp
+bfloat16_t __hdiv(const bfloat16_t x, const bfloat16_t y)
+```
+
+## 参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| x | 输入 | 源操作数。 |
+| y | 输入 | 源操作数。 |
+
+## 返回值说明
+
+输入数据相除的结果。本接口受全局饱和模式影响，特殊值如下：
+
+| x值 | y值 | 非饱和模式返回值 | 饱和模式返回值 |
+| --- | --- | --- | --- |
+| ±0 | ±0 | nan | 0 |
+| ±inf | ±inf | nan | 0 |
+| 有限值 | ±inf | 符号由x和y的符号异或决定，值为0 | 符号由x和y的符号异或决定，值为0 |
+| inf | 正有限值 | inf | ASCRT_MAX_NORMAL_BF16 |
+| inf | 负有限值 | -inf | -ASCRT_MAX_NORMAL_BF16 |
+| -inf | 正有限值 | -inf | -ASCRT_MAX_NORMAL_BF16 |
+| -inf | 负有限值 | inf | ASCRT_MAX_NORMAL_BF16 |
+| >0 | 0 | inf | ASCRT_MAX_NORMAL_BF16 |
+| <0 | 0 | -inf | -ASCRT_MAX_NORMAL_BF16 |
+| >0 | -0 | -inf | -ASCRT_MAX_NORMAL_BF16 |
+| <0 | -0 | inf | ASCRT_MAX_NORMAL_BF16 |
+| ±0 | 非0 | 符号由x和y的符号异或决定，值为0 | 符号由x和y的符号异或决定，值为0 |
+| x，y任意一个为nan | — | nan | 0 |
+
+## 约束说明
+
+
+针对Ascend 950PR&950DT系列产品，本接口不支持Subnormal场景：处于Subnormal范围内的输入和输出值，都会被刷新为保留符号的0。
+
+
+## 调用示例
+
+- SIMT编程场景：
+
+    ```cpp
+    #include "simt_api/asc_bf16.h"
+
+    __global__ __launch_bounds__(1024) void kernel_hdiv(bfloat16_t* dst, bfloat16_t* x, bfloat16_t* y, uint32_t total_length)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        if (idx >= total_length) {
+            return;
+        }
+        dst[idx] = __hdiv(x[idx], y[idx]);
+    }
+    ```
+
+- SIMD与SIMT混合编程场景：
+
+    ```cpp
+    #include "simt_api/asc_bf16.h"
+
+    __simt_vf__ __launch_bounds__(1024) inline void kernel_hdiv(__gm__ bfloat16_t* dst, __gm__ bfloat16_t* x, __gm__ bfloat16_t* y, uint32_t total_length)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        if (idx >= total_length) {
+            return;
+        }
+        dst[idx] = __hdiv(x[idx], y[idx]);
+    }
+    ```
+
+输入输出示例如下：
+
+```text
+x: 0.5, -0.5, 1.0, -1.0, 2.0, -2.0, 0.0, 4.0
+y: 2.0, 0.5, -1.0, -1.0, 0.5, 2.0, 4.0, 0.5
+result: 0.25, -1.0, -1.0, 1.0, 4.0, -1.0, 0.0, 8.0
+```

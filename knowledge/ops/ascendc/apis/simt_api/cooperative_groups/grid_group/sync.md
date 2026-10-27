@@ -1,0 +1,78 @@
+---
+type: API
+title: Grid协作组sync
+description: 同步当前Grid内所有SIMT线程。所有线程块中的所有线程都执行到该同步点位置后，Grid内线程才能继续执行。
+tags:
+- task.lookup
+- topic.implementation.api_layer.simt_api
+- topic.programming_model.cooperative_groups
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMT-API/cooperative_groups/grid_group/sync.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/simt_api/cooperative_groups.h
+---
+
+# sync
+
+## 功能说明
+
+头文件路径为：`"simt_api/cooperative_groups.h"`。
+
+同步当前Grid内所有SIMT线程。所有线程块中的所有线程都执行到该同步点位置后，Grid内线程才能继续执行。
+
+## 函数原型
+
+```cpp
+void sync() const
+```
+
+## 参数说明
+
+无
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+- 仅支持SIMT编程场景，不支持SIMD与SIMT混合编程场景。
+- 必须保证Grid内所有线程都能执行到同一个`sync()`调用，否则是未定义行为。
+- 确保Grid中的线程块总数不超过设备的AIV物理核数，以避免程序卡死。开发者可以通过[aclrtGetDeviceInfo](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/04_device_management.md#aclrtGetDeviceInfo)接口查询设备的AIV物理核数。
+- `sync()`接口仅保证线程指令执行的同步，不保证各线程块的Data Cache和Global Memory间的[缓存一致性](../../../../guides/programming_guide/advanced_programming/memory_model/cache_coherence.md)。
+
+## 调用示例
+
+- SIMT编程场景：
+
+    ```cpp
+    #include "simt_api/cooperative_groups.h"
+
+    using namespace cooperative_groups;
+    __global__ void simt_kernel(uint64_t* output)
+    {
+        grid_group g = this_grid(); // 获取grid_group对象
+        unsigned int block = static_cast<unsigned int>(g.block_rank());
+
+        if (threadIdx.x == 0) {
+            output[block] = block + 1;
+        }
+
+        g.sync(); // 同步Grid内所有线程
+
+        if (threadIdx.x == 0) {
+            uint64_t sum = 0;
+            asc_dcci_entire(output); // 刷新Cache
+            for (unsigned int i = 0; i < g.num_blocks(); ++i) {
+                sum += output[i];
+            }
+            output[g.num_blocks() + block] = sum;
+        }
+    }
+    ```

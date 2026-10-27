@@ -39,6 +39,8 @@
 | 需求 | 技能 | 位置 |
 |---|---|---|
 | 芯片型号 / 架构代际 / 条件编译 | npu-arch | `skills/ascend/npu-arch` |
+| Ascend C 通用实现知识与问题排查 | knowledge-query | `skills/ascend/knowledge-query` |
+| Ascend C API 定义、参数与重载 | ascendc-api-knowledge-query | `skills/ascend/ascendc-api-knowledge-query` |
 | Tiling 设计方法论 | ascendc-tiling-design | `skills/ascend/ascendc-tiling-design` |
 | API 用法与最佳实践 | ascendc-api-best-practices | `skills/ascend/ascendc-api-best-practices` |
 | 代码检视 | ascendc-code-review | `skills/ascend/ascendc-code-review` |

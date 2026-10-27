@@ -1,0 +1,54 @@
+---
+type: API
+title: SetDilation
+description: 设置Dilation信息，即卷积核Depth/Height/Width方向的扩张大小。
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.compute.neighborhood.convolution
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/convolution_compute/Conv3DBackpropInput_Tiling/SetDilation.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-04T01:25:11Z'
+platforms: []
+---
+
+# SetDilation
+
+## 功能说明
+
+设置Dilation信息，即卷积核Depth/Height/Width方向的扩张大小。
+
+## 函数原型
+
+```
+void SetDilation(int64_t dilationD, int64_t dilationH, int64_t dilationW)
+```
+
+## 参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dilationD | 输入 | 卷积核Weight的Depth方向扩张大小。 |
+| dilationH | 输入 | 卷积核Weight的Height方向扩张大小。 |
+| dilationW | 输入 | 卷积核Weight的Width方向扩张大小。 |
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+无
+
+## 调用示例
+
+```
+auto ascendcPlatform = platform_ascendc::PlatformAscendCManager::GetInstance();
+ConvBackpropApi::Conv3DBpInputTiling conv3DBpDxTiling(*ascendcPlatform);
+conv3DBpDxTiling.SetDilation(dilationD, dilationH, dilationW);
+```

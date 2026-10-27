@@ -1,0 +1,92 @@
+---
+type: API
+title: ShiftRight
+description: 对源操作数中的每个元素进行右移操作，右移位数由Tensor指定，无符号类型执行逻辑右移，有符号类型执行算术右移。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.programming_model.execution_unit.vector
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/memory_vector_compute/logical_compute/ShiftRight_shift_amount_tensor.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+---
+
+# ShiftRight（右移位数为Tensor）<a name="ZH-CN_TOPIC_0000002193989473"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+源操作数内每个元素做右移。
+
+对无符号数据类型的源操作数做逻辑右移，对有符号数据类型的源操作数做算术右移。
+
+逻辑右移为去掉最低位，最高位填充为0。
+
+算术右移为去掉最低位，最高位复制符号位。
+
+例：数据类型uint16\_t，二进制数1010101010101010，逻辑右移一位结果为0101010101010101；
+
+数据类型int16\_t，二进制数1010101010101010，算术右移一位结果为1101010101010101；
+
+数据类型int16\_t，二进制数1010101010101010，算术右移三位结果为1111010101010101。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
+template <typename T, typename U>
+__aicore__ inline void ShiftRight(const LocalTensor<T>& dst, const LocalTensor<T>& src0, const LocalTensor<U>& src1, const int32_t& count)
+```
+
+## 参数说明<a name="section1436019411811"></a>
+
+**表1**  模板参数说明
+
+| 参数名 | 描述 |
+| :--- | :--- |
+| T | 源/目的操作数数据类型。 |
+| U | 源操作数数据类型。 |
+
+**表2**  参数说明
+
+| **参数名称** | 输入/输出 | **说明** |
+| :--- | :--- | :--- |
+| dst | 输出 | 目的操作数。<br>类型为[LocalTensor](../../data_structures/local_tensor/index.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br>LocalTensor的起始地址需要32字节对齐。 |
+| src0 | 输入 | 源操作数。<br>类型为[LocalTensor](../../data_structures/local_tensor/index.md)，支持的TPosition为VECIN/VECCALC/VECOUT。<br>LocalTensor的起始地址需要32字节对齐。<br>数据类型需要与目的操作数保持一致。 |
+| src1 | 输入 | 存放右移位数的LocalTensor，数据类型的字节数需要与源src0操作数Tensor中的元素数据类型的字节数相匹配，不支持设置为负数。 |
+| count | 输入 | 参与计算的元素个数。 |
+
+
+## 数据类型
+
+
+Ascend 950PR&950DT系列产品，T支持的数据类型为：int8_t、uint8_t、int16_t、uint16_t、int32_t、uint32_t、int64_t、uint64_t。U支持的数据类型为：int8_t、int16_t、int32_t、int64_t。
+
+
+## 返回值说明<a name="section194321251175110"></a>
+
+无
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+-   操作数地址对齐要求请参见[通用地址对齐约束](../../../general_description_and_constraints.md#section796754519912)。
+
+-   对于逻辑位移（无符号数据类型），如果位移量大于数据类型位宽，则输出为0。
+-   对于算数位移（有符号数据类型），如果src0小于0，src1大于0，并且位移量大于数据类型位宽，则输出-1；如果src0大于0，并且位移量大于数据类型位宽，则输出0。
+
+## 调用示例<a name="section642mcpsimp"></a>
+
+```cpp
+AscendC::ShiftRight(dstLocal, srcLocal0, srcLocal1, 512);
+```
+
+结果示例如下：
+
+```plain
+输入数据(srcLocal0): [1 2 3 ... 512]
+输入数据(srcLocal1): [2 2 2 ... 2]
+输出数据(dstLocal): [0 0 0 1 1 1 1 ... 128]
+```

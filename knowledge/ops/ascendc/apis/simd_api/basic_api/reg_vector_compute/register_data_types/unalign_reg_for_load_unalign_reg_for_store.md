@@ -1,0 +1,35 @@
+---
+type: API
+title: UnalignRegForLoadAndUnalignRegForStore
+description: Reg矢量计算支持对非32字节对齐地址的访问，利用UnalignRegForLoad和UnalignRegForStore作为临时缓存区，实现高效的连续非对齐数据传输。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.programming_model.execution_unit.vector
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/reg_vector_compute/register_data_types/UnalignRegForLoad-UnalignRegForStore.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-12T03:09:26Z'
+platforms:
+- '950'
+---
+
+# UnalignRegForLoad & UnalignRegForStore<a name="ZH-CN_TOPIC_0000001956862301"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+为提升对不规则内存地址的处理能力，Reg矢量计算支持在数据搬运过程中对非32字节对齐的地址进行访问，适用于从Unified Buffer（UB）向RegTensor非对齐搬运，或从RegTensor向UB非对齐搬运的场景。RegBase引入非对齐寄存器缓存机制，降低非对齐访问带来的性能开销，该机制利用非对齐寄存器（32B）UnalignRegForLoad和UnalignRegForStore作为临时缓存区，用于暂存非32B对齐的数据，从而实现高效的连续非对齐数据传输。
+
+- UnalignRegForLoad为非对齐搬入寄存器，在读非对齐地址时，先通过LoadUnAlignPre进行初始化（将非对齐地址数据暂存进UnalignRegForLoad），再调用LoadUnAlign进行搬运。
+
+- UnalignRegForStore为非对齐搬出寄存器，在写非对齐地址时，先调用StoreUnAlign，再使用StoreUnAlignPost进行后处理（将UnalignRegForStore中的数据写入非对齐UB地址）。
+
+UnalignRegForLoad和UnalignRegForStore的具体使用方式请参考：[连续非对齐搬入（LoadUnAlign）](../reg_data_load/load_un_align_continuous.md)、[连续非对齐搬出（StoreUnAlign）](../reg_data_store/store_un_align_continuous.md)。
+
+## 约束说明<a name="section11585101304320"></a>
+
+- UnalignRegForLoad寄存器数量上限为4，超出后编译器将报错。
+
+- UnalignRegForStore寄存器数量上限为4，超出后编译器将报错。

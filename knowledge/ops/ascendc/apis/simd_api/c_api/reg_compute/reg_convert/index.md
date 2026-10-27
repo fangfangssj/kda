@@ -1,0 +1,63 @@
+# 类型转换
+
+- [asc_bfloat162float](asc_bfloat162float.md)：根据mask将src中的每个参与计算的bfloat16_t类型元素转换为float类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据参数src_pos选择读取src索引为偶数的位置或奇数的位置。
+- [asc_bfloat162half](asc_bfloat162half.md)：根据mask将src中的每个参与计算的bfloat16_t类型元素转换为half类型，结果写入dst。
+- [asc_bfloat162int32](asc_bfloat162int32.md)：根据mask将src中的每个参与计算的bfloat16_t类型元素转换为int32_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据参数src_pos选择读取src索引为偶数的位置或奇数的位置。
+- [asc_ceil](asc_ceil.md)：将src中的浮点数元素按照CEIL（向正无穷方向舍入）舍入模式舍入到整数值，结果仍保持原浮点数据类型。接口支持通过函数返回值返回结果，也支持通过引用和参数输出结果：前者直接返回舍入结果，后者将舍入结果写入dst。舍入规则等价于C标准库ceil语义：向正无穷方向舍入，即取大于或等于输入值的最小整数，正数向数值增大的方向取整（如1.3 -> 2.0），负数向0方向取整（如-1.7 -> -1.0），整数值保持不变。未被mask筛选的元素置零。
+- [asc_float2bfloat16](asc_float2bfloat16.md)：根据mask将src中的每个float类型数据转换成bfloat16_t类型，并支持多种舍入模式与饱和模式，结果写入dst。 由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据位置参数选择数据写入索引为奇数的位置或偶数的位置。伪代码如下：
+- [asc_float2half](asc_float2half.md)：将float类型数据转换成half类型，并支持多种舍入模式与饱和模式。
+- [asc_float2int16](asc_float2int16.md)：将float类型数据转换为int16_t类型，并支持多种舍入模式与饱和/非饱和模式。
+- [asc_float2int32](asc_float2int32.md)：将float类型数据转换为int32_t类型，并支持多种舍入模式与饱和/非饱和模式。
+- [asc_float2int64](asc_float2int64.md)：将float类型数据转换为int64_t类型，并支持多种舍入模式与饱和/非饱和模式。
+- [asc_floor](asc_floor.md)：将src中的浮点数元素按照FLOOR（向负无穷方向舍入）舍入模式舍入到整数值，结果仍保持原浮点数据类型。接口支持通过函数返回值返回结果，也支持通过引用和参数输出结果：前者直接返回舍入结果，后者将舍入结果写入dst。舍入规则等价于C标准库floor语义：向负无穷方向舍入，即取小于或等于输入值的最大整数，正数向0方向取整（如1.7 -> 1.0），负数向数值减小的方向取整（如-1.3 -> -2.0），整数值保持不变。未被mask筛选的元素置零。
+- [asc_half2bfloat16](asc_half2bfloat16.md)：根据mask将src中的每个参与计算的half类型元素转换为bfloat16_t类型，结果写入dst。
+- [asc_half2float](asc_half2float.md)：根据mask将src中的每个参与计算的half类型元素转换为float类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据参数src_pos选择读取src索引为偶数的位置或奇数的位置。
+- [asc_half2hif8](asc_half2hif8.md)：根据mask将src中的每个参与计算的half类型元素转换为hifloat8_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据参数dst_pos选择写入dst索引为偶数的位置或奇数的位置。
+- [asc_half2int16](asc_half2int16.md)：根据mask将src中的每个参与计算的half类型元素转换为int16_t类型，结果写入dst。
+- [asc_half2int32](asc_half2int32.md)：根据mask将src中的每个参与计算的half类型元素转换为int32_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据参数src_pos选择读取src索引为偶数的位置或奇数的位置。
+- [asc_half2int8](asc_half2int8.md)：根据mask将src中的每个参与计算的half类型元素转换为int8_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据参数dst_pos选择写入dst索引为偶数的位置或奇数的位置。
+- [asc_half2uint8](asc_half2uint8.md)：根据mask将src中的每个参与计算的half类型元素转换为uint8_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据参数dst_pos选择写入dst索引为偶数的位置或奇数的位置。
+- [asc_hif82half](asc_hif82half.md)：src中hifloat8_t数据类型的元素转换为half数据类型，并将结果写入dst。
+- [asc_int162float](asc_int162float.md)：src中int16_t类型的元素转换为float类型，并将结果写入dst。
+- [asc_int162half](asc_int162half.md)：src中int16_t类型的元素转换为half类型（16位浮点数），并将结果写入dst。源操作数和目的操作数位宽相同，转换后元素数量不变。支持5种舍入模式，关于舍入模式的详细说明请参见舍入模式与饱和模式。
+- [asc_int162int32](asc_int162int32.md)：src中int16_t类型的元素转换为int32_t类型，并将结果写入dst。
+- [asc_int162uint32](asc_int162uint32.md)：src中int16_t类型的元素转换为uint32_t类型，并将结果写入dst。转换过程将16位有符号整数转换为32位无符号整数。
+- [asc_int162uint8](asc_int162uint8.md)：src中int16_t类型的元素转换为uint8_t类型，并将结果写入dst。支持非饱和与饱和两种模式。
+- [asc_int322float](asc_int322float.md)：根据mask将src中的每个int32_t类型数据转换成float类型，并支持多种舍入模式，结果写入dst。参考伪代码如下：
+- [asc_int322int16](asc_int322int16.md)：根据mask将src中的每个int32_t类型元素转化为int16_t类型，支持饱和/非饱和模式，结果写入dst。由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据位置参数选择数据写入索引为奇数的位置或偶数的位置。参考伪代码如下：
+- [asc_int322int64](asc_int322int64.md)：根据mask将src中的每个int32_t类型元素转换为int64_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据位置参数选择输入数据索引为奇数的位置或偶数的位置。伪代码如下：
+- [asc_int322uint16](asc_int322uint16.md)：根据mask将src中的每个int32_t类型元素转换为uint16_t类型，并支持不同的饱和模式，结果写入dst。由于源操作数与目的操作数类型位宽比为2:1，写入数据时需要将一个VL大小的数据分为两部分，根据位置参数选择数据写入索引为奇数的位置或偶数的位置。参考伪代码：
+- [asc_int642float](asc_int642float.md)：将int64_t类型数据转换为float，并支持多种舍入模式。
+- [asc_int642int32](asc_int642int32.md)：将int64_t类型的源操作数转换成int32_t类型，并支持不同的饱和模式。
+- [asc_int82half](asc_int82half.md)：将int8_t类型数据转换为half类型。
+- [asc_int82int16](asc_int82int16.md)：将int8_t类型数据转换为int16_t类型。
+- [asc_rint](asc_rint.md)：将src中的浮点数元素按照RINT（四舍六入五成双）舍入模式舍入到整数值，结果仍保持原浮点数据类型。接口支持通过函数返回值返回结果，也支持通过引用和参数输出结果：前者直接返回舍入结果，后者将舍入结果写入dst。舍入规则等价于C标准库rint在舍入方向设置为FE_TONEAREST时的语义：舍入到最接近的整数；当输入值恰好位于两个整数中间时，舍入到偶数（如1.5 -> 2.0、2.5 -> 2.0、-2.5 -> -2.0），整数值保持不变。未被mask筛选的元素置零。
+- [asc_round](asc_round.md)：将src中的浮点数元素按照ROUND（四舍五入）舍入模式舍入到整数值，结果仍保持原浮点数据类型。接口支持通过函数返回值返回结果，也支持通过引用和参数输出结果：前者直接返回舍入结果，后者将舍入结果写入dst。舍入规则等价于C标准库round语义：舍入到最接近的整数；当输入值恰好位于两个整数中间时，向远离0的方向舍入（如1.4 -> 1.0、1.5 -> 2.0、-1.5 -> -2.0），整数值保持不变。未被mask筛选的元素置零。
+- [asc_trunc](asc_trunc.md)：将src中的浮点数元素按照TRUNC（向零方向截断）截断到整数值，结果仍保持原浮点数据类型。接口支持通过函数返回值返回结果，也支持通过引用和参数输出结果：前者直接返回截断结果，后者将截断结果写入dst。截断规则等价于C标准库trunc语义：向零方向舍入，即丢弃小数部分取整，正数向0方向取整（如1.7 -> 1.0），负数向0方向取整（如-1.7 -> -1.0），整数值保持不变。未被mask筛选的元素置零。
+- [asc_uint162uint32](asc_uint162uint32.md)：将uint16_t类型数据转为uint32_t类型。
+- [asc_uint162uint8](asc_uint162uint8.md)：将uint16_t类型数据转换为uint8_t类型，无舍入模式，支持饱和/非饱和模式。
+- [asc_uint322int16](asc_uint322int16.md)：将uint32_t类型数据转为int16_t类型，支持饱和/非饱和模式。
+- [asc_uint322uint16](asc_uint322uint16.md)：将uint32_t类型转换为uint16_t类型，支持饱和/非饱和模式。
+- [asc_uint82half](asc_uint82half.md)：将uint8_t类型数据转为half类型。
+- [asc_uint82uint16](asc_uint82uint16.md)：根据mask将源操作数src中的每个uint8_t类型元素转为uint16_t类型，结果写入dst。由于源操作数与目的操作数类型位宽比为1:2，读取数据时需要将一个VL大小的数据分为两部分，根据位置参数选择输入数据索引为奇数的位置或偶数的位置。参考伪代码如下：
+- [舍入模式与饱和模式](rounding_mode.md)：在进行数据类型转换时，Ascend C API支持多种舍入模式和饱和模式。这些模式决定了当源数据类型转换为不同精度或范围的目标数据类型时，如何处理数值的舍入和溢出问题。
+
+- [asc_bfloat162e1m2x2](asc_bfloat162e1m2x2.md)：根据mask将src中参与计算的bfloat16_t类型元素转换为fp4x2_e1m2_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_bfloat162e2m1x2](asc_bfloat162e2m1x2.md)：根据mask将src中参与计算的bfloat16_t类型元素转换为fp4x2_e2m1_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_e1m2x22bfloat16](asc_e1m2x22bfloat16.md)：根据mask将src中参与计算的fp4x2_e1m2_t类型元素转换为bfloat16_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_e2m1x22bfloat16](asc_e2m1x22bfloat16.md)：根据mask将src中参与计算的fp4x2_e2m1_t类型元素转换为bfloat16_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_e4m32float](asc_e4m32float.md)：根据mask将src中参与计算的fp8_e4m3fn_t类型元素转换为float类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_e5m22float](asc_e5m22float.md)：根据mask将src中参与计算的fp8_e5m2_t类型元素转换为float类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_float2e4m3](asc_float2e4m3.md)：根据mask将src中参与计算的float类型元素转换为fp8_e4m3fn_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_float2e5m2](asc_float2e5m2.md)：根据mask将src中参与计算的float类型元素转换为fp8_e5m2_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_float2hif8](asc_float2hif8.md)：根据mask将src中参与计算的float类型元素转换为hifloat8_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_hif82float](asc_hif82float.md)：根据mask将src中参与计算的hifloat8_t类型元素转换为float类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_int322uint8](asc_int322uint8.md)：根据mask将src中参与计算的int32_t类型元素转换为uint8_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_int82int32](asc_int82int32.md)：根据mask将src中参与计算的int8_t类型元素转换为int32_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+- [asc_uint322uint8](asc_uint322uint8.md)：根据mask将src中参与计算的uint32_t类型元素转换为uint8_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为4:1，dst中的元素按索引分为四组，参数dst_quarter_pos从dst中离散选取每隔4个元素的索引位置写入转换结果，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…，其他位置置零。
+- [asc_uint82uint32](asc_uint82uint32.md)：根据mask将src中参与计算的uint8_t类型元素转换为uint32_t类型，结果写入dst。由于源操作数与目的操作数的类型位宽比为1:4，src中的元素按索引分为四组，参数src_quarter_pos从src中离散选取每隔4个元素的索引位置读取数据，具体为索引0、4、8、…，索引1、5、9、…，索引2、6、10、…或索引3、7、11、…。
+
+- [asc_half2int4x2](asc_half2int4x2.md)：头文件路径为："c_api/reg_compute/reg_convert.h"。
+- [asc_int4x22bfloat16](asc_int4x22bfloat16.md)：头文件路径为："c_api/reg_compute/reg_convert.h"。
+- [asc_int4x22half](asc_int4x22half.md)：头文件路径为："c_api/reg_compute/reg_convert.h"。
+- [asc_int4x22int16](asc_int4x22int16.md)：头文件路径为："c_api/reg_compute/reg_convert.h"。

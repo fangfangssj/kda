@@ -1,0 +1,50 @@
+# 融合通信 ACLNN 算子
+
+本目录保存计算与集合通信融合类 ACLNN 算子知识。
+
+- [AllGatherMatmul A2/A3](all_gather_matmul.md)：AllGatherMatmul 算子在 A2/A3 平台的 ACLNN 实现，用于融合 AllGather 与矩阵乘。
+- [AllGatherMatmul 950](all_gather_matmul_950.md)：AllGatherMatmul 算子在 950 平台的 ACLNN 实现，用于融合 AllGather 与矩阵乘。
+- [AlltoAllAllGatherBatchMatMul A3](allto_all_all_gather_batch_mat_mul.md)：AlltoAllAllGatherBatchMatMul 算子在 A3 平台的 ACLNN 实现，用于融合 AllToAll、AllGather 与批量矩阵乘。
+- [AlltoAllMatmul A2/A3](allto_all_matmul.md)：AlltoAllMatmul 算子在 A2/A3 平台的 ACLNN 实现，用于融合 AllToAll 与矩阵乘。
+- [AlltoAllQuantMatmul A2](allto_all_quant_matmul.md)：AlltoAllQuantMatmul 算子在 A2 平台的 ACLNN 实现，用于融合 AllToAll 与量化矩阵乘。
+- [AlltoAllQuantMatmul 950](allto_all_quant_matmul_950.md)：AlltoAllQuantMatmul 算子在 950 平台的 ACLNN 实现，用于融合 AllToAll 与量化矩阵乘。
+- [AlltoAllvGroupedMatMul A3](allto_allv_grouped_mat_mul.md)：AlltoAllvGroupedMatMul 算子在 A3 平台的 ACLNN 实现，用于融合 AllToAllV 与分组矩阵乘。
+- [AlltoAllvGroupedMatMul 950](allto_allv_grouped_mat_mul_950.md)：AlltoAllvGroupedMatMul 算子在 950 平台的 ACLNN 实现，用于融合 AllToAllV 与分组矩阵乘。
+- [AlltoAllvQuantGroupedMatMul 950](allto_allv_quant_grouped_mat_mul_950.md)：AlltoAllvQuantGroupedMatMul 算子在 950 平台的 ACLNN 实现，用于融合 AllToAllV 与量化分组矩阵乘。
+- [AttentionToFfn A3](attention_to_ffn.md)：AttentionToFfn 算子在 A3 平台的 ACLNN 实现，用于将注意力输出重排并发送到 FFN 阶段。
+- [BatchMatMulReduceScatterAlltoAll A3](batch_mat_mul_reduce_scatter_allto_all.md)：BatchMatMulReduceScatterAlltoAll 算子在 A3 平台的 ACLNN 实现，用于融合批量矩阵乘、ReduceScatter 与 AllToAll。
+- [DistributeBarrier A3](distribute_barrier.md)：DistributeBarrier 算子在 A3 平台的 ACLNN 实现，用于在多卡之间建立分布式同步屏障。
+- [DistributeBarrier 950](distribute_barrier_950.md)：DistributeBarrier 算子在 950 平台的 ACLNN 实现，用于在多卡之间建立分布式同步屏障。
+- [FfnToAttention A3](ffn_to_attention.md)：FfnToAttention 算子在 A3 平台的 ACLNN 实现，用于将 FFN 输出重排并发送到注意力阶段。
+- [GroupedMatMulAllReduce A2](grouped_mat_mul_all_reduce.md)：GroupedMatMulAllReduce 算子在 A2 平台的 ACLNN 实现，用于融合分组矩阵乘与 AllReduce。
+- [GroupedMatMulAlltoAllv A3](grouped_mat_mul_allto_allv.md)：GroupedMatMulAlltoAllv 算子在 A3 平台的 ACLNN 实现，用于融合分组矩阵乘与 AllToAllV。
+- [GroupedMatMulAlltoAllv 950](grouped_mat_mul_allto_allv_950.md)：GroupedMatMulAlltoAllv 算子在 950 平台的 ACLNN 实现，用于融合分组矩阵乘与 AllToAllV。
+- [InplaceMatmulAllReduceAddRmsNorm A2](inplace_matmul_all_reduce_add_rms_norm.md)：InplaceMatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合矩阵乘、AllReduce、残差相加与 RMSNorm，并原位更新输出。
+- [InplaceQuantMatmulAllReduceAddRmsNorm A2](inplace_quant_matmul_all_reduce_add_rms_norm.md)：InplaceQuantMatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合量化矩阵乘、AllReduce、残差相加与 RMSNorm，并原位更新输出。
+- [InplaceWeightQuantMatmulAllReduceAddRmsNorm A2](inplace_weight_quant_matmul_all_reduce_add_rms_norm.md)：InplaceWeightQuantMatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合权重量化矩阵乘、AllReduce、残差相加与 RMSNorm，并原位更新输出。
+- [MatmulAllReduce 950](matmul_all_reduce_950.md)：MatmulAllReduce 算子在 950 平台的 ACLNN 实现，用于融合矩阵乘与 AllReduce。
+- [MatmulAllReduceAddRmsNorm A2](matmul_all_reduce_add_rms_norm.md)：MatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合矩阵乘、AllReduce、残差相加与 RMSNorm。
+- [MatmulAlltoAll A2/A3](matmul_allto_all.md)：MatmulAlltoAll 算子在 A2/A3 平台的 ACLNN 实现，用于融合矩阵乘与 AllToAll。
+- [MatmulAlltoAll 950](matmul_allto_all_950.md)：MatmulAlltoAll 算子在 950 平台的 ACLNN 实现，用于融合矩阵乘与 AllToAll。
+- [MatmulReduceScatter A2/A3](matmul_reduce_scatter.md)：MatmulReduceScatter 算子在 A2/A3 平台的 ACLNN 实现，用于融合矩阵乘与 ReduceScatter。
+- [MatmulReduceScatter 950](matmul_reduce_scatter_950.md)：MatmulReduceScatter 算子在 950 平台的 ACLNN 实现，用于融合矩阵乘与 ReduceScatter。
+- [MoeDistributeCombine A2/A3](moe_distribute_combine.md)：MoeDistributeCombine 算子在 A2/A3 平台的 ACLNN 实现，用于汇聚分布式专家输出并恢复 Token 顺序。
+- [MoeDistributeCombineAddRmsNorm A3](moe_distribute_combine_add_rms_norm.md)：MoeDistributeCombineAddRmsNorm 算子在 A3 平台的 ACLNN 实现，用于融合专家输出汇聚、残差相加与 RMSNorm。
+- [MoeDistributeCombineAddRmsNorm 950](moe_distribute_combine_add_rms_norm_950.md)：MoeDistributeCombineAddRmsNorm 算子在 950 平台的 ACLNN 实现，用于融合专家输出汇聚、残差相加与 RMSNorm。
+- [MoeDistributeCombineSetup 950](moe_distribute_combine_setup_950.md)：MoeDistributeCombineSetup 算子在 950 平台的 ACLNN 实现，用于初始化专家输出汇聚所需的通信窗口与状态。
+- [MoeDistributeCombineTeardown 950](moe_distribute_combine_teardown_950.md)：MoeDistributeCombineTeardown 算子在 950 平台的 ACLNN 实现，用于释放专家输出汇聚使用的通信窗口与状态。
+- [MoeDistributeDispatch A2/A3](moe_distribute_dispatch.md)：MoeDistributeDispatch 算子在 A2/A3 平台的 ACLNN 实现，用于按专家路由将 Token 分发到远端设备。
+- [MoeDistributeDispatch 950](moe_distribute_dispatch_950.md)：MoeDistributeDispatch 算子在 950 平台的 ACLNN 实现，用于按专家路由将 Token 分发到远端设备。
+- [MoeDistributeDispatchSetup 950](moe_distribute_dispatch_setup_950.md)：MoeDistributeDispatchSetup 算子在 950 平台的 ACLNN 实现，用于初始化专家 Token 分发所需的通信窗口与状态。
+- [MoeDistributeDispatchTeardown 950](moe_distribute_dispatch_teardown_950.md)：MoeDistributeDispatchTeardown 算子在 950 平台的 ACLNN 实现，用于释放专家 Token 分发使用的通信窗口与状态。
+- [MoeUpdateExpert A3](moe_update_expert.md)：MoeUpdateExpert 算子在 A3 平台的 ACLNN 实现，用于依据负载状态更新专家映射与部署信息。
+- [MoeUpdateExpert 950](moe_update_expert_950.md)：MoeUpdateExpert 算子在 950 平台的 ACLNN 实现，用于依据负载状态更新专家映射与部署信息。
+- [QuantGroupedMatMulAlltoAllv 950](quant_grouped_mat_mul_allto_allv_950.md)：QuantGroupedMatMulAlltoAllv 算子在 950 平台的 ACLNN 实现，用于融合量化分组矩阵乘与 AllToAllV。
+- [QuantMatmulAllReduce A2](quant_matmul_all_reduce.md)：QuantMatmulAllReduce 算子在 A2 平台的 ACLNN 实现，用于融合量化矩阵乘与 AllReduce。
+- [QuantMatmulAllReduce 950](quant_matmul_all_reduce_950.md)：QuantMatmulAllReduce 算子在 950 平台的 ACLNN 实现，用于融合量化矩阵乘与 AllReduce。
+- [QuantMatmulAllReduceAddRmsNorm A2](quant_matmul_all_reduce_add_rms_norm.md)：QuantMatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合量化矩阵乘、AllReduce、残差相加与 RMSNorm。
+- [QuantMatmulAlltoAll A2](quant_matmul_allto_all.md)：QuantMatmulAlltoAll 算子在 A2 平台的 ACLNN 实现，用于融合量化矩阵乘与 AllToAll。
+- [QuantMatmulAlltoAll 950](quant_matmul_allto_all_950.md)：QuantMatmulAlltoAll 算子在 950 平台的 ACLNN 实现，用于融合量化矩阵乘与 AllToAll。
+- [WeightQuantMatmulAllReduce A2](weight_quant_matmul_all_reduce.md)：WeightQuantMatmulAllReduce 算子在 A2 平台的 ACLNN 实现，用于融合权重量化矩阵乘与 AllReduce。
+- [WeightQuantMatmulAllReduce 950](weight_quant_matmul_all_reduce_950.md)：WeightQuantMatmulAllReduce 算子在 950 平台的 ACLNN 实现，用于融合权重量化矩阵乘与 AllReduce。
+- [WeightQuantMatmulAllReduceAddRmsNorm A2](weight_quant_matmul_all_reduce_add_rms_norm.md)：WeightQuantMatmulAllReduceAddRmsNorm 算子在 A2 平台的 ACLNN 实现，用于融合权重量化矩阵乘、AllReduce、残差相加与 RMSNorm。

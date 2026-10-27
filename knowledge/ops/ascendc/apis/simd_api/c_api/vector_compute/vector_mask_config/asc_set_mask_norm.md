@@ -1,0 +1,72 @@
+---
+type: API
+title: asc_set_mask_norm
+description: 设置Mask模式为Normal模式，该模式为系统默认模式。该模式下，Mask参数可控制高维切分计算过程中单次迭代内参与计算的元素。
+tags:
+- task.lookup
+- topic.implementation.api_layer.c_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/c_api/vector_compute/vector_mask_config/asc_set_mask_norm.md
+  role: primary
+created_at: '2026-09-03T08:52:46Z'
+updated_at: '2026-09-12T03:09:26Z'
+platforms:
+- a2
+- a3
+source_headers:
+- include/c_api/vector_compute/compute/vector_mask_config.h
+---
+
+# asc_set_mask_norm
+
+## 功能说明
+
+头文件路径为：`"c_api/vector_compute/compute/vector_mask_config.h"`。
+
+设置Mask模式为Normal模式，该模式为系统默认模式。该模式下，Mask参数可控制高维切分计算过程中单次迭代内参与计算的元素。
+
+## 函数原型
+
+```cpp
+__aicore__ inline void asc_set_mask_norm()
+```
+
+## 参数说明
+
+无
+
+## 返回值说明
+
+无
+
+## 流水类型
+
+PIPE_S
+
+## 约束说明
+
+该API需和[asc_set_vector_mask](asc_set_vector_mask.md)配合使用。
+
+## 调用示例
+
+```cpp
+asc_set_mask_norm();
+asc_set_vector_mask(0xffffffffffffffff, 0xffffffffffffffff);    // 设置每个迭代内所有元素均参与计算。
+
+// 进行高维切分计算
+constexpr uint32_t total_length = 128; //total_length指参与计算的数据总长度
+__ubuf__ half src0[total_length];
+__ubuf__ half src1[total_length];
+__ubuf__ half dst[total_length];
+
+uint8_t repeat = 1; // 1个repeat可以处理128个half类型的数据
+uint8_t dst_block_stride = 1;
+uint8_t src0_block_stride = 1;
+uint8_t src1_block_stride = 1;
+uint8_t dst_repeat_stride = 8;
+uint8_t src0_repeat_stride = 8;
+uint8_t src1_repeat_stride = 8;
+asc_add(dst, src0, src1, repeat, dst_block_stride, src0_block_stride, src1_block_stride,
+    dst_repeat_stride, src0_repeat_stride, src1_repeat_stride);
+```

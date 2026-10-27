@@ -1,0 +1,27 @@
+# HCCL核函数（Kernel）侧接口
+
+- [AllGather](all_gather.md)：集合通信算子AllGather的任务下发接口，返回该任务的标识handleId给用户。AllGather的功能为：将通信域内所有节点的输入按照rank id重新排序，然后拼接起来，再将结果发送到所有节点的输出。 !
+- [AllReduce](all_reduce.md)：集合通信算子AllReduce的任务下发接口，返回该任务的标识handleId给用户。AllReduce功能为：将通信域内所有节点的同名张量进行reduce操作后，再把结果发送到所有节点的输出buffer。 !
+- [AlltoAll](allto_all.md)：集合通信AlltoAll的任务下发接口，返回该任务的标识handleId给用户。AlltoAll的功能为：每张卡向通信域内所有卡发送相同数据量的数据，并从所有卡接收相同数据量的数据。结合原型中的参数，描述接口功能，具体为，第j张卡接收到来自第i张卡的sendBuf中第j块数据，并将该数据存放到本卡recvBuf中第i块的位置。 !
+- [AlltoAllV](allto_all_v.md)：集合通信AlltoAllV任务下发接口，支持通信域内各卡定制收发数据量和内存偏移，返回任务标识handleId。
+- [AlltoAllvWrite](allto_allv_write.md)：集合通信AlltoAllvWrite任务下发接口，支持定制发送偏移和数据大小，实现卡间数据的点对点写入。
+- [BatchWrite](batch_write.md)：集合通信BatchWrite任务下发接口，实现点对点批量数据传输，可同时将多份数据发送到不同Global Memory地址。
+- [Commit（HCCL集合通信）](commit.md)：非细粒度通信时，每调用一次本接口，则通知服务端可以执行handleId对应的任务一次。细粒度通信时，每调用一次本接口，则通知服务端可以执行handleId对应的步长长度的子通信任务。
+- [Finalize（HCCL集合通信）](finalize.md)：通知服务端后续无通信任务，执行结束后退出。
+- [GetQueueNum](get_queue_num.md)：获取BatchWrite通信任务的通信队列数量。
+- [GetRankDim](get_rank_dim.md)：获取通信域内卡的数量。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [GetRankId](get_rank_id.md)：获取本卡RankId。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [GetWindowsInAddr](get_windows_in_addr.md)：获取卡间通信数据WindowsIn起始地址，可用来直接作为计算的输入输出地址，减少拷贝。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [GetWindowsOutAddr](get_windows_out_addr.md)：获取卡间通信数据WindowsOut起始地址，可用来直接作为计算的输入输出地址，减少拷贝。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [HCCL模板参数](hccl_template_params.md)：创建HCCL对象时需要传入模板参数。
+- [HCCL使用说明](hccl_usage.md)：Ascend C提供一组HCCL通信类高阶API，方便算子Kernel开发用户在AI Core侧灵活管理通算融合算子中计算与通信任务的执行顺序。
+- [Init（废弃）](init_deprecated.md)：HCCL客户端初始化接口。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [InitV2](init_v2.md)：HCCL客户端初始化接口。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [InterHcclGroupSync](inter_hccl_group_sync.md)：用于等待一个跨通信域的通信任务完成。调用该接口后，本通信域后续下发的通信任务，均等待指定的srcGroupID通信域中的srcHandleID通信任务执行完成，才开始执行。
+- [Iterate](iterate.md)：细粒度通信接口，获取集合通信算法每一步的输入或输出，实现计算与通信的精细粒度流水排布。
+- [Query（HCCL集合通信）](query.md)：查询handleId对应的通信任务已经完成的轮次，最多返回repeat轮。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。
+- [QueueBarrier](queue_barrier.md)：阻塞服务端上指定队列的BatchWrite通信任务，直到指定范围内所有队列上的任务完成执行，从而实现指定范围内队列的同步。
+- [ReduceScatter](reduce_scatter.md)：集合通信算子ReduceScatter的任务下发接口，返回该任务的标识handleId给用户。ReduceScatter的功能为：将所有rank的输入相加（或其他归约操作）后，再把结果按照rank编号均匀分散到各个rank的输出buffer，每个进程拿到其他进程1/ranksize份的数据进行归约操作。 !
+- [SetCcTiling（废弃）](set_cc_tiling_deprecated.md)：用于设置HCCL客户端通信算法的Tiling地址。
+- [SetCcTilingV2](set_cc_tiling_v2.md)：用于设置HCCL客户端中某个通信算法配置的TilingData地址。
+- [HCCL集合通信Wait](wait.md)：阻塞AI Core，非细粒度通信时，等待handleId对应的通信任务完成，细粒度通信时，等待handleId对应的步长长度的子通信任务完成。handleId调用Wait接口的顺序，须和Prepare接口一致。该接口默认在所有核上工作，用户也可以在调用前通过GetBlockIdx指定其在某一个核上运行。

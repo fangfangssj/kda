@@ -1,0 +1,23 @@
+---
+type: Guide
+title: 算子调试（功能调试）
+description: 从异构计算章节可以了解到Ascend C算子主要包括Tiling和Kernel实现两部分组成。
+tags:
+- task.lookup
+- topic.implementation.debugging
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/guide/operator_practice/functional_debug/operator_debug.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms: []
+---
+
+# 算子调试<a name="ZH-CN_TOPIC_0000001846719824"></a>
+
+从[异构计算](../heterogeneous_computing.md)章节可以了解到Ascend C算子主要包括Tiling和核函数（Kernel）实现两部分组成。
+
+Tiling实现运行在Host侧CPU上，一般使用传统的调测手段（比如gdb工具）即可完成调试。
+
+核函数（Kernel）实现运行在Device侧NPU上，Ascend C提供了多种调试方式，包括孪生调试、上板调试等，具体的调试方法请参考[算子调试](../../programming_guide/debug_and_tuning/overview.md)。

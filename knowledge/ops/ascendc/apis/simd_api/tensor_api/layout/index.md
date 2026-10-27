@@ -1,0 +1,25 @@
+# layout
+
+- [capacity](capacity.md)：头文件路径为：tensor_api/tensor.h。
+- [coord](coord.md)：coord用于定义张量的坐标，用于访问张量中特定位置的元素。
+- [coshape](coshape.md)：头文件路径为：tensor_api/tensor.h。
+- [cosize](cosize.md)：头文件路径为：tensor_api/tensor.h。
+- [crd2idx](crd2idx.md)：头文件路径为：tensor_api/tensor.h。
+- [get](get.md)：头文件路径为：tensor_api/tensor.h。
+- [get_shape](get_shape.md)：头文件路径为：tensor_api/tensor.h。
+- [get_stride](get_stride.md)：头文件路径为：tensor_api/tensor.h。
+- [layout](layout.md)：layout数据结构是描述多维张量内存布局的基础模板类，通过编译期的形状和步长信息，实现逻辑坐标空间到一维内存地址空间的映射。借助模板元编程技术，该类在编译期完成计算和代码生成，从而降低运行时开销。
+- [layout和层次化表述法](layout_hierarchical_representation.md)：我们使用shape和stride来表示layout排布格式，例如下图中的行优先和列优先排布。
+- [Layout](layout_structure.md)：Layout使用Shape和Stride描述数据的逻辑形状及各维坐标对应的线性地址步长。Tensor API支持普通整数和嵌套元组形式的Shape、Stride和Coord，并通过Layout Pattern表达ND、DN、NZ、ZN等数据排布。
+- [make_coord](make_coord.md)：头文件路径为：tensor_api/tensor.h。
+- [make_frame_layout](make_frame_layout.md)：头文件路径为：tensor_api/tensor.h。
+- [make_layout](make_layout.md)：头文件路径为：tensor_api/tensor.h。
+- [make_pattern_layout](make_pattern_layout.md)：头文件路径为：tensor_api/tensor.h。
+- [make_shape](make_shape.md)：构造shape对象，用于描述数据的逻辑形状。支持传入多个维度值，也支持传入嵌套的shape子结构以构造层次化shape。
+- [make_stride](make_stride.md)：构造stride对象，用于描述各维度在内存中的步长。支持传入多个步长值，也支持传入嵌套的stride子结构以构造层次化stride。
+- [rank](rank.md)：用于返回layout的秩。
+- [select](select.md)：选择layout的shape和stride指定维度组成新的layout对象并返回。
+- [shape](shape.md)：shape用于定义张量的逻辑形状，用于描述各维度的大小。
+- [size](size.md)：用于返回layout的有效元素个数。
+- [squeeze](squeeze.md)：头文件路径为：tensor_api/tensor.h。
+- [stride](stride.md)：stride用于定义张量各维度在内存中的步长，用于描述同一维度相邻元素在内存中的间隔。

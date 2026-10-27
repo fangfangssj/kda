@@ -1,0 +1,99 @@
+---
+type: API
+title: CastFloatToHalfInt32
+description: 将float类型标量数据转换为half或int32_t类型标量数据，支持多种舍入模式。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.programming_model.execution_unit.scalar
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/scalar_compute/Cast_float_to_half_int32.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-08T03:31:04Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+- kirin_x90
+- kirin_9030
+source_headers:
+- include/basic_api/kernel_operator_scalar_intf.h
+---
+
+# Cast（float转half/int32\_t）<a name="ZH-CN_TOPIC_0000001787470378"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为：`"basic_api/kernel_operator_scalar_intf.h"`。
+
+对标量的数据类型进行转换。
+
+在使用该接口之前，用户需要先了解[内置数据类型](../data_structures/builtin_data_types.md)和[精度转换](../data_structures/precision_conversion.md)。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
+template <typename T, typename U, RoundMode roundMode>
+__aicore__ inline U Cast(T valueIn)
+```
+
+## 参数说明<a name="section622mcpsimp"></a>
+
+**表1**  模板参数说明
+
+| 参数名 | 描述 |
+| ------ | ------ |
+| T | valueIn的数据类型。 |
+| U | 转换后的数据类型。 |
+| roundMode | 精度转换处理模式，类型是RoundMode。<br>RoundMode为枚举类型，用以控制精度转换处理模式，参考[精度舍入模式](../data_structures/precision_conversion.md#tab1)，可取值为:<br>&bull; CAST_NONE：当转换过程存在精度损失时，按CAST_RINT模式处理；当不存在精度损失时，不进行舍入；<br>&bull; CAST_RINT：向最近的偶数舍入；<br>&bull; CAST_FLOOR：向负无穷大方向舍入；<br>&bull; CAST_CEIL：向正无穷大方向舍入；<br>&bull; CAST_ROUND：四舍五入；<br>&bull; CAST_TRUNC：截断模式；<br>&bull; CAST_ODD：向最近的奇数舍入。 |
+
+**表2**  参数说明
+
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| valueIn | 输入 | 被转换数据类型的标量。 |
+
+## 数据类型<a name="zh-cn_topic_0000002531121342_section4219135304818"></a>
+
+支持的数据类型如下：
+
+- valueIn支持float。
+- 返回值支持half、int32\_t。
+
+## 返回值说明<a name="section640mcpsimp"></a>
+
+转换后的U类型标量数据。
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+支持的数据类型组合及对应支持的RoundMode如下：
+
+| valueIn | 返回值 | RoundMode |
+| ------ | ------ | ------ |
+| float | half | CAST_ODD |
+| float | int32_t | CAST_ROUND |
+| float | int32_t | CAST_CEIL |
+| float | int32_t | CAST_FLOOR |
+| float | int32_t | CAST_RINT |
+
+## 调用示例<a name="section837496171220"></a>
+
+```cpp
+float valueIn = 3.14159f;
+half halfOut = AscendC::Cast<float, half, AscendC::RoundMode::CAST_ODD>(valueIn);             // 返回3.142578
+
+valueIn = 1.5f;
+int32_t intRoundOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回2
+int32_t intCeilOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回2
+int32_t intFloorOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回1
+int32_t intRintOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_RINT>(valueIn);   // 使用CAST_RINT模式，1.5向临近偶数舍入返回2
+
+valueIn = 2.5f;
+intRoundOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_ROUND>(valueIn); // 使用CAST_ROUND模式，四舍五入返回3
+intCeilOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_CEIL>(valueIn);   // 使用CAST_CEIL模式，向上取整返回3
+intFloorOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_FLOOR>(valueIn); // 使用CAST_FLOOR模式，向下取整返回2
+intRintOut = AscendC::Cast<float, int32_t, AscendC::RoundMode::CAST_RINT>(valueIn);   // 使用CAST_RINT模式，2.5向临近偶数舍入返回2
+```

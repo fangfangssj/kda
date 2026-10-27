@@ -1,0 +1,105 @@
+---
+type: API
+title: IcpuRunKf
+description: CPU调测总入口，完成CPU侧的算子程序调用。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.implementation.debugging
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/debug_interface/cpu_twin_debug/ICPU_RUN_KF.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+- '910'
+- kirin_x90
+- kirin_9030
+---
+
+# ICPU_RUN_KF<a name="ZH-CN_TOPIC_0000002080882157"></a>
+
+## 功能说明<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section259105813316"></a>
+
+头文件路径为：`"tools/cpudebug/include/kern_fwk.h"`。
+
+进行核函数（Kernel）的CPU侧运行验证时，CPU调测总入口，完成CPU侧的算子程序调用。
+
+## 函数原型<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section2067518173415"></a>
+
+```cpp
+#define ICPU_RUN_KF(func, numBlocks, ...)
+```
+
+## 参数说明<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section158061867342"></a>
+
+**表1**  模板参数说明
+
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ------ | ------ |
+| func | 输入 | 算子的核函数（Kernel）指针。|
+| numBlocks | 输入 | 算子的核心数，corenum。|
+| ... | 输入 | 所有的入参和出参，依次填入，当前参数个数限制为32个，超出32时会出现编译错误。 |
+
+## 返回值说明<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section640mcpsimp"></a>
+
+无
+
+## 约束说明<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section794123819592"></a>
+
+- 为了保留接口兼容，推荐[<<<>>>](../../../../../guides/programming_guide/debug_and_tuning/functional_debug/cpu_twin_debug.md)编译使用。
+- 除了func、blkdim以外，其他的变量都必须是通过[GmAlloc](gm_alloc.md)分配的共享内存的指针；传入的参数的数量和顺序都必须和核函数（Kernel）保持一致。
+
+## 调用示例<a name="zh-cn_topic_0000001963799134_zh-cn_topic_0000001541924164_section82241477610"></a>
+
+下面代码以add_custom算子为例，介绍算子核函数（Kernel）在CPU侧验证时，算子调用的应用程序如何编写。您在实现自己的应用程序时，需要关注由于算子核函数（Kernel）不同带来的修改，包括算子核函数（Kernel）名，入参出参的不同等，合理安排相应的内存分配、内存拷贝和文件读写等，相关API的调用方式直接复用即可。
+
+1.  按需包含头文件，通过ASCENDC_CPU_DEBUG宏区分CPU和NPU侧需要包含的头文件。
+
+    ```cpp
+    #include "data_utils.h"
+    #ifndef ASCENDC_CPU_DEBUG
+    #include "acl/acl.h"
+    #else
+    #include "tikicpulib.h"
+    extern "C" __global__ __aicore__ void add_custom(GM_ADDR x, GM_ADDR y, GM_ADDR z); // 核函数（Kernel）声明。
+    #endif
+    ```
+
+2.  CPU侧运行验证。完成算子核函数（Kernel）CPU侧运行验证的步骤如下：
+
+    **图1**  CPU侧运行验证步骤<a name="fig13576112114442"></a>  
+    ![](https://raw.gitcode.com/cann/asc-devkit/raw/639b2b5c1031188107d23d785d52b935f1b4f13b/docs/zh/api/figures/cpu_verification_steps.png "CPU侧运行验证步骤")
+
+    ```cpp
+    int32_t main(int32_t argc, char* argv[])
+    {
+        uint32_t numBlocks = 8;
+        size_t inputByteSize = 8 * 2048 * sizeof(uint16_t);
+        size_t outputByteSize = 8 * 2048 * sizeof(uint16_t);
+    
+       // 使用GmAlloc分配共享内存，并进行数据初始化。
+        uint8_t* x = (uint8_t*)AscendC::GmAlloc(inputByteSize);
+        uint8_t* y = (uint8_t*)AscendC::GmAlloc(inputByteSize);
+        uint8_t* z = (uint8_t*)AscendC::GmAlloc(outputByteSize);
+    
+        ReadFile("./input/input_x.bin", inputByteSize, x, inputByteSize);
+        ReadFile("./input/input_y.bin", inputByteSize, y, inputByteSize);
+        // 矢量算子需要设置内核模式为AIV模式。
+        AscendC::SetKernelMode(KernelMode::AIV_MODE);
+        // 调用ICPU_RUN_KF调测宏，完成核函数（Kernel）CPU侧的调用。
+        ICPU_RUN_KF(add_custom, numBlocks, x, y, z);
+        // 输出数据写出。
+        WriteFile("./output/output_z.bin", z, outputByteSize);
+        // 调用GmFree释放申请的资源。
+        AscendC::GmFree((void *)x);
+        AscendC::GmFree((void *)y);
+        AscendC::GmFree((void *)z);
+        return 0;
+    }
+    ```

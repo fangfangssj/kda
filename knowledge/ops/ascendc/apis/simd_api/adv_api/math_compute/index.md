@@ -1,0 +1,51 @@
+# 数学计算
+
+- [Acos接口](acos_interface/index.md)：共 3 张知识卡（如 Acos、GetAcosMaxMinTmpSize、GetAcosTmpBufferFactorSize）。
+- [Acosh接口](acosh_interface/index.md)：共 3 张知识卡（如 Acosh、GetAcoshMaxMinTmpSize、GetAcoshTmpBufferFactorSize）。
+- [Asin接口](asin_interface/index.md)：共 3 张知识卡（如 Asin、GetAsinMaxMinTmpSize、GetAsinTmpBufferFactorSize）。
+- [Asinh接口](asinh_interface/index.md)：共 3 张知识卡（如 Asinh、GetAsinhMaxMinTmpSize、GetAsinhTmpBufferFactorSize）。
+- [Atan接口](atan_interface/index.md)：共 3 张知识卡（如 Atan、GetAtanMaxMinTmpSize、GetAtanTmpBufferFactorSize）。
+- [Atanh接口](atanh_interface/index.md)：共 3 张知识卡（如 Atanh、GetAtanhMaxMinTmpSize、GetAtanhTmpBufferFactorSize）。
+- [Axpy接口](axpy_interface/index.md)：共 3 张知识卡（如 Axpy、GetAxpyMaxMinTmpSize、GetAxpyTmpBufferFactorSize）。
+- [BitwiseAnd接口](bitwise_and_interface/index.md)：共 3 张知识卡（如 BitwiseAnd、GetBitwiseAndMaxMinTmpSize、GetBitwiseAndTmpBufferFactorSize）。
+- [BitwiseNot接口](bitwise_not_interface/index.md)：共 3 张知识卡（如 BitwiseNot、GetBitwiseNotMaxMinTmpSize、GetBitwiseNotTmpBufferFactorSize）。
+- [BitwiseOr接口](bitwise_or_interface/index.md)：共 3 张知识卡（如 BitwiseOr、GetBitwiseOrMaxMinTmpSize、GetBitwiseOrTmpBufferFactorSize）。
+- [BitwiseXor接口](bitwise_xor_interface/index.md)：共 3 张知识卡（如 BitwiseXor、GetBitwiseXorMaxMinTmpSize、GetBitwiseXorTmpBufferFactorSize）。
+- [Ceil接口](ceil_interface/index.md)：共 3 张知识卡（如 Ceil、GetCeilMaxMinTmpSize、GetCeilTmpBufferFactorSize）。
+- [Clamp接口](clamp_interface/index.md)：共 5 张知识卡（如 Clamp（数学计算）、ClampMax、ClampMin 等）。
+- [Cos接口](cos_interface/index.md)：共 3 张知识卡（如 Cos、GetCosMaxMinTmpSize、GetCosTmpBufferFactorSize）。
+- [Cosh接口](cosh_interface/index.md)：共 3 张知识卡（如 Cosh、GetCoshMaxMinTmpSize、GetCoshTmpBufferFactorSize）。
+- [CumSum接口](cum_sum_interface/index.md)：共 2 张知识卡（如 CumSum、GetCumSumMaxMinTmpSize）。
+- [Digamma接口](digamma_interface/index.md)：共 3 张知识卡（如 Digamma、GetDigammaMaxMinTmpSize、GetDigammaTmpBufferFactorSize）。
+- [Erf接口](erf_interface/index.md)：共 3 张知识卡（如 Erf、GetErfMaxMinTmpSize、GetErfTmpBufferFactorSize）。
+- [Erfc接口](erfc_interface/index.md)：共 3 张知识卡（如 Erfc、GetErfcMaxMinTmpSize、GetErfcTmpBufferFactorSize）。
+- [Exp接口](exp_interface/index.md)：共 3 张知识卡（如 Exp、GetExpMaxMinTmpSize、GetExpTmpBufferFactorSize）。
+- [Floor接口](floor_interface/index.md)：共 3 张知识卡（如 Floor、GetFloorMaxMinTmpSize、GetFloorTmpBufferFactorSize）。
+- [Fma接口](fma_interface/index.md)：共 3 张知识卡（如 Fma、GetFmaMaxMinTmpSize、GetFmaTmpBufferFactorSize）。
+- [Fmod接口](fmod_interface/index.md)：共 3 张知识卡（如 Fmod、GetFmodMaxMinTmpSize、GetFmodTmpBufferFactorSize）。
+- [Frac接口](frac_interface/index.md)：共 3 张知识卡（如 Frac、GetFracMaxMinTmpSize、GetFracTmpBufferFactorSize）。
+- [Hypot接口](hypot_interface/index.md)：共 3 张知识卡（如 GetHypotMaxMinTmpSize、GetHypotTmpBufferFactorSize、Hypot）。
+- [IsFinite接口](is_finite_interface/index.md)：按元素判断输入浮点数是否非NAN、非±INF，输出结果为浮点数或布尔值，支持half、bfloat16_t、float数据类型。
+- [IsInf接口](is_inf_interface/index.md)：共 3 张知识卡（如 GetIsInfMaxMinTmpSize、GetIsInfTmpBufferFactorSize、IsInf）。
+- [IsNan接口](is_nan_interface/index.md)：共 3 张知识卡（如 GetIsNanMaxMinTmpSize、GetIsNanTmpBufferFactorSize、IsNan）。
+- [Lgamma接口](lgamma_interface/index.md)：共 3 张知识卡（如 GetLgammaMaxMinTmpSize、GetLgammaTmpBufferFactorSize、Lgamma）。
+- [Log接口](log_interface/index.md)：共 3 张知识卡（如 GetLogMaxMinTmpSize、GetLogTmpBufferFactorSize、Log）。
+- [LogicalAnd接口](logical_and_interface/index.md)：共 3 张知识卡（如 GetLogicalAndMaxMinTmpSize、GetLogicalAndTmpBufferFactorSize、LogicalAnd）。
+- [LogicalAnds接口](logical_ands_interface/index.md)：共 3 张知识卡（如 GetLogicalAndsMaxMinTmpSize、GetLogicalAndsTmpBufferFactorSize、LogicalAnds）。
+- [LogicalNot接口](logical_not_interface/index.md)：共 3 张知识卡（如 GetLogicalNotMaxMinTmpSize、GetLogicalNotTmpBufferFactorSize、LogicalNot）。
+- [LogicalOr接口](logical_or_interface/index.md)：共 3 张知识卡（如 GetLogicalOrMaxMinTmpSize、GetLogicalOrTmpBufferFactorSize、LogicalOr）。
+- [LogicalOrs接口](logical_ors_interface/index.md)：共 3 张知识卡（如 GetLogicalOrsMaxMinTmpSize、GetLogicalOrsTmpBufferFactorSize、LogicalOrs）。
+- [LogicalXor接口](logical_xor_interface/index.md)：共 3 张知识卡（如 GetLogicalXorMaxMinTmpSize、GetLogicalXorTmpBufferFactorSize、LogicalXor）。
+- [更多样例（数学计算）](more_examples.md)：下面的样例展示了数学库kernel侧API和Tiling API GetXxxMaxMinTmpSize的配套使用方法，具体流程如下：
+- [Power接口](power_interface/index.md)：共 3 张知识卡（如 GetPowerMaxMinTmpSize、GetPowerTmpBufferFactorSize、Power（数学计算））。
+- [Rint接口](rint_interface/index.md)：共 3 张知识卡（如 GetRintMaxMinTmpSize、GetRintTmpBufferFactorSize、Rint）。
+- [Round接口](round_interface/index.md)：共 3 张知识卡（如 GetRoundMaxMinTmpSize、GetRoundTmpBufferFactorSize、Round）。
+- [Sign接口](sign_interface/index.md)：共 3 张知识卡（如 GetSignMaxMinTmpSize、GetSignTmpBufferFactorSize、Sign）。
+- [SinCos接口](sin_cos_interface/index.md)：共 3 张知识卡（如 GetSinCosMaxMinTmpSize、GetSinCosTmpBufferFactorSize、SinCos）。
+- [Sin接口](sin_interface/index.md)：共 3 张知识卡（如 GetSinMaxMinTmpSize、GetSinTmpBufferFactorSize、Sin）。
+- [Sinh接口](sinh_interface/index.md)：共 3 张知识卡（如 GetSinhMaxMinTmpSize、GetSinhTmpBufferFactorSize、Sinh）。
+- [Tan接口](tan_interface/index.md)：共 3 张知识卡（如 GetTanMaxMinTmpSize、GetTanTmpBufferFactorSize、Tan）。
+- [Tanh接口](tanh_interface/index.md)：共 3 张知识卡（如 GetTanhMaxMinTmpSize、GetTanhTmpBufferFactorSize、Tanh）。
+- [Trunc接口](trunc_interface/index.md)：共 3 张知识卡（如 GetTruncMaxMinTmpSize、GetTruncTmpBufferFactorSize、Trunc）。
+- [Where接口](where_interface/index.md)：共 3 张知识卡（如 GetWhereMaxMinTmpSize、GetWhereTmpBufferFactorSize、Where（数学计算））。
+- [Xor接口](xor_interface/index.md)：共 3 张知识卡（如 GetXorMaxMinTmpSize、GetXorTmpBufferFactorSize、Xor）。

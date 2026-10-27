@@ -1,0 +1,5 @@
+# workspace
+
+- [GetSysWorkSpacePtr](get_sys_work_space_ptr.md)：获取系统workspace指针。部分高阶API如Matmul需要使用系统workspace，相关接口需要传入系统workspace指针，此时可以通过该接口获取。使用系统workspace时，host侧开发者需要自行申请系统workspace的空间，其预留空间大小可以通过GetLibApiWorkSpaceSize接口获取。
+- [GetUserWorkspace](get_user_workspace.md)：获取用户使用的workspace指针。Kernel直调开发方式下，如果未开启HAVE_WORKSPACE编译选项，框架不会自动设置系统workspace。如果使用了Matmul Kernel侧接口等需要系统workspace的高阶API，kernel侧需要通过SetSysWorkSpace设置系统workspace，此时用户workspace需要通过该接口获取。
+- [SetSysWorkSpace](set_sys_work_space.md)：设置系统workspace指针，供Matmul Kernel等高阶API使用；工程化或kernel直调方式由框架自动设置，其他场景需开发者手动调用。

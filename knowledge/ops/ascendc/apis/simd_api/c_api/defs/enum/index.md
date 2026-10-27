@@ -1,0 +1,18 @@
+# 枚举
+
+- [asc_hf32_round_mode](asc_hf32_round_mode.md)：asc_hf32_round_mode用于Mmad计算开启HF32模式时由FP32舍入到HF32的舍入模式管理策略，在调用asc_set_hf32_round_mode时使用。
+- [asc_load_l2_cache_mode](asc_load_l2_cache_mode.md)：asc_load_l2_cache_mode用于表示数据从GM搬运到Unified Buffer（UB）时的L2 cache管理策略，可用于：
+- [asc_override_strategy](asc_override_strategy.md)：asc_override_strategy用于表示饱和控制策略，在调用asc_set_saturation_strategy和asc_get_saturation_strategy时使用。该策略影响CAST类全局饱和配置是否生效。
+- [asc_saturation_mode](asc_saturation_mode.md)：asc_saturation_mode用于表示饱和控制所作用的模式类型，在调用asc_set_saturation_flag和asc_get_saturation_flag时使用。
+- [asc_store_l2_cache_mode](asc_store_l2_cache_mode.md)：asc_store_l2_cache_mode用于表示数据从Unified Buffer（UB）搬运到GM时的L2 cache策略，可用于：
+
+- [asc_l13d_repeat_direction](asc_l13d_repeat_direction.md)：asc_l13d_repeat_direction用于表示3D img2col搬运的repeat迭代方向，作为asc_set_l13d_rpt和asc_set_l13d_rpt_b接口的repeat_direction参数类型。
+
+- [asc_channel_pad_mode](asc_channel_pad_mode.md)：头文件路径为："c_api/defs/enum.h"。
+- [asc_dual_dst_mode](asc_dual_dst_mode.md)：asc_dual_dst_mode用于表示L0C Buffer数据搬出时的双目标拆分模式，作为矩阵搬出接口中dual_dst_ctrl参数的类型。
+- [asc_mutex_execute_mode](asc_mutex_execute_mode.md)：asc_mutex_execute_mode用于选择互斥锁的阻塞或非阻塞执行模式，作为asc_lock和asc_unlock接口的mode参数类型。兼容类型名ascMutexExecuteMode是该类型的别名。
+- [asc_position_mode](asc_position_mode.md)：asc_position_mode用于表示源或目的操作数在寄存器中的奇偶位置，供Reg类型转换和融合计算接口选择数据位置。常量ASC_POSITION_EVEN和ASC_POSITION_ODD可直接作为对应接口的位置参数。
+- [asc_position_quarter_mode](asc_position_quarter_mode.md)：asc_position_quarter_mode用于表示源或目的操作数的四分之一位置，供Reg类型转换接口选择数据位置。对应的ASC_DISPERSE_*_QUARTER常量可直接作为接口参数。
+- [asc_quant_mode](asc_quant_mode.md)：asc_quant_mode用于表示L0C Buffer数据搬出时的类型转换或量化模式，作为矩阵搬出接口中quant_pre_mode参数的类型。
+- [asc_relu_pre_mode](asc_relu_pre_mode.md)：asc_relu_pre_mode用于表示L0C Buffer数据搬出时的随路ReLU模式，作为矩阵搬出接口中relu_pre_mode参数的类型。
+- [asc_unit_flag_mode](asc_unit_flag_mode.md)：asc_unit_flag_mode用于配置矩阵计算或矩阵搬出接口执行后的UnitFlag行为，作为相关接口中unit_flag_mode参数的类型。

@@ -1,0 +1,213 @@
+---
+type: API
+title: Assert
+description: SIMD和SIMT调试场景下提供assert断言功能，条件不为真时输出断言信息并终止算子运行。
+tags:
+- task.lookup
+- topic.implementation.api_layer.utils_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/Utils-API/tuning_interface/assert.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+source_headers:
+- include/utils/debug/asc_assert.h
+---
+
+# assert/ascendc_assert
+
+## 功能说明
+
+头文件路径为：`"utils/debug/asc_assert.h"`。
+
+`assert`和`ascendc_assert`用于在Device侧代码中进行断言检查。断言条件成立时，后续代码继续执行；断言条件不成立时，接口打印断言失败信息并触发异常，算子执行失败。
+
+若需要在断言失败时输出自定义错误信息，可以在条件后传入格式字符串和对应参数。
+
+- SIMD编程场景和SIMD VF编程场景下`assert`和`ascendc_assert`提供相同的断言能力，可以任选其一使用。
+- SIMT编程场景和SIMT VF编程场景下`assert`只支持不带消息的形式，不输出fmt和args指定的自定义错误信息；`ascendc_assert`支持输出`fmt`和`args`指定的自定义错误信息。
+
+> [!CAUTION]注意
+> 该接口用于调测，使用时会影响算子性能，生产环境建议通过设置[ASCENDC_DUMP=0](../../simd_api/basic_api/debug_interface/disable_ascendc_dump.md)关闭。
+
+## 函数原型
+
+```cpp
+assert(expr)
+assert(expr, fmt, args...)
+
+ascendc_assert(expr)
+ascendc_assert(expr, fmt, args...)
+```
+
+## 参数说明
+
+**表2**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| expr | 输入 | 断言条件。为`true`时，核函数（Kernel）继续运行；为`false`时，接口打印断言失败信息并触发异常。 |
+| fmt | 输入 | 可选。自定义错误信息的格式控制字符串，包含普通字符和转换说明。普通字符原样输出；转换说明以百分号（%）开始，用于控制`args`中对应参数的转换和输出。支持的转换类型和数据类型参见[printf](printf.md)的参数说明。 |
+| args | 输入 | 可选。与`fmt`中的转换说明对应的附加参数。每个参数替换`fmt`中对应的转换说明，参数数量和类型应与转换说明匹配。 |
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+### 通用约束
+
+- 在CMake工程的Release模式下，默认使能`NDEBUG`宏定义，本接口不生效。
+- 使用`assert`时，如需包含标准库头文件`<cassert>`，请先包含`<cassert>`，再包含`"kernel_operator.h"`或`"utils/debug/asc_assert.h"`，避免标准库覆盖Ascend C的`assert`定义。
+
+### SIMD编程场景
+
+- CPU域调试时，多参数调用仅检查断言条件，不打印`fmt`和`args`指定的自定义错误信息，行为与单参数调用相同。
+- 单次调用本接口打印的数据总量不可超过打印大小限制，默认为30KB。超出限制时，断言失败信息不会打印，但接口仍会触发异常。可以通过[aclInit接口](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/02_initialization_and_deinitialization.md#aclinit)中的`simd_printf_fifo_size_per_core`字段配置，配置范围为`[1KB,64MB]`。PyTorch调用和算子入图场景暂不支持该配置。
+
+### SIMD VF编程场景
+
+- CPU域调试时，多参数调用仅检查断言条件，不打印`fmt`和`args`指定的自定义错误信息，行为与单参数调用相同。
+- `fmt`可以直接使用字符串字面量。使用字符串指针时，该指针必须指向Unified Buffer（UB）中的字符串，示例如下：
+
+    ```cpp
+    __ubuf__ const char* fmt = "value is %d.\n";
+    assert(value == 6, fmt, value);
+    ```
+
+- 每个AIV核在单次`asc_vf_call`执行期间使用2KB预留UB空间临时保存调测数据。同一次`asc_vf_call`中的`assert`、`ascendc_assert`、`printf`和`asc_dump`共享该空间。该空间中的数据传输完成后会被复用，因此上述接口产生的累计调测数据可以超过2KB。单条断言失败信息必须能完整保存在该空间中，否则该条信息不会打印，但接口仍会触发异常。
+- SIMD VF场景下，本接口需要使用2KB预留UB空间传递断言信息。开启`--cce-disable-asc-reserved-ubuf`选项后，本接口不可用。
+- SIMD VF场景下，`simd_printf_fifo_size_per_core`建议配置为3KB以上。配置过小且打印数据量较大时，断言失败信息不会被打印，但接口仍会触发异常。
+
+### SIMT编程场景/SIMT VF编程场景
+
+- 不支持CPU域调试。
+- 断言失败信息通过Global Memory中的缓存空间输出，与[printf](printf.md)共享该缓存空间，缓存空间大小默认为2MB。
+
+## 调用示例
+
+### SIMD编程场景
+
+条件不满足时，接口打印AIC/AIV类型、Block号、源码位置、函数名和条件表达式。传入格式字符串和对应参数时，还会打印自定义错误信息。随后，接口触发异常。
+
+以下示例中，`value`为7，不满足`value == 6`，因此触发断言。
+
+```cpp
+extern "C" __global__ __vector__ void AssertSimdKernel()
+{
+    int32_t value = 7;
+    AscendC::printf("before assert, value is %d.\n", value);
+    assert(value == 6, "value is %d.\n", value);
+}
+```
+
+程序运行时会触发断言，实际打印如下：
+
+```plain
+[AIV Block 0/1] before assert, value is 7.
+[AIV Block 0/1] [ASSERT] .../assert_simd.asc:10: void AssertSimdKernel(): Assertion 'value == 6' failed. value is 7.
+```
+
+### SIMD VF编程场景
+
+条件不成立时，接口打印源码位置、函数名和条件表达式；如果传入了格式字符串和对应参数，自定义错误信息会追加在该断言失败信息之后。随后，接口触发异常。
+
+```cpp
+__simd_vf__ inline void AssertSimdVf()
+{
+    int32_t value = 7;
+    assert(value == 6, "value is %d.\n", value);
+}
+```
+
+程序运行时会触发断言，打印格式如下：
+
+```plain
+[ASSERT] .../assert_simd_vf.asc:12: void AssertSimdVf(): Assertion 'value == 6' failed. value is 7.
+```
+
+### SIMT VF编程场景
+
+-   调用`assert`，传入`expr`，当条件不成立时，接口打印源码位置、函数名和条件表达式，随后接口触发异常：
+
+    ```cpp
+    __simt_vf__ __launch_bounds__(1024) inline void simt_kernel(__gm__ float* x)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        assert(!isnan(x[idx]));
+    }
+    ```
+
+    程序运行时会触发断言，打印效果如下：
+
+    ```plain
+    [ASSERT] /home/.../assert_simt_vf.asc:44: void simt_kernel(__gm__ float *): Assertion `!isnan(x[idx])' failed.
+    ```
+
+-   调用`ascendc_assert`，传入`expr`、`fmt`和`args`，当条件不成立时，接口在打印源码位置、函数名和条件表达式之后，追加打印自定义错误信息，随后接口触发异常：
+
+    ```cpp
+    __simt_vf__ __launch_bounds__(THREAD_COUNT) inline void simt_check(__gm__ int32_t* data, __ubuf__ float* local)
+    {
+        if (threadIdx.x >= ELEM_COUNT) {
+            return;
+        }
+        if (threadIdx.x == 0) {
+            int32_t v = data[0];
+            ascendc_assert(v >= 0, "[simt] value %d must be non-negative (tid=%u)\n", v, threadIdx.x);
+        }
+        local[threadIdx.x] = static_cast<float>(threadIdx.x);
+    }
+    ```
+
+    程序运行时会触发断言，打印效果如下：
+
+    ```plain
+    [ASSERT] /home/.../assert_simt_vf.asc:43: void simt_check(__gm__ int32_t *, __ubuf__ float *): Assertion `v >= 0' failed. [simt] value -5 must be non-negative (tid=0).
+    ```
+
+### SIMT编程场景
+
+-   调用`assert`，传入`expr`，当条件不成立时，接口打印源码位置、函数名和条件表达式，随后接口触发异常：
+
+    ```cpp
+    __global__ __launch_bounds__(1024) inline void simt_kernel(float* x)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        assert(!isnan(x[idx]));
+    }
+    ```
+
+    程序运行时会触发断言，打印效果如下：
+
+    ```plain
+    [ASSERT] /home/.../assert_simt.asc:44: void simt_kernel(float *): Assertion `!isnan(x[idx])' failed.
+    ```
+
+-   调用`ascendc_assert`，传入`expr`、`fmt`和`args`，当条件不成立时，接口在打印源码位置、函数名和条件表达式之后，追加打印自定义错误信息，随后接口触发异常：
+
+    ```cpp
+    constexpr uint32_t MIN_SHAPE = 64;
+
+    __global__ void simt_assert(float* input, uint32_t in_shape)
+    {
+        ascendc_assert(in_shape >= MIN_SHAPE, "in_shape %u must be >= %u.\n", in_shape, MIN_SHAPE);
+    }
+    ```
+
+    程序运行时会触发断言，打印效果如下：
+
+    ```plain
+    [ASSERT] /home/.../assert_simt.asc:52: void simt_assert(float *, uint32_t): Assertion `in_shape >= MIN_SHAPE' failed. in_shape 32 must be >= 64.
+    ```
+
+详细示例请参考[断言打印样例](https://gitcode.com/cann/asc-devkit/blob/639b2b5c1031188107d23d785d52b935f1b4f13b/examples/03_simt_api/01_utilities/01_assert/README.md)。
+
+- [LinalgCholesky A2/A3 ACLNN 算子知识](../../../operators/aclnn/math/math/linalg_cholesky.md)

@@ -1,0 +1,21 @@
+# 基础算术
+
+- [asc_abs](asc_abs.md)：根据mask对源操作数src按元素取绝对值，得到计算结果。计算公式如下：
+- [asc_add](asc_add.md)：该接口根据mask，对源操作数src0、src1进行按元素求和操作，将结果写入目的操作数dst。
+- [asc_add_scalar](asc_add_scalar.md)：根据mask将源操作数src按元素与标量value相加，得到计算结果。计算公式如下：
+- [asc_addc](asc_addc.md)：该接口根据mask，对源操作数src0、src1及输入进位carry_src进行按元素求和操作，将结果写入目的操作数dst，同时将每个元素的进位结果写入carry（存放进位标志的掩码寄存器）。
+- [asc_div](asc_div.md)：该接口根据mask，对源操作数src0、src1进行按元素求商操作，将结果写入目的操作数dst。
+- [asc_exp](asc_exp.md)：该接口根据mask，对源操作数src进行按元素求自然指数操作，将结果写入目的操作数dst。
+- [asc_ln](asc_ln.md)：根据mask将源操作数src按元素取自然对数，将结果写入目的操作数dst。计算公式如下：
+- [asc_log](asc_log.md)：根据mask将源操作数src按元素取自然对数，将结果写入目的操作数dst。计算公式如下：
+- [asc_max](asc_max.md)：该接口根据mask，对源操作数src0、src1进行按元素求最大值操作，将结果写入目的操作数dst。
+- [asc_max_scalar](asc_max_scalar.md)：根据mask将源操作数src按元素与标量value进行比较，得到最大值作为计算结果。计算公式如下：
+- [asc_min](asc_min.md)：该接口根据mask，对源操作数src0、src1进行按元素求最小值操作，将结果写入目的操作数dst。 计算公式如下：
+- [asc_min_scalar](asc_min_scalar.md)：根据mask将源操作数src按元素与标量value进行比较，得到最小值作为计算结果。计算公式如下：
+- [asc_mul](asc_mul.md)：该接口根据mask，对源操作数src0、src1按元素进行乘法运算，将结果写入目的操作数dst。
+- [asc_mul_scalar](asc_mul_scalar.md)：根据mask对源操作数src按元素与标量value相乘，得到计算结果。计算公式如下：
+- [asc_mull](asc_mull.md)：根据掩码将两个源矢量数据寄存器中的有效元素相乘，数据类型位宽为32位的元素相乘得到64位乘积，拆分为低32位与高32位分别写入两个目的矢量数据寄存器。掩码对应位置为1的元素参与计算，为0的元素在目的矢量数据寄存器中置零。计算公式如下：
+- [asc_neg](asc_neg.md)：根据mask对源操作数src按元素取相反数，并将结果作为返回值返回或写入目的操作数dst。
+- [asc_sqrt](asc_sqrt.md)：该接口根据mask，对源操作数src进行按元素求开方操作，将结果写入目的操作数dst。
+- [asc_sub](asc_sub.md)：该接口根据mask，对源操作数src0、src1进行按元素求差操作，将结果写入目的操作数dst。
+- [asc_subc](asc_subc.md)：该接口根据mask，对源操作数src0、src1及输入进位carry_src进行按元素求差操作，减法运算在硬件底层通过补码加法实现，将结果写入目的操作数dst，同时将每个元素的进位结果写入carry（存放进位标志的掩码寄存器）。

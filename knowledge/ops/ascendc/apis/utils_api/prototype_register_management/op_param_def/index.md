@@ -1,0 +1,22 @@
+# OpParamDef
+
+- [AutoContiguous](auto_contiguous.md)：配置该参数，当单算子API（aclnnxxx）接口中的输入（aclTensor类型）是非连续tensor时，框架会自动将其转换为连续tensor。 该接口仅在如下场景支持： - 通过单算子API执行的方式开发单算子调用应用。 - 间接调用单算子API\(aclnnxxx\)接口：Pytorch框架单算子直调的场景。
+- [Comment](comment.md)：设置input/output参数的注释，用于自动生成算子原型头文件时同步生成注释，辅助理解算子原型并支持自动生成文档说明。
+- [构造&拷贝构造函数（OpParamDef）](constructor_and_copy_constructor.md)：构造算子参数的OpParamDef，OpParamDef用于描述算子参数的信息，如数据类型、格式等。一般用户不会直接构造OpParamDef，而是通过Input、Output接口间接构造算子参数的OpParamDef。
+- [DataType（OpParamDef）](data_type.md)：定义算子参数数据类型。
+- [DataTypeForBinQuery](data_type_for_bin_query.md)：设置Input/Output用于运行时算子二进制查找的数据类型，将多种数据类型映射到同一个算子二进制，减少二进制文件生成数量。
+- [DataTypeList](data_type_list.md)：定义算子参数数据类型，当某个输入/输出的数据类型可与其他所有输入/输出的数据类型和格式自由组合时使用，无需重复列出所有组合。
+- [Follow（OpParamDef）](follow.md)：用于指定当前输入/输出的datatype/format/shape信息与之前定义过的某个输入一致。
+- [Format（OpParamDef）](format.md)：定义算子参数数据格式。
+- [FormatForBinQuery](format_for_bin_query.md)：设置Input/Output用于运行时算子二进制查找的数据格式，将多种数据格式映射到同一个算子二进制，减少二进制文件生成数量。
+- [FormatList](format_list.md)：定义算子参数数据格式，当某个输入/输出的格式可与其他所有输入/输出的数据类型和格式自由组合时使用，无需重复列出所有组合。
+- [IgnoreContiguous](ignore_contiguous.md)：某些算子支持非连续的tensor，在算子的实现中对非连续的tensor做了转换处理。配置该参数后，框架会忽略对非连续的校验。
+- [InitValue（OpParamDef）](init_value.md)：通过该host侧接口设置算子输出的初始值，设置后会在算子执行前对算子输出的GM空间进行清零操作或者插入memset类算子进行初始值设置。 InitValue和SetNeedAtomic接口配合使用，SetNeedAtomic接口需要配置为true。
+- [OutputShapeDependOnCompute](output_shape_depend_on_compute.md)：标识算子输出的shape依赖于计算得到，用于NonZero等计算完成后才能获取输出shape的算子，需在核函数中将实际输出shape写入出参。
+- [ParamType（OpParamDef）](param_type.md)：OpParamDef &ParamType(Option param_type)
+- [Scalar（OpParamDef）](scalar.md)：配置该参数后，自动生成的单算子API（aclnnxxx）接口中，输入类型为aclScalar类型。
+- [ScalarList](scalar_list.md)：配置该参数后，自动生成的单算子API（aclnnxxx）接口中，输入类型为aclScalarList类型。
+- [To](to.md)：配置后调用单算子API时将aclScalar/aclScalarList的数据类型转换为指定类型，支持直接传入数据类型或传入输入名称保持一致。
+- [UnknownShapeFormat](unknown_shape_format_deprecated.md)：已废弃接口，设置未知Shape情况下的Format默认值，请统一使用Format接口替代。
+- [ValueDepend](value_depend.md)：标识该输入是否为“数据依赖输入”，数据依赖输入是指在Tiling/InferShape等函数实现时依赖该输入的具体数据。该输入数据为host侧数据，开发者在Tiling函数/InferShape函数中可以通过TilingContext类的GetInputTensor/InferShapeContext类的GetInputTensor获取这个输入数据。
+- [Version](version.md)：为可选输入配置aclnn接口版本号，版本号从1开始连续配置，高版本接口包含低版本所有参数，保持向后兼容。

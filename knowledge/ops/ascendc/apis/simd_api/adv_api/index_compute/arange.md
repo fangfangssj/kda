@@ -1,0 +1,97 @@
+---
+type: API
+title: Arange（索引计算）
+description: 给定起始值，等差值和长度，返回一个等差数列。
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.compute.indexing
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/index_compute/Arange.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+---
+
+# Arange
+
+## 功能说明
+
+给定起始值，等差值和长度，返回一个等差数列。
+
+## 实现原理
+
+以float类型，ND格式，firstValue和diffValue输入Scalar为例，描述Arange高阶API内部算法框图，如下图所示。
+
+**图1**  Arange算法框图  
+![](https://raw.gitcode.com/cann/asc-devkit/raw/639b2b5c1031188107d23d785d52b935f1b4f13b/docs/zh/api/figures/arange_algorithm_diagram.png "Arange算法框图")
+
+计算过程分为如下几步，均在Vector上进行：
+
+1.  等差数列长度8以内步骤：按照firstValue和diffValue的值，使用SetValue实现等差数列扩充，扩充长度最大为8，如果等差数列长度小于8，算法结束；
+2.  等差数列长度8至64的步骤：对第一步中的等差数列结果使用Adds进行扩充，最大循环7次扩充至64，如果等差数列长度小于64，算法结束；
+3.  等差数列长度64以上的步骤：对第二步中的等差数列结果使用Adds进行扩充，不断循环直至达到等差数列长度为止。
+
+## 函数原型
+
+```
+template <typename T>
+__aicore__ inline void Arange(const LocalTensor<T>& dst, const T firstValue, const T diffValue, const int32_t count)
+```
+
+## 参数说明
+
+**表1**  模板参数说明
+
+| 参数名 | 描述 |
+| --- | --- |
+| T | 操作数的数据类型。不同型号支持的数据类型请参考[支持的数据类型](#li73338460199)。 |
+
+**表2**  接口参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| dst | 输出 | 目的操作数。dst的大小应大于等于count * sizeof(T)。<br><br>类型为[LocalTensor](../../basic_api/data_structures/local_tensor/index.md)，支持的TPosition为VECIN/VECCALC/VECOUT。 |
+| firstValue | 输入 | 等差数列的首个元素值。 |
+| diffValue | 输入 | 等差数列元素之间的差值，应大于等于0。 |
+| count | 输入 | 等差数列的长度。count>0。 |
+
+## 返回值说明
+
+无
+
+## 约束说明
+
+-   当前仅支持ND格式的输入，不支持其他格式。
+-   支持的数据类型<a id="li73338460199"></a>
+
+    
+    Ascend 950PR&950DT系列产品，支持的数据类型为：int16\_t、half、int32\_t、float、int64\_t。
+    
+    
+    Atlas A3系列产品，支持的数据类型为：int16\_t、half、int32\_t、float。
+    
+    
+    Atlas A2系列产品，支持的数据类型为：int16\_t、half、int32\_t、float。
+    
+    
+    Atlas推理系列产品AI Core，支持的数据类型为：int16\_t、half、int32\_t、float。
+    
+
+## 调用示例
+
+完整样例请参考[Arange样例](https://gitcode.com/cann/asc-devkit/tree/639b2b5c1031188107d23d785d52b935f1b4f13b/examples/01_simd_cpp_api/04_advanced_api/06_index/arange)。
+
+```
+// dst：输出Tensor
+// firstValue_：等差数列首个元素值
+// diffValue_：等差数列的公差
+// count_：等差数列的长度
+AscendC::Arange<T>(dst, static_cast<T>(firstValue_), static_cast<T>(diffValue_), count_);
+```

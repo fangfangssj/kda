@@ -1,0 +1,199 @@
+---
+type: API
+title: copy（L1 Buffer到L0ScaleA Buffer数据搬运）
+description: 头文件路径为：tensor_api/tensor.h。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/tensor_api/matrix_compute/cube_compute_load/copy_l1_to_l0scalea.md
+  role: primary
+created_at: '2026-09-03T08:52:46Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/tensor_api/tensor.h
+---
+
+# copy（L1 Buffer到L0A_MX Buffer数据搬运）
+
+## 功能说明
+
+头文件路径为：`tensor_api/tensor.h`。
+
+Tensor API通过`copy`接口统一执行不同通路数据搬运。该接口用于将L1 Buffer中的左矩阵缩放数据搬运到L0A_MX Buffer。左矩阵缩放数据在L0A_MX Buffer上的首地址由左矩阵在L0A Buffer的首地址的1/16推导出来。
+
+接口支持完整Tensor搬运，也支持通过`dst_coord`、`src_coord`和`copy_shape`指定目的Tensor中的起始坐标、源Tensor中的起始坐标和搬运区域的形状，执行区域搬运。
+
+该通路的数据类型固定为`fp8_e8m0_t`。ScaleA的逻辑矩阵形状为`(M, K / 32)`，物理存储使用`ZZ`分形布局，单个分形大小为16 * 2。构造layout时需要根据物理分形对逻辑形状进行补齐。左矩阵和右矩阵的缩放数据的分形排布和缩放计算关系可参考下图，其中左矩阵缩放数据是`ZZ`的数据格式：
+
+**图1**  左矩阵和右矩阵缩放数据缩放示意图
+
+![左矩阵和右矩阵缩放数据缩放示意图](https://raw.gitcode.com/cann/asc-devkit/raw/639b2b5c1031188107d23d785d52b935f1b4f13b/docs/zh/api/figures/image_0000002549011155.png)
+
+## 函数原型
+
+- 执行L1 Buffer到L0A_MX Buffer的数据搬运。
+
+    ```cpp
+    template <typename Atom, typename DstTensor, typename SrcTensor>
+    __aicore__ inline void copy(const copy_atom<Atom>& atom, const DstTensor& dst, const SrcTensor& src)
+    ```
+
+- 根据源张量和目的张量的存储位置自动推导搬运通路，使用[默认trait](../../algorithm.md#copy_traits)执行L1 Buffer到L0A_MX Buffer的数据搬运。
+
+    ```cpp
+    template <typename DstTensor, typename SrcTensor>
+    __aicore__ inline void copy(const DstTensor& dst, const SrcTensor& src)
+    ```
+
+- 按指定源坐标、目的坐标和搬运形状执行L1 Buffer到L0A_MX Buffer搬运。
+
+    ```cpp
+    template <typename Atom, typename DstTensor, typename SrcTensor, typename DstCoord,
+        typename SrcCoord, typename CopyShape>
+    __aicore__ inline void copy(const copy_atom<Atom>& atom, const DstTensor& dst,
+        const SrcTensor& src, const DstCoord& dst_coord, const SrcCoord& src_coord,
+        const CopyShape& copy_shape)
+    ```
+
+- 根据源张量和目的张量的存储位置自动推导搬运通路，使用默认trait按指定源坐标、目的坐标和搬运形状执行L1 Buffer到L0A_MX Buffer搬运。
+
+    ```cpp
+    template <typename DstTensor, typename SrcTensor, typename DstCoord,
+        typename SrcCoord, typename CopyShape>
+    __aicore__ inline void copy(const DstTensor& dst,
+        const SrcTensor& src, const DstCoord& dst_coord, const SrcCoord& src_coord,
+        const CopyShape& copy_shape)
+    ```
+
+- 使用默认trait构造搬运原子对象。
+
+    ```cpp
+    template <typename CopyOperation>
+    __aicore__ inline constexpr auto make_copy(const CopyOperation& operation)
+    ```
+
+- 使用指定trait构造搬运原子对象。
+
+    ```cpp
+    template <typename CopyOperation, typename CopyTrait>
+    __aicore__ inline constexpr auto make_copy(
+        const CopyOperation& operation, const CopyTrait& trait)
+    ```
+
+## 参数说明
+
+**表1**  `copy`接口模板参数说明
+
+| 参数名 | 描述 |
+| :--- | :--- |
+| Atom | `copy_atom`的模板参数，由`make_copy`接口推导得到。 |
+| DstTensor | 目的张量类型，需为Tensor API Tensor类型。 |
+| SrcTensor | 源张量类型，需为Tensor API Tensor类型。 |
+| DstCoord | 目的张量起始坐标类型，也可为`zero_coord`。 |
+| SrcCoord | 源张量起始坐标类型，也可为`zero_coord`。 |
+| CopyShape | 搬运区域形状的类型。 |
+
+**表2**  `make_copy`接口模板参数说明
+
+| 参数名 | 描述 |
+| :--- | :--- |
+| CopyOperation | 搬运操作对象类型。 |
+| CopyTrait | 搬运trait对象类型。 |
+
+**表3**  `copy`接口参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| :--- | :---: | :--- |
+| atom | 输入 | 搬运原子对象，封装特定搬运通路的Operation、Trait与可选运行时Params组合，可由`make_copy`接口构造，详见[Algorithm](../../algorithm.md#copy_atom)。 |
+| dst | 输出 | 目的张量，存储位置为`location::l0scalea`，数据格式为`ZZ`。 |
+| src | 输入 | 源张量，存储位置为`location::l1`，数据格式为`ZZ`。 |
+| dst_coord | 输入 | 搬运区域在目的张量中的起始坐标，也可传入`zero_coord`。 |
+| src_coord | 输入 | 搬运区域在源张量中的起始坐标，也可传入`zero_coord`。 |
+| copy_shape | 输入 | 搬运区域的形状，用于指定搬运区域的大小。 |
+
+**表4**  `make_copy`接口参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| :--- | :---: | :--- |
+| operation | 输入 | 搬运操作对象。L1 Buffer到L0A_MX Buffer通路使用`copy_l1_to_l0scalea{}`。 |
+| trait | 输入 | 搬运Trait对象，用于指定搬运特性。L1 Buffer到L0A_MX Buffer默认Trait使用`l1_to_l0scalea_trait_default{}`。 |
+
+### copy_l1_to_l0scalea说明
+
+`copy_l1_to_l0scalea`用于标识L1 Buffer到L0A_MX Buffer数据搬运通路，仅列出其public内容：
+
+```cpp
+struct copy_l1_to_l0scalea {
+    template <typename Trait, const Trait& trait, typename... Args>
+    __aicore__ inline static void copy(const Args&... args);
+};
+```
+
+`copy`静态成员函数用于接收Trait和搬运参数，并分发L1 Buffer到L0A_MX Buffer数据搬运。
+
+### l1_to_l0scalea_trait说明
+
+`l1_to_l0scalea_trait`表示该通路的静态配置。当前没有可配置成员，定义如下：
+
+```cpp
+struct l1_to_l0scalea_trait {};
+```
+
+`l1_to_l0scalea_trait_default`提供该通路的默认Trait类型和默认值：
+
+```cpp
+struct l1_to_l0scalea_trait_default {
+    using trait_type = l1_to_l0scalea_trait;
+    static constexpr const trait_type value = {};
+};
+```
+
+
+## 数据类型
+
+数据类型仅支持`fp8_e8m0_t`。
+
+源张量和目的张量的数据类型需要保持一致。
+
+## 返回值说明
+
+- `copy`无返回值。
+- `make_copy`返回`copy_atom`对象。
+
+## 约束说明
+
+- 源张量和目的张量数据格式为`ZZ`，使用`make_frame_layout<zz_layout_ptn, _2>(...)`构造。
+- 源地址和目的地址需要满足32Byte对齐要求。
+- ScaleA的逻辑形状为`(M, K / 32)`；传入`make_frame_layout`的行列参数需要满足`ZZ`布局的物理分形要求，物理存储空间可能包含补齐数据。
+- ScaleA的目的地址由对应L0A矩阵地址按1/16地址编码关系推导得到，不能将普通L0A地址直接作为L0ScaleA地址使用。
+
+## 调用示例
+
+```cpp
+#include "tensor_api/tensor.h"
+
+using namespace asc::te;
+
+__aicore__ inline void copy_l1_to_l0scalea_example()
+{
+    constexpr uint32_t m = 16;
+    constexpr uint32_t k = 32;
+    constexpr uint32_t scale_k = k / 16;
+
+    __cbuf__ fp8_e8m0_t l1_buf[m * scale_k];
+    __ca__ fp8_e5m2_t l0a_buf[m * k];
+
+    auto l1_tensor = make_tensor(make_mem_ptr(l1_buf), make_frame_layout<zz_layout_ptn, _2>(m, scale_k));
+
+    // ScaleA地址由左矩阵的L0A Buffer地址按1/16地址编码换算得到。
+    auto l0scalea_ptr = make_mem_ptr<location::l0scalea, fp8_e8m0_t>(reinterpret_cast<uint64_t>(l0a_buf) / 16);
+    auto l0scalea_tensor = make_tensor(l0scalea_ptr, make_frame_layout<zz_layout_ptn, _2>(m, scale_k));
+
+    auto atom = make_copy(copy_l1_to_l0scalea{}, l1_to_l0scalea_trait_default{});
+    copy(atom, l0scalea_tensor, l1_tensor);
+}
+```

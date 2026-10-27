@@ -1,0 +1,52 @@
+# Matmul核函数（Kernel）侧接口
+
+- [AsyncGetTensorC](async_get_tensor_c.md)：获取Iterate接口异步计算的结果矩阵。该接口功能已被GetTensorC覆盖，建议直接使用GetTensorC异步接口。
+- [ClearBias](clear_bias.md)：DisableBias接口与该接口的功能相同，建议使用DisableBias。 清除Bias标志位，表示Matmul计算时没有Bias参与。如果在调用Init时配置了TCubeTiling结构中的isBias参数来启用Bias，调用该接口后，会清除Bias标志位，不再启用Bias。
+- [DisableBias](disable_bias.md)：清除Bias标志位，表示Matmul计算时没有Bias参与。如果在初始化时配置了TCubeTiling结构中的isBias参数来启用Bias，调用该接口后，会清除Bias标志位，不再启用Bias。
+- [矩阵计算End](end.md)：多个Matmul对象之间切换计算时，必须调用一次End函数，用于释放Matmul计算资源，防止多个Matmul对象的计算资源冲突。
+- [GetBasicConfig](get_basic_config.md)：用于配置BasicBlock模板的参数，获取自定义BasicBlock模板。
+- [GetBatchC](get_batch_c.md)：GetBatchTensorC接口与该接口的功能相同，建议使用GetBatchTensorC。 调用一次GetBatchC，会获取C矩阵分片，该接口可以与IterateNBatch异步接口配合使用。用于在调用IterateNBatch迭代计算后，获取一片std::max\(batchA, batchB\) \ singleCoreM \ singleCoreN大小的矩阵分片。
+- [GetBatchTensorC](get_batch_tensor_c.md)：调用一次GetBatchTensorC，会获取C矩阵片，该接口可以与IterateNBatch异步接口配合使用。用于在调用IterateNBatch迭代计算后，获取一片std::max\(batchA, batchB\) \ singleCoreM \ singleCoreN大小的矩阵分片。
+- [GetIBShareNormConfig](get_ib_share_norm_config.md)：用于配置IBShare模板的参数，获取自定义IBShare模板。IBShare模板的介绍请参考表模板特性。
+- [GetMatmulApiTiling](get_matmul_api_tiling.md)：在编译期间获取常量化的Matmul Tiling参数，减少Scalar计算开销，提升算子整体性能。
+- [GetMDLConfig](get_mdl_config.md)：用于配置MDL模板的参数，获取自定义MDL模板。MDL模板的介绍请参考表模板特性。
+- [GetMMConfig](get_mm_config.md)：灵活的自定义Matmul模板参数配置，通过设置MatmulConfigMode及可变参数获取自定义的MatmulConfig。
+- [GetNormalConfig](get_normal_config.md)：用于配置Norm模板的参数，获取自定义Norm模板。Norm模板的介绍请参考表模板特性。
+- [GetOffsetC](get_offset_c.md)：预留接口，为后续功能做预留。 获取本次计算时当前分片在整个C矩阵中的位置。
+- [GetSpecialMDLConfig](get_special_mdl_config.md)：用于配置SpecialMDL模板的参数，获取自定义SpecialMDL模板。SpecialMDL模板的介绍请参考表模板特性。
+- [GetSubBlockIdx](get_sub_block_idx.md)：获取当前AIV核在当前AI Core分组中的ID，需在REGIST_MATMUL_OBJ之后调用。仅分离架构支持。
+- [GetTensorC](get_tensor_c.md)：Iterate后获取C矩阵分片，可输出到GM或UB，支持同步与异步两种模式。
+- [Init](init.md)：对Matmul对象的Tiling数据进行初始化，根据Tiling参数进行资源划分。Tiling参数可变场景下可多次调用。
+- [Iterate](iterate.md)：每调用一次计算一块baseM*baseN的C矩阵，内部维护迭代进度并偏移A、B矩阵首地址。
+- [IterateAll](iterate_all.md)：调用一次IterateAll，会计算出singleCoreM \ singleCoreN大小的C矩阵。迭代顺序可通过tiling参数iterateOrder调整。
+- [IterateBatch](iterate_batch.md)：批量处理Matmul的接口，调用一次可计算出多个singleCoreM*singleCoreN大小的C矩阵。
+- [IterateNBatch](iterate_n_batch.md)：调用一次进行N次IterateBatch计算，支持多Batch输入多Batch输出，结果输出至SetWorkspace指定的Global Memory。
+- [MatmulCallBackFunc](matmul_call_back_func.md)：模板参数，支持用户定制化Matmul的A、B、C矩阵搬入搬出功能，传入自定义回调函数指针替换默认搬运函数。
+- [MatmulConfig](matmul_config.md)：模板参数MatmulConfig，用于配置Matmul模板信息以及相关的配置参数。不配置默认开启Norm模板，Norm模板的介绍请参考表模板特性。MatmulConfig的参数说明见表2。MatmulConfig的定义方式有：
+- [MatmulPolicy](matmul_policy.md)：模板参数，用于定义Matmul可拓展模块策略，支持上三角、下三角、NBuffer33、MxMatmul、SplitM、SplitN等内置策略。
+- [MatmulTemplateParams](matmul_template_params.md)：创建Matmul对象时需要传入的模板参数，包括A/B/C/Bias类型信息、MatmulConfig、MatmulCallBackFunc和MatmulPolicy。
+- [Matmul使用说明](matmul_usage.md)：Ascend C提供一组Matmul高阶API，方便用户快速实现Matmul矩阵乘法的运算操作。
+- [REGIST_MATMUL_OBJ](regist_matmul_obj.md)：初始化Matmul对象。
+- [SetAntiQuantScalar](set_anti_quant_scalar.md)：在Matmul计算时支持A矩阵half类型输入，B矩阵int8类型输入，该场景下，需要调用伪量化接口进行伪量化。调用伪量化接口后，将数据从GM搬出到L1时，会执行伪量化操作，将B矩阵转化为half类型。本节的伪量化接口提供对B矩阵的所有数据采用同一量化系数进行伪量化的功能。
+- [SetAntiQuantVector](set_anti_quant_vector.md)：在Matmul计算时支持A矩阵half类型输入，B矩阵int8类型输入，该场景下，需要调用伪量化接口进行伪量化。调用伪量化接口后，将数据从GM搬出到L1时，会执行伪量化操作，将B矩阵转化为half类型。本节的伪量化接口提供一个量化参数向量，该向量的shape为[1, N]，N值为Matmul矩阵计算时M/N/K中的N值。对B矩阵的每一列都采用该向量中对应列的伪量化系数进行伪量化。
+- [SetBatchNum](set_batch_num.md)：在不改变Tiling的情况下，重新设置多Batch计算的Batch数。
+- [SetBias](set_bias.md)：设置矩阵乘的Bias。
+- [SetHF32](set_hf32.md)：在纯Cube模式（只有矩阵计算）下，设置是否开启HF32（矩阵乘计算时可采用的数据类型）模式。开启后，在矩阵乘计算时，float32数据类型会转换为hf32数据类型，可提升计算性能，但同时也会带来精度损失。
+- [SetLocalWorkspace](set_local_workspace.md)：设置Matmul内部额外占用的UB临时空间，由用户预留并申请LocalTensor后传入，需在Iterate前调用。
+- [SetOrgShape](set_org_shape.md)：设置Matmul计算原始完整的形状M、N、K，单位为元素个数。用于运行时修改shape，比如复用同一个Matmul对象，从不同的矩阵块取数据计算。
+- [SetQuantScalar](set_quant_scalar.md)：对输出矩阵所有值采用同一系数进行量化或反量化，量化参数shape为[1]，需在Iterate前调用。
+- [SetQuantVector](set_quant_vector.md)：对输出矩阵采用向量进行量化或反量化，对每一列采用参数向量中对应列的系数，需在Iterate前调用。
+- [SetSelfDefineData](set_self_define_data.md)：启用模板参数MatmulCallBackFunc（自定义回调函数）时，设置需要的计算数据或在GM上存储的数据地址等信息，用于回调函数使用。复用同一个Matmul对象时，可以多次调用本接口重新设置对应数据信息。
+- [SetSingleShape](set_single_shape.md)：设置Matmul单核计算的形状singleCoreM、singleCoreN、singleCoreK，单位为元素。用于运行时修改shape，比如复用Matmul对象来处理尾块。与SetTail接口功能一致，建议使用本接口。
+- [SetSparseIndex](set_sparse_index.md)：设置稀疏矩阵稠密化过程生成的索引矩阵。 索引矩阵在稠密化中的作用请参考MmadWithSparse。
+- [SetSubBlockIdx](set_sub_block_idx.md)：设置当前AIV核的ID。分离架构下，一个AI Core由Cube Core（AIC）和Vector Core（AIV）按照一定比例1：N进行组合，其中N个AIV核的ID分别为0, 1, ..., N-1。
+- [SetTail](set_tail.md)：在不改变Tiling的情况下，重新设置本次计算的singleCoreM/singleCoreN/singleCoreK，以元素为单位。
+- [SetTensorA](set_tensor_a.md)：设置矩阵乘的左矩阵A。
+- [SetTensorB](set_tensor_b.md)：设置矩阵乘的右矩阵B。
+- [SetTensorScaleA](set_tensor_scale_a.md)：MxMatmul场景，设置矩阵乘中左矩阵的量化系数矩阵scaleA。
+- [SetTensorScaleB](set_tensor_scale_b.md)：MxMatmul场景，设置矩阵乘中右矩阵的量化系数矩阵scaleB。
+- [SetUserDefInfo](set_user_def_info.md)：启用模板参数MatmulCallBackFunc（自定义回调函数）时，设置算子tiling地址，用于回调函数使用，该接口仅需调用一次。
+- [SetWorkspace](set_workspace.md)：Iterate计算的异步场景，调用本接口申请一块临时空间来缓存计算结果，然后调用GetTensorC时会在该临时空间中获取C的矩阵分片。 IterateNBatch计算时，调用本接口申请一块临时空间来缓存计算结果，然后根据同步或异步场景进行其它接口的调用。
+- [WaitGetTensorC](wait_get_tensor_c.md)：当使用GetTensorC异步接口将结果矩阵从GM拷贝到UB，且UB后续需要进行Vector计算时，需要调用WaitGetTensorC进行同步。
+- [WaitIterateAll](wait_iterate_all.md)：等待IterateAll异步接口返回，支持连续输出到Global Memory。
+- [WaitIterateBatch](wait_iterate_batch.md)：等待IterateBatch异步接口或IterateNBatch异步接口返回，支持连续输出到Global Memory。

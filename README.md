@@ -6,7 +6,8 @@ Kernel Design Agents (KDA) is an agent-centric workflow for using coding agents 
 
 1. **AscendC 开发流程** —— 从任务契约、tiling 设计和实现，到 ST/精度验证、上板测量与证据记录。
 2. **昇腾硬件档案** —— `hardware/` 记录 Ascend 芯片代际、CANN 工具链、验证和 profiling 约定；当前内置 Ascend C 档案。
-3. **接入 cannbot 的 Skill 层** —— `skills/ascend/` 下 19 个昇腾技能（取自 [cann/cannbot-skills](https://gitcode.com/cann/cannbot-skills)，仅 Skill 层，不含其 Plugin 编排层）。
+3. **离线 Ascend C 知识查询** —— 仓库内保存 `knowledge/ops/ascendc/`；两个 Query Skill 指导 Agent 使用原生文件搜索和阅读工具检索，不依赖 Python 查询脚本或服务。
+4. **接入 cannbot 的 Skill 层** —— 19 个上游昇腾技能加 2 个 KDA 知识查询 Skill；只接入 Skill，不接入上游 Plugin 编排层。
 
 This repository documents an early research prototype. Upstream's MLSys Kernel Contest (#1–3) solutions live at [mit-han-lab/mlsys2026-flashinfer-contest](https://github.com/mit-han-lab/mlsys2026-flashinfer-contest).
 
@@ -17,10 +18,12 @@ This repository documents an early research prototype. Upstream's MLSys Kernel C
 | `docs/agent-flow.md` | Minimal end-to-end KDA workflow. |
 | `docs/hardware-profiles.md` | 昇腾硬件档案说明与维护方法。 |
 | `hardware/` | 内置 Ascend C 档案：`ascend-ascendc.md`，以及 Ascend 芯片档案模板。 |
+| `knowledge/ops/ascendc/` | 离线 Ascend C 知识库：API、Guide、Operator、Runbook 等 Markdown 知识卡。 |
 | `prompts/README.md` | How to use prompt templates. |
 | `prompts/basic-flow.md` | Ascend 开发任务的通用 starter prompt。 |
 | `prompts/ascendc-flow.md` | Ascend C 核函数 starter prompt。 |
-| `skills/ascend/` | 昇腾技能层（cannbot Skill 层快照，19 个技能）。 |
+| `skills/ascend/` | 昇腾技能：19 个上游技能及两个本仓知识查询 Skill。 |
+| `third_party/` | 上游知识库来源清单与随附许可。 |
 | `AGENT.md` | Repository-facing agent instructions. |
 | `CONTRIBUTING.md` | Upstream contribution process（本定制版未沿用）。 |
 | `THIRD_PARTY_NOTICES.md` | Third-party component and license disclosures. |
@@ -32,6 +35,8 @@ This repository documents an early research prototype. Upstream's MLSys Kernel C
 | `ascend-ascendc` | Atlas A2/A3（910B/910C） | Ascend C | `ascendc-flow.md` |
 
 当前仓库面向昇腾开发。内置档案覆盖 Atlas A2/A3（910B/910C）；新增昇腾芯片型号或架构代际时，可按 `docs/hardware-profiles.md` 维护对应档案。
+
+Ascend C 知识已随仓库保存于 `knowledge/ops/ascendc/`。使用 `knowledge-query` 查询通用知识，使用 `ascendc-api-knowledge-query` 查询 API 定义；二者都只用 Agent 原生文件搜索与读取能力，支持离线工作。
 
 ## Getting Started
 
@@ -79,7 +84,7 @@ task-workspace/
   hardware-profile.md   # Ascend 芯片与工具链约定
 ```
 
-`skills/ascend/` 内容取自 cannbot-skills（CANN Open Software License v2.0，快照 `c1ad585`），仅个人使用；再分发请遵守其许可并保留来源说明（见 `skills/ascend/README.md`）。
+上游 cannbot 技能和 Ascend C 知识卡适用 CANN Open Software License v2.0。知识库来源提交、导入范围和许可副本见 [`third_party/cannbot_knowledge_manifest.md`](third_party/cannbot_knowledge_manifest.md) 与 `third_party/licenses/`；再分发时请保留许可与来源说明。两个本仓 Query Skill 的职责和安装入口见 `skills/ascend/README.md`。
 
 ## License
 

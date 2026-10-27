@@ -21,7 +21,7 @@ You are working in a task implementation workspace on Ascend NPU. Your job is to
 0. **先读 `hardware-profile.md`**。若文件缺失，先要求将选定档案复制到任务工作区。随后跑环境检查（`cann-env-setup`、`ascendc-env-check` 技能），并用 `npu-arch` 技能确认 SoC Version 与架构代际，全部记录进 `docs/draft.md`。
 1. Read the repository structure, existing implementation, tests, and task documentation.
 2. Identify the baseline behavior and the validation path.
-3. Research only what this task needs（按 profile 技能映射：tiling 设计 → `ascendc-tiling-design`；API → `ascendc-api-best-practices`；性能手法 → `ascendc-performance-best-practices`）。
+3. 先查仓内知识：通用实现、硬件和排障问题用 `knowledge-query`；API 定义、参数与重载用 `ascendc-api-knowledge-query`。再按 profile 技能映射补充本任务需要的实践（tiling 设计 → `ascendc-tiling-design`；API 使用实践 → `ascendc-api-best-practices`；性能手法 → `ascendc-performance-best-practices`）。
 4. Write an implementation-plan draft to `docs/draft.md`. The draft MUST contain:
    - **Tiling 设计方案**（多核切分 / UB 切分 / Buffer 规划）及其分支覆盖清单——tiling 就是这个领域的"算法候选"。
    - tiling 参数（块大小、buffer 深度等）的"配置候选"清单。

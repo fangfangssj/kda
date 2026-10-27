@@ -1,0 +1,22 @@
+# LocalTensor
+
+- [GetLength](get_length.md)：获取LocalTensor数据长度。
+- [GetPhyAddr](get_phy_addr.md)：返回LocalTensor的地址或指定偏移量后的地址。
+- [GetPosition](get_position.md)：获取LocalTensor所在的TPosition逻辑位置，支持TPosition为VECIN、VECOUT、VECCALC、A1、A2、B1、B2、CO1、CO2。
+- [GetShapeInfo](get_shape_info.md)：获取LocalTensor的Shape信息。注意：Shape信息没有默认值，只有通过SetShapeInfo设置过Shape信息后，才可以调用该接口获取正确的Shape信息。
+- [GetSize](get_size.md)：获取当前LocalTensor Size大小。
+- [GetUserTag](get_user_tag.md)：获取指定Tensor块的Tag信息，用户可以根据Tag信息对Tensor进行不同操作。
+- [GetValue](get_value.md)：获取LocalTensor指定索引的数值。 该接口仅在LocalTensor的TPosition为VECIN/VECCALC/VECOUT时支持。
+- [LocalTensor构造函数](local_tensor_constructor.md)：LocalTensor构造函数。
+- [LocalTensor简介](local_tensor_intro.md)：LocalTensor表达AI Core中Local Memory（内部存储）内的L1/L0A/L0B/L0C Buffer及Unified Buffer中的数据。
+- [OperatorSubscript](operator.md)：获取距原LocalTensor起始地址偏移量为offset的新LocalTensor，offset不能超过原有LocalTensor的size大小。
+- [operator](operator_call.md)：获取本LocalTensor的第offset个变量的引用。用于左值，相当于SetValue接口，用于右值，相当于GetValue接口。
+- [Print（数据结构）](print.md)：只限于CPU调试，在调试窗口中打印LocalTensor数据用于精度调试，每一行打印一个DataBlock（32字节）的数据。
+- [ReinterpretCast](reinterpret_cast.md)：将当前Tensor重解释为用户指定的新类型，转换后的Tensor与原Tensor地址及内容完全相同，Tensor的大小（字节数）保持不变。
+- [SetAddrWithOffset](set_addr_with_offset.md)：设置带有偏移的Tensor地址。用于快速获取定义一个Tensor，同时指定新Tensor相对于旧Tensor首地址的偏移。偏移的长度为旧Tensor的元素个数。
+- [SetBufferLen](set_buffer_len.md)：设置Buffer长度。当用户调用operator\[\]函数创建新LocalTensor时，建议调用该接口设置新LocalTensor长度，便于编译器对内存及同步进行自动优化。
+- [SetShapeInfo](set_shape_info.md)：设置LocalTensor的Shape信息。
+- [SetSize](set_size.md)：设置当前LocalTensor Size大小。单位为元素。当用户重用local tensor变量且使用长度发生变化的时候，需要使用此接口重新设置Size。
+- [SetUserTag](set_user_tag.md)：为Tensor添加用户自定义信息，用户可以根据需要设置对应的Tag。后续可通过GetUserTag获取指定Tensor的Tag信息，并根据Tag信息对Tensor进行相应操作。
+- [SetValue](set_value.md)：设置LocalTensor中的某个值。 该接口仅在LocalTensor的TPosition为VECIN/VECCALC/VECOUT时支持。
+- [ToFile](to_file.md)：只限于CPU调试，将LocalTensor数据Dump到文件中，用于精度调试，文件保存在执行目录。

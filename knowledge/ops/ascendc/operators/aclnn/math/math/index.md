@@ -1,0 +1,64 @@
+# 数学运算 ACLNN 算子
+
+本目录保存基础数学、比较、归约、线性代数和数值变换相关的 ACLNN 算子知识。
+
+- [AddLora A2](add_lora.md)：用于执行 LoRA 增量加法。
+- [All 950](all_950.md)：用于判断指定维度上的元素是否全部为真。
+- [AmpUpdateScale A2/A3](amp_update_scale.md)：用于更新自动混合精度的损失缩放值。
+- [AmpUpdateScale 950](amp_update_scale_950.md)：用于更新自动混合精度的损失缩放值。
+- [AngleV2 A2/A3](angle_v2.md)：用于计算复数或二维坐标的相位角。
+- [Asin 950](asin_950.md)：用于计算元素级反正弦。
+- [Atan2 950](atan2_950.md)：用于计算两个输入的元素级反正切。
+- [BitwiseNot 950](bitwise_not_950.md)：用于计算元素级按位非。
+- [BitwiseOrTensor 950](bitwise_or_tensor_950.md)：用于计算两个张量的元素级按位或。
+- [BitwiseXorScalar 950](bitwise_xor_scalar_950.md)：用于计算张量与标量的元素级按位异或。
+- [BitwiseXorTensor 950](bitwise_xor_tensor_950.md)：用于计算两个张量的元素级按位异或。
+- [Ceil 950](ceil_950.md)：用于计算元素级向上取整。
+- [Cumsum 950](cumsum_950.md)：用于计算指定维度上的累积和。
+- [Div 950](div_950.md)：用于计算元素级除法。
+- [ExpSegsum A2/A3](exp_segsum.md)：用于计算分段指数和。
+- [ExpSegsumBackward A2/A3](exp_segsum_backward.md)：用于计算分段指数和的反向梯度。
+- [Expand 950](expand_950.md)：用于将张量扩展到目标形状。
+- [Expm1 950](expm1_950.md)：用于计算元素级 exp(x)-1。
+- [Eye 950](eye_950.md)：用于构造单位矩阵。
+- [GeScalar 950](ge_scalar_950.md)：用于比较张量元素是否大于或等于标量。
+- [GeTensor 950](ge_tensor_950.md)：用于比较两个张量元素是否大于或等于。
+- [GroupedBiasAddGrad A2/A3](grouped_bias_add_grad.md)：用于计算分组偏置加法的反向梯度。
+- [InplaceAsin 950](inplace_asin_950.md)：用于原位计算元素级反正弦。
+- [InplaceBitwiseOrScalar 950](inplace_bitwise_or_scalar_950.md)：用于原位计算张量与标量的元素级按位或。
+- [InplaceBitwiseXorTensor 950](inplace_bitwise_xor_tensor_950.md)：用于原位计算两个张量的元素级按位异或。
+- [InplaceCeil 950](inplace_ceil_950.md)：用于原位计算元素级向上取整。
+- [InplaceDiv 950](inplace_div_950.md)：用于原位计算元素级除法。
+- [InplaceDivs 950](inplace_divs_950.md)：用于原位计算张量与标量的除法。
+- [InplaceExp2 950](inplace_exp2_950.md)：用于原位计算元素级以 2 为底的指数。
+- [InplaceExpm1 950](inplace_expm1_950.md)：用于原位计算元素级 exp(x)-1。
+- [InplaceGeScalar 950](inplace_ge_scalar_950.md)：用于原位比较张量元素是否大于或等于标量。
+- [InplaceGeTensor 950](inplace_ge_tensor_950.md)：用于原位比较两个张量元素是否大于或等于。
+- [InplaceLerp 950](inplace_lerp_950.md)：用于原位执行两个张量间的线性插值。
+- [InplaceLerps 950](inplace_lerps_950.md)：用于原位执行张量与标量权重的线性插值。
+- [InplaceLog10 950](inplace_log10_950.md)：用于原位计算元素级常用对数。
+- [InplaceLog2 950](inplace_log2_950.md)：用于原位计算元素级以 2 为底的对数。
+- [InplaceLog 950](inplace_log_950.md)：用于原位计算元素级自然对数。
+- [InplaceLtScalar 950](inplace_lt_scalar_950.md)：用于原位比较张量元素是否小于标量。
+- [InplaceNanToNum 950](inplace_nan_to_num_950.md)：用于原位替换 NaN 和无穷值。
+- [InplaceNeg 950](inplace_neg_950.md)：用于原位计算元素级相反数。
+- [InplacePowTensorScalar 950](inplace_pow_tensor_scalar_950.md)：用于原位计算张量的标量幂。
+- [InplacePowTensorTensor 950](inplace_pow_tensor_tensor_950.md)：用于原位计算张量间的元素级幂。
+- [Lerp 950](lerp_950.md)：用于执行两个张量间的线性插值。
+- [LinalgCholesky A2/A3](linalg_cholesky.md)：用于计算矩阵的 Cholesky 分解。
+- [LinalgCross 950](linalg_cross_950.md)：用于计算两个向量的叉积。
+- [Log2 950](log2_950.md)：用于计算元素级以 2 为底的对数。
+- [Log 950](log_950.md)：用于计算元素级自然对数。
+- [LogAddExp 950](log_add_exp_950.md)：用于稳定地计算 log(exp(x)+exp(y))。
+- [LogicalNot 950](logical_not_950.md)：用于计算元素级逻辑非。
+- [LtTensor 950](lt_tensor_950.md)：用于比较两个张量元素是否小于。
+- [MaskedScale 950](masked_scale_950.md)：用于按掩码对张量元素进行缩放。
+- [MaxDim 950](max_dim_950.md)：用于计算指定维度上的最大值及其索引。
+- [MinDim 950](min_dim_950.md)：用于计算指定维度上的最小值及其索引。
+- [MinN 950](min_n_950.md)：用于计算多个输入中的元素级最小值。
+- [NanToNum 950](nan_to_num_950.md)：用于替换 NaN 和无穷值。
+- [OneHot 950](one_hot_950.md)：用于将整数索引转换为独热表示。
+- [Polar 950](polar_950.md)：用于根据模长和相位构造复数张量。
+- [PowTensorTensor 950](pow_tensor_tensor_950.md)：用于计算两个张量的元素级幂。
+- [Sort 950](sort_950.md)：用于按指定维度对张量元素排序。
+- [Xlog1py 950](xlog1py_950.md)：用于计算 x·log(1+y)。

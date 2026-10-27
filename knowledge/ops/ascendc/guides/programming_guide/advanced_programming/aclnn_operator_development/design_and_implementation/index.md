@@ -1,0 +1,11 @@
+# design and implementation
+
+- [GenSimplifiedKey回调实现](gen_simplified_key.md)：本文介绍如何编写并注册GenSimplifiedKey回调。该回调用于预编译多份核函数（Kernel）binary的场景：算子开发者根据本次调用的输入、输出和属性生成一个自定义simplified key片段，运行时框架使用该片段查找对应的binary。
+- [高级编程基本流程](host_tiling_implementation.md)：本文属于基础内容，介绍Host侧Tiling在aclnn工程化算子开发方式中的基本编写流程。Host侧Tiling承接算子功能设计中的Tiling设计结论，把输入shape、属性和运行场景转换成Kernel启动前需要的参数。
+- [高级编程基本流程](kernel_operator_implementation.md)：本文属于基础内容，介绍aclnn工程化算子开发方式中Kernel侧的基本接入流程，重点说明Kernel入口函数格式、参数顺序、TilingData处理和编译期信息获取方式。Global Memory地址绑定、UB管理、数据搬运、计算和同步等Kernel核心实现方法，请参考核函数。
+- [输出shape依赖计算](kernel_output_shape_computation.md)：本文属于扩展内容，介绍输出shape依赖Kernel计算结果时的实现方法。NonZero等算子在Kernel计算完成前无法确定实际输出shape。此类输出需要在原型定义中调用OutputShapeDependOnCompute()标记，并由Kernel按照固定格式把实际shape写入框架追加的shape输出地址。
+- [多分支策略](multi_branch_strategy.md)：本文属于扩展内容，介绍同一个算子需要根据dtype、shape或属性执行不同计算流程时，如何使用TilingKey或Kernel模板组织多个Kernel分支。TilingKey使用数字标识分支，适合分支数量较少、含义稳定的场景；Kernel模板使用具名参数描述分支，适合由多个维度共同决定分支的场景。
+- [算子功能设计](operator_function_design.md)：本文属于基础内容，介绍在编写自定义算子代码前需要完成的功能设计，包括将计算语义转换为工程实现，以及明确需要编写的工程文件。
+- [算子原型定义](operator_prototype_definition.md)：本文属于基础内容，介绍如何通过算子原型定义描述算子对外暴露的接口和支持范围。本文承接算子功能设计的结论，说明如何将功能设计中的输入输出、属性、dtype/format和Tiling函数关联落地为OpDef代码，并介绍图模式下的输出shape和dtype推导配置。
+- [通过TilingData传递属性信息](tiling_data_attributes.md)：本文属于扩展内容，介绍算子属性参与Kernel计算时所需的数据传递方法。算子属性在Host侧保存，Kernel不能直接读取。属性需要参与Kernel计算时，Host侧Tiling函数先读取属性值，再把Kernel真正需要的数据写入TilingData，由框架传到Kernel侧。
+- [使用高阶API时配套的Tiling实现](tiling_with_advanced_api.md)：本文属于扩展内容，介绍使用高阶API时配套的Host侧Tiling实现。Matmul、Conv等高阶API通常提供配套的Host侧Tiling类，用于根据shape、dtype计算切分参数。开发者需要把配套Tiling类的计算结果传到Kernel侧，并使用同一份数据初始化高阶API对象。

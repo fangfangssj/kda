@@ -1,0 +1,28 @@
+# 矩阵计算的搬入
+
+- [BroadCastVecToMMISASI](broad_cast_vec_to_mm_isasi.md)：将矢量数据广播到矩阵中，每个数据块中的每16个元素会被连续复制16次；当前支持的数据传输通路：Unified Buffer-\>L0C Buffer（VECIN/VECCALC/VECOUT-\>CO1）。 图1 功能示例 !
+- [矩阵计算输入搬运约束](cube_compute_input_move_constraint.md)：具体可见表数据通路和存储层级。
+- [DataCopy](data_copy_gm_to_l1_continuous.md)：将矩阵从Global Memory连续搬运至L1 Buffer（TPosition为A1/B1），数据搬运时格式和内容保持不变。
+- [DataCopy](data_copy_gm_to_l1_dn2_nz.md)：随路格式转换数据搬运，将数据从Global Memory搬运至L1 Buffer（TPosition为A1/B1），搬运过程中完成DN到NZ格式转换。
+- [DataCopy](data_copy_gm_to_l1_highdim_split.md)：将矩阵从Global Memory搬运至L1 Buffer，支持通过配置数据块个数、长度和地址偏移实现高维切分的非连续搬运，搬运时格式和内容保持不变。
+- [DataCopy](data_copy_gm_to_l1_nd2_nz.md)：将矩阵从Global Memory搬运至L1 Buffer，并在搬运过程中完成ND到NZ格式的转换。
+- [DataCopy](data_copy_l1_to_bias_table.md)：将矩阵计算用到的Bias参数从L1 Buffer搬运到BiasTable Buffer。
+- [DataCopy](data_copy_l1_to_fixpipe.md)：将随路量化参数从L1 Buffer搬运到Fixpipe Buffer。
+- [DataCopyPad（GMToL1非对齐数据搬运）](data_copy_pad_gm_to_l1.md)：该接口提供从Global Memory到L1 Buffer的数据非对齐搬运功能，可以根据开发者的需要自行填充数据。
+- [DataCopyPad（UBToL1非对齐数据搬运）](data_copy_pad_ub_to_l1.md)：将 Unified Buffer 中的数据经 Matmul workspace 搬运至 L1 Buffer，并支持非对齐数据的 Padding。
+- [DataCopy](data_copy_ub_to_l1_continuous.md)：将矩阵从Unified Buffer搬运至L1 Buffer，采用连续搬运方式，数据搬运时格式和内容保持不变。
+- [DataCopy](data_copy_ub_to_l1_highdim_split.md)：将矩阵从Unified Buffer搬运至L1 Buffer，支持非连续搬运和连续搬运，数据搬运时格式和内容保持不变。
+- [DataCopy](data_copy_ub_to_l1_nd2_nz.md)：将数据从Unified Buffer搬运至L1 Buffer，并在搬运过程中完成ND到NZ格式的转换。
+- [L1 Buffer、L0A Buffer/L0B Buffer内存结构介绍](l1_l0_a_b_memory_structure_intro.md)：为提升数据访问效率和吞吐量，Buffer采用了等容量的内存模块（Bank）结构设计。内存空间被划分为多个Bank，并以Bank为单位进一步分组形成多个Bank Group（BG）；每个Bank Group包含若干Bank，每个Bank都是一个可独立操作的存储单元子模块。
+- [LoadData](load_data_2_d.md)：完成普通矩阵计算所需的2D格式数据搬运，以512字节的数据分形为单位，支持GM到L0A/L0B Buffer及L1 Buffer到L0A/L0B Buffer通路。
+- [LoadData（BitMode 2D矩阵搬运）](load_data_2_d_bit_mode.md)：负责完成普通矩阵计算所需的2D格式数据的搬运，以大小为512字节的数据分形为单位进行搬运，支持的数据通路为：L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer。 本接口与LoadData（2D矩阵搬运V2）接口的差异在于参数的传入方式不同，本接口传入的是一个联合体结构Load2DBitModeParam。
+- [LoadData](load_data_2_d_mx.md)：完成矩阵计算所需的左右矩阵数据及对应量化系数矩阵数据的搬运，左右矩阵以512字节分形为单位，量化系数矩阵以32字节分形为单位。
+- [LoadData](load_data_2_d_v2.md)：完成普通矩阵计算所需的2D格式数据搬运，以512字节的数据分形为单位，支持L1 Buffer到L0A/L0B Buffer通路。
+- [LoadData](load_data_3_d.md)：将NC1HWC0格式的Feature Map完成Image to Column展开后搬入L0A/L0B Buffer，也可用于2D格式数据搬运。
+- [LoadData（BitMode卷积数据搬运）](load_data_3_d_bit_mode.md)：LoadData（BitMode卷积数据搬运）用于完成image to column操作，将多维feature map转为二维矩阵。支持的数据通路为：L1 Buffer->L0A Buffer、L1 Buffer->L0B Buffer。 本接口与LoadData（卷积数据搬运）接口的差异在于参数的传入方式不同，本接口传入的是一个联合体结构Load3DBitModeParam。
+- [LoadData](load_data_gm_to_l1_2_d.md)：完成普通矩阵计算所需的2D格式数据搬运，以512字节的数据分形为单位从Global Memory搬运至L1 Buffer。
+- [LoadData](load_data_gm_to_l1_2_dv2.md)：完成普通矩阵计算所需的2D格式数据搬运，以512字节的数据分形为单位从Global Memory搬运至L1 Buffer。
+- [LoadDataWithSparse](load_data_with_sparse.md)：从L1 Buffer搬运稠密权重矩阵到L0B Buffer，同时搬运索引矩阵到专用buffer空间，供后续MmadWithSparse接口读取。
+- [LoadDataWithStride](load_data_with_stride.md)：将NC1HWC0格式的Feature Map完成Image to Column展开后搬入对应内存，支持配置输出矩阵K轴方向偏移量dstStride。
+- [LoadDataWithTranspose](load_data_with_transpose.md)：完成普通矩阵计算所需的2D格式数据搬运，搬运过程中伴随转置操作，支持L1 Buffer到L0A/L0B Buffer通路。
+- [Cube计算(ISASI)总体说明](overall_description.md)：矩阵计算的搬入是Ascend C编程框架中用于数据搬运的一类核心接口，主要实现Global Memory到L0A Buffer/L0B Buffer之间的数据高效传输。该类接口提供了多种数据搬运模式，能够满足矩阵计算中左右矩阵等数据的搬运需求，通常与Mmad接口配合使用。

@@ -1,0 +1,4 @@
+# 常量
+
+- [ASC_C_API_MRGSORT_ELEMENT_LEN](asc_c_api_mrgsort_element_len.md)：ASC_C_API_MRGSORT_ELEMENT_LEN表示MrgSort4操作支持的队列数量，值为4。该常量用于asc_mrgsort4接口的src数组长度，以及asc_get_vms4_sr接口的sorted_num数组长度。
+- [ASC_VDEQ_SIZE](asc_vdeq_size.md)：ASC_VDEQ_SIZE表示asc_set_deq_scale接口中scale_arr、offset_arr和sign_mode_arr数组的元素个数，值为16。

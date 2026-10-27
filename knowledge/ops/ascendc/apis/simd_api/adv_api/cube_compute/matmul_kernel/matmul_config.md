@@ -1,0 +1,104 @@
+---
+type: API
+title: MatmulConfig
+description: 模板参数MatmulConfig，用于配置Matmul模板信息以及相关的配置参数。不配置默认开启Norm模板，Norm模板的介绍请参考表模板特性。MatmulConfig的参数说明见表2。MatmulConfig的定义方式有：
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.programming_model.execution_unit.cube
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/cube_compute/Matmul_Kernel/MatmulConfig.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-10T10:23:00Z'
+platforms: []
+---
+
+# MatmulConfig
+
+模板参数MatmulConfig，用于配置Matmul模板信息以及相关的配置参数。不配置默认开启Norm模板，Norm模板的介绍请参考[表模板特性](#template-features)。MatmulConfig的参数说明见[表2](#matmulconfig-params)。MatmulConfig的定义方式有：
+
+-   该模板参数可选取提供的模板之一，当前提供的MatmulConfig模板取值范围为【CFG\_NORM、CFG\_MDL、CFG\_IBSHARE\_NORM、MM\_CFG\_BB】，分别对应默认的Norm、MDL、IBShare、BasicBlock模板。各模板的介绍请参考[表1](#template-features)。
+-   该模板参数可以基于各类获取模板的接口，自定义模板参数配置，获取自定义模板。各类获取模板的接口包括：[GetNormalConfig](get_normal_config.md)、[GetMDLConfig](get_mdl_config.md)、[GetSpecialMDLConfig](get_special_mdl_config.md)、[GetIBShareNormConfig](get_ib_share_norm_config.md)、[GetBasicConfig](get_basic_config.md)。
+-   另外，MatmulConfig可拆分为[MatmulShapeParams](get_mm_config.md#table16317184295116)、[MatmulQuantParams](get_mm_config.md#table8313111211573)、[MatmulBatchParams](get_mm_config.md#table15129204644)、[MatmulFuncParams](get_mm_config.md#table66217141862)二级子Config，使用[GetMMConfig](get_mm_config.md)接口，设置需要的二级子Config和[MatmulConfigMode](get_mm_config.md#table17837129144319)，可以更加灵活的获取自定义的模板参数配置MatmulConfig。
+
+**表1**  模板特性
+
+<a id="template-features"></a>
+
+| 模板 | 实现 | 优点 | 推荐使用场景 |
+| --- | --- | --- | --- |
+| Norm | 支持L1缓存多个基本块，MTE2分多次从GM搬运基本块到L1，每次搬运一份基本块，已搬的基本块不清空。（举例说明：Tiling结构体中的[depthA1](../matmul_tiling/t_cube_tiling_struct.md#deptha1)=6，代表搬入6份A矩阵基本块到L1，1次搬运一份基本块，MTE2进行6次搬运）。 | 可以提前启动MTE1流水（因为搬1份基本块就可以做MTE1后面的运算）。 | 默认开启Norm模板。 |
+| MDL，SpecialMDL | 支持L1缓存多个基本块，MTE2从GM到L1的搬运为一次性“大包”搬运。（举例说明：Tiling结构体中的[depthA1](../matmul_tiling/t_cube_tiling_struct.md#deptha1)=6，代表一次性搬入6份A矩阵基本块到L1，MTE2进行1次搬运）。MDL模板与SpecialMDL模板的差异见[表2](#matmulconfig-params)。 | 对于一般的大shape场景，可以减少MTE2的循环搬运，提升性能。 | 大shape场景。 |
+| IBShare | MIX场景下，A矩阵或B矩阵GM地址相同的时候，通过共享L1 Buffer，减少MTE2搬运。 | 减少MTE2搬运，提升性能。 | MIX场景多个AIV的A矩阵或B矩阵GM地址相同。<br><br>注意：IBShare模板要求多个AIV复用的A/B矩阵必须在L1 Buffer上全载。 |
+| BasicBlock | 在无尾块的场景，基本块大小确定的情况下，通过[GetBasicConfig](get_basic_config.md)接口配置输入的基本块大小，固定MTE1每次搬运的矩阵大小及每次矩阵乘计算的矩阵大小，减少参数计算量。 | 减少MTE1矩阵搬运和矩阵乘计算过程中的参数计算开销。 | 无尾块，基本块（baseM,baseN）大小确定。 |
+| SpecialBasicBlock | 在无尾块的场景，基本块和单核内shape大小确定的情况下，通过配置MatmulConfig参数，在BasicBlock模板的基础上进一步消除头开销Scalar计算。 | 减少MTE1矩阵搬运和矩阵乘计算过程中的参数计算开销，并进一步消除头开销Scalar计算。 | 无尾块，基本块（baseM,baseN）和单核内shape（singleCoreM,singleCoreN）大小确定。<br><br>注意：相同场景下，推荐使用[常量化](get_matmul_api_tiling.md)来获得更好的性能收益。 |
+
+**表2**  MatmulConfig参数说明
+
+<a id="matmulconfig-params"></a>
+
+| 参数 | 说明 | 支持模板：Norm, MDL, SpecialMDL, IBShare, BasicBlock, SpecialBasicBlock |
+| --- | --- | --- |
+| doNorm | 开启Norm模板。参数取值如下：<br>true：开启Norm模板。false：不开启Norm模板。<br><br>不指定模板的情况默认开启Norm模板。 | Norm |
+| doBasicBlock | 开启BasicBlock模板。模板参数取值如下：<br>true：开启BasicBlock模板。false：不开启BasicBlock模板。<br><br>调用GetBasicConfig接口获取BasicBlock模板时，该参数被置为true。注意：<br>BasicBlock模板暂不支持输入为int8_t, int4_t数据类型的A、B矩阵，支持half/float/bfloat16_t数据类型的A、B矩阵。<br>BasicBlock模板暂不支持A矩阵为标量数据Scalar或向量数据Vector。<br>BasicBlock模板暂不支持ScheduleType::OUTER_PRODUCT的数据搬运模式。 | BasicBlock |
+| doMultiDataLoad<a id="mdl-template"></a> | 开启MDL模板。参数取值如下：<br>true：开启MDL模板。false：不开启MDL模板。 | MDL |
+| basicM | 与[TCubeTiling结构体](../matmul_tiling/t_cube_tiling_struct.md)中的baseM参数含义相同，Matmul计算时base块M轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |
+| basicN | 与[TCubeTiling结构体](../matmul_tiling/t_cube_tiling_struct.md)中的baseN参数含义相同，Matmul计算时base块N轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |
+| basicK | 与[TCubeTiling结构体](../matmul_tiling/t_cube_tiling_struct.md)中的baseK参数含义相同，Matmul计算时base块K轴长度，以元素为单位。 | BasicBlock、SpecialBasicBlock |
+| intrinsicsCheck | 当左矩阵或右矩阵在单核上内轴（即尾轴）大于等于65535（元素个数）时，是否开启循环执行数据从Global Memory到L1 Buffer的搬入。例如，左矩阵A[M, K]，单核上的内轴数据singleCoreK大于65535，配置该参数为true后，API内部通过循环执行数据的搬入。参数取值如下：<br>false：当左矩阵或右矩阵在单核上内轴大于等于65535时，不开启循环执行数据的搬入（默认值）。<br>true：当左矩阵或右矩阵在单核上内轴大于等于65535时，开启循环执行数据的搬入。 | 所有模板 |
+| isNBatch | 是否多Batch输入多Batch输出。仅对BatchMatmul有效，开启多Batch后，仅支持Norm模板，且需调用[IterateNBatch](iterate_n_batch.md)实现多Batch输入多Batch输出。参数取值如下：<br>false：不开启多Batch（默认值）。true：开启多Batch。 | Norm |
+| enVecND2NZ | 开启通过vector指令进行ND2NZ。开启时需要设置[SetLocalWorkspace](set_local_workspace.md)。参数取值如下：<br>false：不开启通过vector指令进行ND2NZ（默认值）。<br>true：开启通过vector指令进行ND2NZ。 | 所有模板 |
+| doSpecialBasicBlock | 开启SpecialBasicBlock模板。参数取值如下：<br>true：开启SpecialBasicBlock模板。false：不开启SpecialBasicBlock模板。<br><br>本质上也是BasicBlock模板，但消除了头开销Scalar计算。 | SpecialBasicBlock |
+| doMTE2Preload | 在MTE2流水间隙较大，且M/N数值较大时可通过该参数开启对应M/N方向的预加载功能，开启后能减小MTE2间隙，提升性能。预加载功能仅在MDL模板有效（不支持SpecialMDL模板）。参数取值如下：<br>0：不开启（默认值）。<br>1：开启M方向preload。<br>2：开启N方向preload。<br><br>注意：开启M/N方向的预加载功能时需保证K全载且M/N方向开启DoubleBuffer；其中，M方向的K全载条件为：singleCoreK/baseK <= stepKa；N方向的K全载条件为：singleCoreK/baseK <= stepKb。 | MDL |
+| singleCoreM | 单核内M轴shape大小，以元素为单位。 | SpecialBasicBlock |
+| singleCoreN | 单核内N轴shape大小，以元素为单位。 | SpecialBasicBlock |
+| singleCoreK | 单核内K轴shape大小，以元素为单位。 | SpecialBasicBlock |
+| stepM | 左矩阵在L1 Buffer（A1）中缓存的bufferM方向上baseM的倍数。 | SpecialBasicBlock |
+| stepN | 右矩阵在L1 Buffer（B1）中缓存的bufferN方向上baseN的倍数。 | SpecialBasicBlock |
+| baseMN | baseM*baseN的大小。 | SpecialBasicBlock |
+| singleCoreMN | singleCoreM*singleCoreN的大小。 | SpecialBasicBlock |
+| enUnitFlag | 开启UnitFlag功能，使计算与搬运流水并行，提高性能。Norm, IBShare下默认开启，MDL下默认不开启。参数取值如下：<br>false：不开启UnitFlag功能。<br>true：开启UnitFlag功能。 | MDL、Norm、IBShare |
+| isPerTensor | A矩阵half类型输入且B矩阵int8_t类型输入场景，开启B矩阵量化时是否为per tensor。<br>true：per tensor量化。<br>false：per channel量化。 | MDL、SpecialMDL |
+| hasAntiQuantOffset | A矩阵half类型输入且B矩阵int8_t类型输入场景，开启B矩阵量化时是否使用offset系数。 | MDL、SpecialMDL |
+| doIBShareNorm | 开启IBShare模板。参数取值如下：<br>false：不开启IBShare。true：开启IBShare。<br><br>IBShare的功能是能够复用L1上相同的A矩阵或B矩阵数据，开启后在数据复用场景能够避免重复搬运数据到L1。 | IBShare |
+| doSpecialMDL | 开启SpecialMDL模板。参数取值如下：<br>true：开启SpecialMDL模板。false：不开启SpecialMDL模板。<br><br>MDL模板的一种特殊场景：Matmul K方向不全载时（singleCoreK/baseK > stepKb），默认仅支持stepN设置为1，开启SpecialMDL模板后支持stepN=2。<br><br>注意：开启SpecialMDL模板时，doMultiDataLoad参数取值必须为false。 | SpecialMDL |
+| enableInit | 是否启用Init函数，不启用Init函数能够提升常量传播效果，优化性能。默认启用。<br>false：不启用Init函数。true：启用Init函数。 | 所有模板 |
+| batchMode | BatchMatmul场景中Layout类型为NORMAL时，设置BatchMatmul输入A/B矩阵的多batch数据总和与L1 Buffer的大小关系。参数取值如下：<br>BatchMode::BATCH_LESS_THAN_L1：多batch数据总和<L1 Buffer Size；<br>BatchMode::BATCH_LARGE_THAN_L1：多batch数据总和>L1 Buffer Size；<br>BatchMode::SINGLE_LARGE_THAN_L1：单batch数据总和>L1 Buffer Size。 | Norm |
+| enableEnd | Matmul计算过程中是否需要调用[End](end.md)函数，该参数可用于优化性能。参数取值如下：<br>true：Matmul计算过程中需要调用End函数（默认值）。<br>false：不需要调用End函数。End处理相关的代码都会在编译期删除，从而优化性能。例如，[异步场景](get_tensor_c.md#li17508136205415)不需要调用End函数，可以将该参数置为false。 | 所有模板 |
+| enableGetTensorC | Matmul计算过程中是否需要调用[GetTensorC](get_tensor_c.md)函数，该参数可用于优化性能。参数取值如下：<br>true：Matmul计算过程中需要调用GetTensorC函数（默认值）。<br>false：不需要调用GetTensorC函数。GetTensorC处理相关的代码都会在编译期删除，从而优化性能。 | 所有模板 |
+| enableSetOrgShape | Matmul计算过程中是否需要调用[SetOrgShape](set_org_shape.md)函数，该参数可用于优化性能。参数取值如下：<br>true：Matmul计算过程中需要调用SetOrgShape函数（默认值）。<br>false：不需要调用SetOrgShape函数。SetOrgShape处理相关的代码都会在编译期删除，从而优化性能。 | 所有模板 |
+| enableSetBias | 是否开启计算Bias。该参数可用于优化性能。参数取值如下：<br>true：开启计算Bias（默认值）。若输入带有Bias，实现过程中做Bias的搬运、计算等。<br>false：不计算Bias。Bias处理相关的代码都会在编译期删除，从而优化性能。 | 所有模板 |
+| enableSetTail | Matmul计算过程中是否需要调用[SetTail](set_tail.md)函数，该参数可用于优化性能。参数取值如下：<br>true：Matmul计算过程中需要调用SetTail函数（默认值）。<br>false：不需要调用SetTail函数。SetTail处理相关的代码都会在编译期删除，从而优化性能。 | 所有模板 |
+| enableQuantVector | Matmul计算过程中是否需要调用[SetQuantVector](set_quant_vector.md)和[SetQuantScalar](set_quant_scalar.md)函数，该参数可用于优化性能。参数取值如下：<br>true：Matmul计算过程中需要调用SetQuantVector和SetQuantScalar函数（默认值）。<br>false：不需要调用SetQuantVector和SetQuantScalar函数。SetQuantVector和SetQuantScalar处理相关的代码都会在编译期删除，从而优化性能。 | 所有模板 |
+| enableSetDefineData | 启用模板参数MatmulCallBack（自定义回调函数）时，用于允许/禁止设置回调函数需要的计算数据或在GM上存储的数据地址等信息。<br><br>参数取值如下：<br>true：允许设置（默认值）。<br>false：不允许设置。SetSelfDefineData处理相关的代码都会在编译期删除，从而优化性能。 | Norm、MDL |
+| iterateMode | 用于优化Matmul计算的头开销。具体为，对Iterate系列接口（包括[Iterate](iterate.md)、[IterateAll](iterate_all.md)、[IterateBatch](iterate_batch.md)、[IterateNBatch](iterate_n_batch.md)）的优化，当开启某种模式时，表示Matmul计算过程中只调用该种模式对应的一个Iterate系列接口，其它Iterate系列接口相关的代码都会在编译期删除，从而优化性能。该参数为IterateMode类型。参数取值如下：<br>ITERATE_MODE_NORMAL：对于Iterate系列接口，Matmul计算过程中只调用[Iterate](iterate.md)接口。<br>ITERATE_MODE_ALL：对于Iterate系列接口，Matmul计算过程中只调用[IterateAll](iterate_all.md)接口。<br>ITERATE_MODE_BATCH：对于Iterate系列接口，Matmul计算过程中只调用[IterateBatch](iterate_batch.md)接口。<br>ITERATE_MODE_N_BATCH：对于Iterate系列接口，Matmul计算过程中只调用[IterateNBatch](iterate_n_batch.md)接口。<br>ITERATE_MODE_DEFAULT：默认值，不限定调用Iterate系列接口的个数，不开启计算头开销的优化。 | 所有模板 |
+| enableReuse | [SetSelfDefineData](set_self_define_data.md)函数设置的回调函数中的dataPtr是否直接传递计算数据。若未调用SetSelfDefineData设置dataPtr，该参数仅支持默认值true。参数取值如下：<br>true：直接传递计算数据，仅限单个值。<br>false：传递GM上存储的数据地址信息。 | Norm、MDL |
+| enableUBReuse | 是否开启UB复用。在UB空间足够的条件下（UB空间大于4倍TCubeTiling的[transLength](../matmul_tiling/t_cube_tiling_struct.md#p1620315053211)参数），设置开启UB复用后，UB空间分为互不重叠的两份，分别存储Matmul计算相邻前后两轮迭代的数据，后一轮迭代数据的搬入将不必等待前一轮迭代的UB空间释放，从而优化流水。参数取值如下：<br>true：开启UB复用。<br>false：不开启UB复用。 | MDL |
+| enableL1CacheUB | 是否开启L1 Buffer缓存UB计算块。建议在MTE3和MTE2流水串行较多的场景使用。参数取值如下：<br>true：开启L1 Buffer缓存UB计算块。<br>false：不开启L1 Buffer缓存UB计算块。<br><br>若要开启L1 Buffer缓存UB计算块，必须在Tiling实现中调用[SetMatmulConfigParams](../matmul_tiling/set_matmul_config_params.md)接口将参数enableL1CacheUBIn设置为true。 | MDL |
+| intraBlockPartSum | 用于分离模式下的Vector、Cube计算融合场景，开启两个AIV核的一次计算结果（baseM * baseN大小的矩阵分片）在L0C Buffer上累加，参数取值如下：<br>false：不开启两个AIV核的计算结果在L0C Buffer上的累加（默认值）。<br>true：开启两个AIV核的计算结果在L0C Buffer上的累加。 | Norm |
+| iterateOrder | Matmul做矩阵运算的循环迭代顺序，与[表1](../matmul_tiling/t_cube_tiling_struct.md#tcubetiling-struct)中的iterateOrder参数含义相同。当ScheduleType参数取值为ScheduleType::OUTER_PRODUCT时，本参数生效。参数取值如下：<br><br>ORDER_M：先往M轴方向偏移再往N轴方向偏移。<br><br>ORDER_N：先往N轴方向偏移再往M轴方向偏移。<br><br>UNDEF：当前无效。<br><br>注：Norm模板的Matmul场景、MDL模板使用时，若IterateOrder取值ORDER_M，[TCubeTiling结构](../matmul_tiling/t_cube_tiling_struct.md#tcubetiling-struct)中的stepN需要大于1，IterateOrder取值ORDER_N时，TCubeTiling结构中的stepM需要大于1。<br>MxMatmul仅支持MDL模板。 | Norm、MDL |
+| scheduleType | 配置Matmul数据搬运模式。参数取值如下：<br>ScheduleType::INNER_PRODUCT：默认模式，在K方向上做MTE1的循环搬运；<br>ScheduleType::OUTER_PRODUCT：在M或N方向上做MTE1的循环搬运；设置该取值后，需要与IterateOrder参数配合使用。该配置当前只在BatchMatmul场景（开启Norm模板）或Matmul场景（开启MDL模板或Norm模板）生效。<br>若IterateOrder取值ORDER_M，则N方向循环搬运（在singleCoreN大于baseN场景可能有性能提升），即B矩阵的MTE1搬运并行；<br>若IterateOrder取值ORDER_N，则M方向循环搬运（在singleCoreM大于baseM场景可能有性能提升），即A矩阵的MTE1搬运并行；<br>不能同时开启M方向和N方向循环搬运；<br><br>注：<br>Norm模板的Batch Matmul场景或者MDL模板中，singleCoreK>baseK时，不能设置为ScheduleType::OUTER_PRODUCT取值，需使用默认模式。<br>Norm模板或MDL模板的Matmul场景，仅支持在纯Cube模式（只有矩阵计算）下配置ScheduleType::OUTER_PRODUCT。<br>MDL模板仅在调用[IterateAll](iterate_all.md)计算的场景支持配置ScheduleType::OUTER_PRODUCT。<br>仅在C矩阵输出至GM时，支持配置ScheduleType::OUTER_PROD | Norm、MDL |
+| enableDoubleCache | 开启IBShare模板后，在L1 Buffer上是否同时缓存两块数据。参数取值如下：<br>false：L1 Buffer上同时缓存一块数据（默认值）。<br>true：开启L1 Buffer上同时缓存两块数据。<br><br>注意：该参数取值为true时，需要控制基本块大小，防止两块数据的缓存超过L1 Buffer大小限制。 | IBShare |
+| isBiasBatch | 批量多Batch的Matmul场景，即BatchMatmul场景，Bias的大小是否带有Batch轴。参数取值如下：<br>true：Bias带有Batch轴，Bias大小为Batch * N（默认值）。<br>false：Bias不带Batch轴，Bias大小为N，多Batch计算Matmul时，会复用Bias。<br>注意：BatchMode::SINGLE_LARGE_THAN_L1场景仅支持设置为true。 | Norm |
+| enableStaticPadZeros | 使用常量化的Tiling参数时，在左矩阵和右矩阵搬运到L1 Buffer的过程中，是否自动按照常量化的singleM/singleN/singleK及baseM/baseN/baseK大小补零。关于常量化Tiling参数的详细内容请参考[GetMatmulApiTiling](get_matmul_api_tiling.md)。<br><br>仅支持GM输入的ND2NZ格式的补零，其他场景需要用户自行补零。参数取值如下：<br>false：搬运时不自动补零，需要用户自行补零（默认值）。<br>true：搬运时按照常量化的singleM/singleN/singleK及baseM/baseN/baseK大小自动补零。 | Norm、MDL、IBShare |
+| isPartialOutput | 是否开启PartialOutput功能，即控制Matmul顺序输出K方向的基本块计算方式：Matmul一次Iterate计算的K轴是否进行累加计算。参数取值如下：<br>true：开启PartialOutput功能，一次Iterate的K轴不进行累加计算，Matmul每次计算输出局部baseK的baseM * baseN大小的矩阵分片。<br>false：不开启PartialOutput功能，一次Iterate的K轴进行累加计算，Matmul每次计算输出SingleCoreK长度的baseM * baseN大小的矩阵分片。 | MDL |
+| enableMixDualMaster | 是否开启MixDualMaster（双主模式）。区别于MIX模式（包含矩阵计算和矢量计算）通过消息机制驱动AIC运行，双主模式为AIC和AIV独立运行代码，不依赖消息驱动，用于提升性能。该参数默认值为false，仅能在以下场景设置为true：<br>核函数（Kernel）的类型为MIX，同时AIC核数 : AIV核数为1:1。<br>核函数（Kernel）的类型为MIX，同时AIC核数 : AIV核数为1:2，且A矩阵和B矩阵同时开启[IBSHARE](matmul_usage.md#table1188045714378)参数。<br><br>注意，开启MixDualMaster场景，需要满足：<br>同一算子中所有Matmul对象的该参数取值必须保持一致。<br>A/B/Bias矩阵只支持从GM搬入。<br>获取矩阵计算结果只支持调用[IterateAll](iterate_all.md)接口输出到GlobalTensor或者LocalTensor，即计算结果放置于Global Memory或者Local Memory的地址，不能调用[GetTensorC](get_tensor_c.md)等接口获取结果。 | Norm |
+| isA2B2Shared | 是否开启A2和B2的全局管理，即控制所有Matmul对象是否共用A2和B2的double buffer机制。该配置为全局配置，所有Matmul对象取值必须保持一致。注意，开启时，A矩阵、B矩阵的基本块大小均不能超过32KB。<br><br>参数取值如下：<br>true：开启。false：关闭（默认值）。<br><br>该参数取值为true时，建议同时设置enUnitFlag参数为true，使搬运与计算流水并行，提高性能。 | Norm、MDL |
+| isEnableChannelSplit | 是否开启channel_split功能。正常情况下，Matmul计算出的CubeFormat::NZ格式的C矩阵分形为16\*16，假设此时的分形个数为x，channel_split功能是使获得的C矩阵分形为16\*8，同时分形个数变为2x。注意，当前仅在Matmul计算结果C矩阵的Format为CubeFormat::NZ，TYPE为float类型，矩阵乘结果L0C Buffer（CO1）为float类型，输出到Global Memory的场景，支持开启该参数。参数取值如下：<br>false：默认值，不开启channel_split功能，输出的分形为16\*16。<br>true：开启channel_split功能，输出的分形为16\*8。 | 所有模板 |
+| enableKdimReorderLoad | 是否开启K轴错峰加载数据。基于相同Tiling参数，执行Matmul计算时，如果多核的左矩阵或者右矩阵相同，且存储于Global Memory，多个核一般会同时访问相同地址以加载矩阵数据，引发同地址访问冲突，影响性能。开启K轴错峰加载数据后，多核执行Matmul时，将尽量在相同时间访问矩阵的不同Global Memory地址，减少地址访问冲突概率，提升性能。该参数功能只支持MDL模板，建议K轴较大且左矩阵和右矩阵均非全载场景开启该功能。参数取值如下。<br>false：默认值，关闭K轴错峰加载数据的功能。<br>true：开启K轴错峰加载数据的功能。 | MDL |
+| isCO1Shared | 是否开启L0C Buffer（CO1）内存共享，由该参数与sharedCO1BufferSize参数指定L0C Buffer（CO1）划分块数，缓存到L0C Buffer（CO1）中的数据块数不能超过L0C Buffer（CO1）划分的块数，即未被GetTensorC获取的Iterate计算生成的结果个数不能超过L0C Buffer（CO1）划分的块数。该配置为全局配置，所有Matmul对象取值必须保持一致。参数取值如下：<br>true：开启L0C Buffer（CO1）内存共享。<br>false：默认值，关闭L0C Buffer（CO1）内存共享。 | Norm、IBShare |
+| sharedCO1BufferSize | 指定L0C Buffer（CO1）共享的一份Buffer大小。uint32_t类型，支持的取值为32\*1024、64\*1024、128\*1024。 | Norm、IBShare |
+| bmmOutMode | 预留参数，默认值为BatchOutMode::SINGLE_BATCH。 | 预留参数 |
+| enableL1BankConflictOptimise<a name="p84588523128"></a> | 是否开启L1上的Bank冲突优化。在Tiling侧调用[EnableL1BankConflictOptimise](../matmul_tiling/enable_l1_bank_conflict_optimise.md)接口获取能否开启该优化的结果，并与TilingKey机制配合使用，在核函数（Kernel）侧增加代码实现分支。若开启该优化，基于相同Tiling参数执行Matmul计算时，对A、B矩阵和MxMatmul场景的ScaleA、ScaleB矩阵不再连续分配L1 Buffer的空间，在DoubleBuffer场景下，并行计算的数据分别被分配在L1 Buffer的上半部空间和下半部空间，非DoubleBuf场景，数据被分配在L1 Buffer的上半部空间；另外，Bias被分配在L1 Buffer的上半部空间，向量的量化/反量化场景的量化系数被分配在L1 Buffer的下半部空间。参数取值如下。<br>false：默认值，关闭L1 Bank冲突优化。true：开启L1 Bank冲突优化。 | MDL |
+| enableRelu | 是否开启对矩阵乘的输出矩阵C做Relu修正。开启该功能后，输出矩阵中负数值被修正为0。参数取值如下。<br>false：默认值，关闭对输出矩阵C的Relu修正功能。true：开启对输出矩阵C的Relu修正功能。 | 所有模板 |
+
+
+## 配套 API 与常见组合
+
+- [Matmul使用说明](matmul_usage.md)
+- [REGIST_MATMUL_OBJ](regist_matmul_obj.md)
+- [Matmul Tiling类使用说明](../matmul_tiling/matmul_tiling_usage.md)
+- [Matmul 基本块流量模型与输出对齐](../../../../../guides/matmul/base_block_traffic_model_and_alignment.md)
+- [MX Matmul scale 驻留与预取权衡](../../../../../guides/matmul/mx_matmul_scale_residency_and_preload_tradeoffs.md)

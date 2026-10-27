@@ -1,0 +1,24 @@
+# Reg矢量计算
+
+- [辅助数据类型](aux_data_types/index.md)：共 5 张知识卡（如 MaskMergeMode、PostLiteral、RegLayout 等）。
+- [基础算术](basic_arithmetic/index.md)：寄存器矢量基本算术运算接口概述，涵盖Abs、Exp、Add、Mul等单目、双目及标量双目运算。（共 25 张知识卡：Abs、Add、AddC 等）
+- [比较与选择](compare_and_select/index.md)：比较与选择支持以下接口：（共 5 张知识卡：Compare、Compares、Select 等）
+- [复合计算](composite_compute/index.md)：复合计算支持以下接口：（共 7 张知识卡：AbsSub、Axpy、ExpSub 等）
+- [数据压缩](data_compression/index.md)：共 3 张知识卡（如 Pack、UnPack、Unsqueeze）。
+- [数据填充](data_padding/index.md)：将标量或源寄存器最低位元素广播到目的寄存器，支持Scalar和Tensor两种模式，可配合mask使用。
+- [数据重排](data_reorder/index.md)：共 2 张知识卡（如 DeInterleave、Interleave）。
+- [直方图计算](histogram_compute/index.md)：对直方图数据进行统计，在目的寄存器原始数据上累加源寄存器数据的频率统计或累计统计结果。
+- [索引操作](index_operations/index.md)：以传入标量值为起始或终止值，生成递增或递减的索引序列并保存在目的寄存器中。
+- [关键特性说明](key_features/index.md)：Reg矢量计算关键特性说明，涵盖HardwareLoop硬件循环、指令双发优化、VF融合和数据搬运优化。
+- [逻辑计算](logical_compute/index.md)：逻辑计算支持以下接口：（共 9 张知识卡：And、Not、Or 等）
+- [MaskReg计算](mask_reg_compute/index.md)：共 7 张知识卡（如 DeInterleave、Interleave、Move 等）。
+- [Reg矢量计算概述](overview.md)：Reg矢量计算API概述，直接操作Vector计算寄存器实现数据搬运与计算，较Memory矢量计算API提供更大开发自由度。
+- [归约计算](reduction_compute/index.md)：共 3 张知识卡（如 PairReduceElem、Reduce、ReduceDataBlock）。
+- [Reg数据搬入](reg_data_load/index.md)：共 9 张知识卡（如 GatherB、Gather、Load 等）。
+- [Reg数据搬出](reg_data_store/index.md)：共 7 张知识卡（如 ScatterDiscrete、Store、StoreAlignContinuous 等）。
+- [寄存器数据类型](register_data_types/index.md)：Reg矢量计算API操作的基础寄存器数据类型介绍如下：（共 5 张知识卡：AddrReg、MaskReg、RegTensor 等）
+- [离散操作](scatter_operations/index.md)：根据索引值将源操作数按元素收集到目的操作数中，支持b8、b16、b32数据类型。
+- [同步控制](sync_control/index.md)：Reg矢量计算宏函数内不同流水线之间的同步指令，目的流水线等待源流水线上所有指令完成才执行。
+- [系统变量访问](system_variable_access/index.md)：对指定的特殊目的寄存器进行清零操作，通过模板参数指定目标特殊寄存器，调用后该寄存器值被置为0。
+- [类型转换](type_conversion/index.md)：共 2 张知识卡（如 Cast、Truncate）。
+- [VF调用](vf_call/index.md)：在SIMD编程场景下使用。用于启动SIMD VF（Vector Function）子任务。

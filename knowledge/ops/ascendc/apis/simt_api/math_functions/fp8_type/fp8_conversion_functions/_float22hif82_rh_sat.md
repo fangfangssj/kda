@@ -1,0 +1,91 @@
+---
+type: API
+title: __float22hif82_rh_sat
+description: 饱和模式下，将float2类型数据的两个分量遵循CAST_HYBRID模式转换为hifloat8_t精度，返回转换后的hifloat8x2_t类型数据。
+tags:
+- task.lookup
+- topic.implementation.api_layer.simt_api
+- topic.compute.elementwise.type_conversion
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMT-API/math_functions/fp8_type/fp8_conversion_functions/__float22hif82_rh_sat.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-10-20T07:46:54Z'
+platforms:
+- '950'
+source_headers:
+- include/simt_api/asc_fp8.h
+- include/basic_api/kernel_operator_common_intf.h
+---
+
+# \_\_float22hif82\_rh\_sat
+
+## 功能说明
+
+头文件路径为：`"simt_api/asc_fp8.h"`。
+
+饱和模式下，将float2类型数据的两个分量遵循CAST\_HYBRID模式转换为hifloat8\_t精度，返回转换后的hifloat8x2\_t类型数据。
+
+## 函数原型
+
+```cpp
+inline hifloat8x2_t __float22hif82_rh_sat(const float2 x)
+```
+
+## 参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| x | 输入 | 源操作数。 |
+
+## 返回值说明
+
+饱和模式下将输入的两个分量遵循CAST\_HYBRID模式转换成的hifloat8x2\_t类型数据。特殊值如下：
+
+| x分量值 | 非饱和模式返回值 | 饱和模式返回值 |
+|---|---|---|
+| ±0 | 0 | 0 |
+| nan | nan | 0 |
+| inf | inf | 32768 |
+| -inf | -inf | -32768 |
+
+## 约束说明
+
+使用此接口前需将CTRL\[60\]寄存器设置为0，否则饱和模式不生效。设置方式请参见[控制饱和行为的方式](../../data_type_conversion/overview.md#section1194916101549)。
+
+SIMT编程场景当前不支持使用该接口。
+
+## 调用示例
+
+-   SIMD与SIMT混合编程场景：
+
+    ```cpp
+    #include "simt_api/asc_fp8.h"
+    #include "basic_api/kernel_operator_common_intf.h"
+
+    // 使用短向量可提升数据搬运效率
+    __simt_vf__ __launch_bounds__(1024) inline void simt_float22hif82_rh_sat(__gm__ float2* input, __gm__ hifloat8x2_t* output, uint32_t input_total_length)
+    {
+        uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+        // 每个线程处理1个float2类型的数据，即2个float类型的数据，因此idx >= input_total_length / 2的线程不处理数据
+        if (idx >= input_total_length / 2) {
+            return;
+        }
+        output[idx] = __float22hif82_rh_sat(input[idx]);
+    }
+    __global__ __vector__ void cast_kernel(__gm__ float* input, __gm__ uint8_t* output, uint32_t input_total_length)
+    {
+        AscendC::SetCtrlSpr<60, 60>(0);  // 将CTRL[60]设置为0，使饱和模式生效。
+        asc_vf_call<simt_float22hif82_rh_sat>(dim3(1024), (__gm__ float2*)input, (__gm__ hifloat8x2_t*)output, input_total_length);
+    }
+    ```
+
+输入输出示例如下：
+
+```text
+x(float2)：(0.0, 1.75), (0.25, 16.25), (128.25, 8.0), (nan, inf)
+result(hifloat8x2_t)：(0, 1.75), (0.25, 20), (160, 8), (0, 32768)
+```

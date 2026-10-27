@@ -1,0 +1,51 @@
+---
+type: API
+title: SetSplitRange
+description: 设置baseM/baseN/baseK的最大值和最小值。目前Tiling暂时不支持该功能。
+tags:
+- task.lookup
+- topic.implementation.api_layer.high_level_api
+- topic.programming_model.execution_unit.cube
+status: draft
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/adv_api/cube_compute/Matmul_Tiling/SetSplitRange.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-04T01:25:11Z'
+platforms: []
+source_headers:
+- include/adv_api/matmul/matmul_tiling_base.h
+---
+
+# SetSplitRange
+
+## 功能说明
+
+设置baseM/baseN/baseK的最大值和最小值。目前Tiling暂时不支持该功能。
+
+## 函数原型
+
+```
+int32_t SetSplitRange(int32_t maxBaseM = -1, int32_t maxBaseN = -1, int32_t maxBaseK = -1, int32_t minBaseM = -1, int32_t minBaseN = -1, int32_t minBaseK = -1)
+```
+
+## 参数说明
+
+**表1**  参数说明
+
+| 参数名 | 输入/输出 | 描述 |
+| --- | --- | --- |
+| maxBaseM | 输入 | 设置最大的baseM值，默认值为-1。-1表示不设置指定的baseM最大值，该值由Tiling函数自行计算。 |
+| maxBaseN | 输入 | 设置最大的baseN值，默认值为-1。-1表示不设置指定的baseN最大值，该值由Tiling函数自行计算。 |
+| maxBaseK | 输入 | 设置最大的baseK值，默认值为-1。-1表示不设置指定的baseK最大值，该值由Tiling函数自行计算。 |
+| minBaseM | 输入 | 设置最小的baseM值，默认值为-1。-1表示不设置指定的baseM最小值，该值由Tiling函数自行计算。 |
+| minBaseN | 输入 | 设置最小的baseN值，默认值为-1。-1表示不设置指定的baseN最小值，该值由Tiling函数自行计算。 |
+| minBaseK | 输入 | 设置最小的baseK值，默认值为-1。-1表示不设置指定的baseK最小值，该值由Tiling函数自行计算。 |
+
+## 返回值说明
+
+-1表示设置失败；0表示设置成功。
+
+## 约束说明
+
+若baseM/baseN/baseK不满足C0\_size对齐，计算Tiling时会将该值对齐到C0\_size。提示，half/bfloat16\_t数据类型的C0\_size为16，float数据类型的C0\_size为8，int8\_t数据类型的C0\_size为32，int4b\_t数据类型的C0\_size为64。

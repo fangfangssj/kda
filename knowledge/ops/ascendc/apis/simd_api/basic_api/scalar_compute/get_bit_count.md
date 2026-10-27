@@ -1,0 +1,71 @@
+---
+type: API
+title: GetBitCount
+description: 统计uint64_t数值二进制表示中指定比特值（0或1）的出现次数。
+tags:
+- task.lookup
+- topic.implementation.api_layer.basic_api
+- topic.programming_model.execution_unit.scalar
+status: stable
+sources:
+- resource: cann-docs-raw/asc-devkit/docs/zh/api/SIMD-API/basic_api/scalar_compute/GetBitCount.md
+  role: primary
+created_at: '2026-08-18T14:51:00Z'
+updated_at: '2026-09-08T03:31:04Z'
+platforms:
+- '950'
+- a2
+- a3
+- 310p
+- kirin_x90
+- kirin_9030
+source_headers:
+- include/basic_api/kernel_operator_scalar_intf.h
+---
+
+# GetBitCount<a name="ZH-CN_TOPIC_0000001787630010"></a>
+
+## 功能说明<a name="section618mcpsimp"></a>
+
+头文件路径为：`"basic_api/kernel_operator_scalar_intf.h"`。
+
+统计uint64\_t类型数值的二进制表示中指定比特值（0或1）的出现次数。
+
+## 函数原型<a name="section620mcpsimp"></a>
+
+```cpp
+template <int countValue>
+__aicore__ inline int64_t GetBitCount(uint64_t valueIn)
+```
+
+## 参数说明<a name="section622mcpsimp"></a>
+
+**表1** 模板参数说明
+
+| 参数名 | 描述 |
+| ------ | ------ |
+| countValue | 指定需统计的比特值。取值为0或1。 |
+
+**表2** 参数说明
+
+| 参数名称 | 输入/输出 | 描述 |
+| ------ | ----- | ----- |
+| valueIn | 输入 | 被统计的二进制数字。 |
+
+## 返回值说明
+
+返回valueIn中0或者1的个数。
+
+## 约束说明<a name="section633mcpsimp"></a>
+
+无
+
+## 调用示例<a name="section837496171220"></a>
+
+```cpp
+uint64_t valueIn = 0xFFFF;    // 二进制表示中有16个1，48个0
+
+int64_t oneCount = AscendC::GetBitCount<1>(valueIn); // 统计valueIn二进制格式中1的个数，二进制格式中有16个1
+
+int64_t zeroCount = AscendC::GetBitCount<0>(valueIn); // 统计valueIn二进制格式中0的个数，二进制格式中有48个0
+```
