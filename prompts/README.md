@@ -8,8 +8,7 @@ The templates are intentionally task-agnostic. Fill in the task objective, **har
 
 | Path | Purpose | 配套硬件档案 |
 |---|---|---|
-| `basic-flow.md` | Minimal prompt for research, planning, implementation, validation, and iteration. | 任选（CUDA 推荐） |
-| `triton-flow.md` | Triton kernel 专用：算法变体 vs 配置扫描分组、autotune 纪律、profile 约定的验证/测量/归因。 | `nvidia-triton` / `ascend-triton` |
+| `basic-flow.md` | Minimal prompt for research, planning, implementation, validation, and iteration. | 通用 |
 | `ascendc-flow.md` | Ascend C 核函数专用：环境检查 → tiling 设计 → 模板脚手架 → ST/精度验证 → msprof 归因。 | `ascend-ascendc` |
 
 ## How To Use

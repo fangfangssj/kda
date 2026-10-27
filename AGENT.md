@@ -18,19 +18,19 @@
 2. 若实现工作区独立于本仓库，启动 agent 前先把选定的内置 `hardware/<profile>.md` 复制到该文件；自定义档案也放在工作区内。
 3. agent 在写 `docs/draft.md` **之前必须先读 profile**，以其命令约定、精度默认值、纪律条款为默认值；任务契约可覆盖 profile。
 4. 新硬件 = 复制 `hardware/TEMPLATE.md` 填写 + 在 `docs/hardware-profiles.md` 登记；不要为单个任务直接修改内置档案。
-5. 内置档案：`nvidia-cuda`、`nvidia-triton`、`ascend-ascendc`、`ascend-triton`。
+5. 内置档案：`ascend-ascendc`。
 
 ## Expected Agent Workflow
 
 For a new task:
 
 0. Create or enter a separate implementation workspace.
-1. 选定并声明硬件档案（见上节），复制到任务工作区的 `hardware-profile.md`，并把 `prompts/basic-flow.md` / `prompts/triton-flow.md` / `prompts/ascendc-flow.md` 之一作为 starter prompt。
+1. 选定并声明硬件档案（见上节），复制到任务工作区的 `hardware-profile.md`，并把 `prompts/basic-flow.md` / `prompts/ascendc-flow.md` 之一作为 starter prompt。
 2. Define the task objective, constraints, validation command, and promotion criteria.
 3. Read local task code and documentation before proposing implementation changes.
 4. Write the initial plan draft to `docs/draft.md` inside the task workspace.
 5. Convert the draft into an executable plan.
-6. Implement in small iterations, validating each meaningful candidate（Triton/AscendC 候选必须标注"算法变体 / 配置扫描"分组）。
+6. Implement in small iterations, validating each meaningful candidate（AscendC 候选必须标注"算法变体 / 配置扫描"分组）。
 7. Record candidate relationships, evaluation results, and profiling evidence when applicable.
 8. Keep this repository focused on the reusable flow.
 
@@ -38,8 +38,7 @@ For a new task:
 
 Use external skills only when they are relevant to the active task:
 
-- **NVIDIA（CUDA/Triton）**：`skills/KernelWiki`（内核优化知识）、`skills/ncu-report-skill`（NCU 报告解读）。
-- **昇腾（AscendC/Triton）**：`skills/ascend/` 下的 cannbot 技能族（npu-arch、ascendc-*、triton-*、ops-profiling、msnpureport-toolkit、asys-toolkit、cann-env-setup 等），映射关系见 `hardware/ascend-*.md` 的技能映射表。
+- **昇腾（AscendC）**：`skills/ascend/` 下的 cannbot 技能族（npu-arch、ascendc-*、ops-profiling、msnpureport-toolkit、asys-toolkit、cann-env-setup 等），映射关系见 `hardware/ascend-ascendc.md` 的技能映射表。
 - `humanize` 插件用于计划生成与实现循环（可选）。
 - 领域知识技能用于背景调研；profiling / 报告分析技能用于性能证据。
 

@@ -20,18 +20,15 @@ cp /path/to/kda/hardware/ascend-ascendc.md /path/to/task-workspace/hardware-prof
 
 | 档案 | 硬件 | 实现语言 | 正确性验证 | 测量与归因 | 知识技能 |
 |---|---|---|---|---|---|
-| `nvidia-cuda.md` | NVIDIA A100/H100/B200… | CUDA C++ | torch 参考 + compute-sanitizer | NCU + nsys | KernelWiki, ncu-report-skill |
-| `nvidia-triton.md` | 同上 | OpenAI Triton | torch 参考 + allclose | do_bench + NCU + TTGIR/PTX | KernelWiki（概念迁移）， ncu-report-skill |
 | `ascend-ascendc.md` | Atlas A2/A3（910B/910C） | Ascend C | torch_npu 参考 + 精度标准 + ST/UT | msprof（ops-profiling） | npu-arch, ascendc-* |
-| `ascend-triton.md` | 同上 | triton_ascend | torch_npu 参考 + triton-op-verifier | ops-profiling compare | triton-*, npu-arch |
 
-配套 starter prompt：CUDA 用 `prompts/basic-flow.md`，Triton（两端）用 `prompts/triton-flow.md`，AscendC 用 `prompts/ascendc-flow.md`。
+配套 starter prompt：AscendC 用 `prompts/ascendc-flow.md`；`prompts/basic-flow.md` 可用于未绑定硬件的通用任务。
 
 ## 新增一个硬件（扩展指南）
 
 1. 复制 `hardware/TEMPLATE.md` 为 `hardware/<vendor>-<device>.md`。
 2. 逐节填写：工具链与版本基线、正确性验证约定（参考实现 + 精度默认值 + 边界形状）、性能测量约定（计时工具 + 统计口径 + csv 行格式）、profiling 采集与报告解读、技能映射、自动调优纪律、常见坑。
 3. 若该硬件有现成的知识技能（例如 AMD ROCm 的 rocprof 解读技能、寒武纪 MLU 知识库），把技能目录放进 `skills/`（昇腾系放 `skills/ascend/`）并在上表登记。
-4. 若需要专用 starter prompt，在 `prompts/` 新增并在 `prompts/README.md` 登记；Triton 系硬件可直接复用 `prompts/triton-flow.md`。
+4. 若需要专用 starter prompt，在 `prompts/` 新增并在 `prompts/README.md` 登记。
 
-示例：AMD MI300 上跑 Triton → 复制模板为 `amd-triton.md` → 语言填 triton(ROCm 后端) → 验证填 torch ROCm 参考 + allclose → 测量填 do_bench(ROCm) + rocprof 归因 → 技能放自建的 rocprof-report-skill → 在上表登记。机制不变，只换档案。
+示例：为 AMD ROCm 新增档案 → 复制模板为 `amd-rocm.md` → 填写 ROCm 工具链、参考实现、精度约定、测量与归因工具及对应技能 → 在上表登记。机制不变，只换档案。
